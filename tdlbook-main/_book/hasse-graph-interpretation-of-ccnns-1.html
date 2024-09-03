@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>第 8 章 CCNNs的Hasse图解释 | 拓扑深度学习：超越图数据</title>
+  <meta name="description" content="一本关于拓扑深度学习的书。" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="第 8 章 CCNNs的Hasse图解释 | 拓扑深度学习：超越图数据" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="一本关于拓扑深度学习的书。" />
+  <meta name="github-repo" content="pyt-team/tdlbook" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="第 8 章 CCNNs的Hasse图解释 | 拓扑深度学习：超越图数据" />
+  
+  <meta name="twitter:description" content="一本关于拓扑深度学习的书。" />
+  
+
+<meta name="author" content="Mustafa Hajij, Theodore Papamarkou, Ghada Zamzmi, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Michael T. Schaub" />
+
+
+<meta name="date" content="2024-09-03" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="push-forward-pooling-and-unpooling.html"/>
+<link rel="next" href="implementation-and-numerical-results.html"/>
+<script src="libs/jquery/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="css/glossarybox.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">拓扑深度学习</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>贡献者</a></li>
+<li class="chapter" data-level="" data-path="译者.html"><a href="译者.html"><i class="fa fa-check"></i>译者</a></li>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html"><i class="fa fa-check"></i>序言</a>
+<ul>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html#编译"><i class="fa fa-check"></i>编译</a></li>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html#致谢"><i class="fa fa-check"></i>致谢</a></li>
+</ul></li>
+<li class="part"><span><b>第一部分：基础知识</b></span></li>
+<li class="chapter" data-level="1" data-path="引言.html"><a href="引言.html"><i class="fa fa-check"></i><b>1</b> 引言</a></li>
+<li class="chapter" data-level="2" data-path="motivation.html"><a href="motivation.html"><i class="fa fa-check"></i><b>2</b> 研究动机</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="motivation.html"><a href="motivation.html#从拓扑空间数据中建模和学习"><i class="fa fa-check"></i><b>2.1</b> 从拓扑空间数据中建模和学习</a></li>
+<li class="chapter" data-level="2.2" data-path="motivation.html"><a href="motivation.html#the-utility-of-topology"><i class="fa fa-check"></i><b>2.2</b> 拓扑的有用性</a></li>
+<li class="chapter" data-level="2.3" data-path="motivation.html"><a href="motivation.html#深度学习和结构化计算的统一视角"><i class="fa fa-check"></i><b>2.3</b> 深度学习和结构化计算的统一视角</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preliminaries.html"><a href="preliminaries.html"><i class="fa fa-check"></i><b>3</b> 预备知识</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="preliminaries.html"><a href="preliminaries.html#邻域函数和拓扑空间"><i class="fa fa-check"></i><b>3.1</b> 邻域函数和拓扑空间</a></li>
+<li class="chapter" data-level="3.2" data-path="preliminaries.html"><a href="preliminaries.html#bridging-the-gap-among-higher-order-networks"><i class="fa fa-check"></i><b>3.2</b> 填补与高阶网络间的代沟</a></li>
+<li class="chapter" data-level="3.3" data-path="preliminaries.html"><a href="preliminaries.html#hierarchical-structure-and-set-type-relations"><i class="fa fa-check"></i><b>3.3</b> 层次化结构与集合型关系</a></li>
+</ul></li>
+<li class="part"><span><b>第二部分:组合复形</b></span></li>
+<li class="chapter" data-level="4" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html"><i class="fa fa-check"></i><b>4</b> 组合复形</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc-definition"><i class="fa fa-check"></i><b>4.1</b> 组合复形定义</a></li>
+<li class="chapter" data-level="4.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc-homomorphisms-and-sub-ccs"><i class="fa fa-check"></i><b>4.2</b> CC同态和子CCs</a></li>
+<li class="chapter" data-level="4.3" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#motivation-for-ccs"><i class="fa fa-check"></i><b>4.3</b> 引入CCs的动机</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#pooling-operations-on-ccs"><i class="fa fa-check"></i><b>4.3.1</b> CCs上的池化操作</a></li>
+<li class="chapter" data-level="4.3.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#structural-advantages-of-ccs"><i class="fa fa-check"></i><b>4.3.2</b> CCs的结构化优势</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#neighbourhood-functions-on-ccs"><i class="fa fa-check"></i><b>4.4</b> CCs上的邻域函数</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#incidence-in-a-cc"><i class="fa fa-check"></i><b>4.4.1</b> CC中的关联关系（Incidence）</a></li>
+<li class="chapter" data-level="4.4.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc内的邻接关系adjacency"><i class="fa fa-check"></i><b>4.4.2</b> CC内的邻接关系（Adjacency）</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#data-on-ccs"><i class="fa fa-check"></i><b>4.5</b> CCs上的数据</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html"><i class="fa fa-check"></i><b>5</b> 组合复形神经网络（Combinatorial complex neural networks）</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#building-ccnns-tensor-diagrams"><i class="fa fa-check"></i><b>5.1</b> 构建 CCNN：张量图</a></li>
+<li class="chapter" data-level="5.2" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#push-forward-operator-and-merge-node"><i class="fa fa-check"></i><b>5.2</b> 前推操作（Push-forward operator）和聚合节点</a></li>
+<li class="chapter" data-level="5.3" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#the-main-three-tensor-operations"><i class="fa fa-check"></i><b>5.3</b> 三种主要的张量操作</a></li>
+<li class="chapter" data-level="5.4" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#definition-of-combinatorial-complex-convolutional-networks"><i class="fa fa-check"></i><b>5.4</b> 组合复形卷积网络的定义（combinatorial complex convolutional networks）</a></li>
+<li class="chapter" data-level="5.5" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#combinatorial-complex-attention-neural-networks"><i class="fa fa-check"></i><b>5.5</b> 组合复形注意力神经网络</a></li>
+</ul></li>
+<li class="part"><span><b>第三部分：高阶消息传递（Higher-order message passing）</b></span></li>
+<li class="chapter" data-level="6" data-path="message-passing.html"><a href="message-passing.html"><i class="fa fa-check"></i><b>6</b> 消息传递</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="message-passing.html"><a href="message-passing.html#definition-of-higher-order-message-passing"><i class="fa fa-check"></i><b>6.1</b> 高阶消息传递的定义</a></li>
+<li class="chapter" data-level="6.2" data-path="message-passing.html"><a href="message-passing.html#higher-order-message-passing-neural-networks-are-ccnns"><i class="fa fa-check"></i><b>6.2</b> 高阶消息传递神经网络就是CCNNs</a></li>
+<li class="chapter" data-level="6.3" data-path="message-passing.html"><a href="message-passing.html#merge-nodes-and-higher-order-message-passing-a-qualitative-comparison"><i class="fa fa-check"></i><b>6.3</b> 聚合节点和高阶消息传递：量化比较</a></li>
+<li class="chapter" data-level="6.4" data-path="message-passing.html"><a href="message-passing.html#attention-higher-order-message-passing-and-ccanns"><i class="fa fa-check"></i><b>6.4</b> 注意力高阶消息传递和CCANNs</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html"><i class="fa fa-check"></i><b>7</b> 前推、池化和反池化</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#cc-pooling-and-unpooling"><i class="fa fa-check"></i><b>7.1</b> CC池化和反池化</a></li>
+<li class="chapter" data-level="7.2" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#formulating-common-pooling-operations-as-cc-pooling"><i class="fa fa-check"></i><b>7.2</b> 将常见的池化操作表述为 CC-pooling</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#graph-pooling-as-cc-pooling"><i class="fa fa-check"></i><b>7.2.1</b> 用CC-pooling表示图池化操作</a></li>
+<li class="chapter" data-level="7.2.2" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#image-pooling-as-cc-pooling"><i class="fa fa-check"></i><b>7.2.2</b> 图像池化作为CC-pooing</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#pooling-and-unpooling-ccnns"><i class="fa fa-check"></i><b>7.3</b> 池化与反池化CCNNs</a></li>
+<li class="chapter" data-level="7.4" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#mapper-and-the-cc-pooling-operation"><i class="fa fa-check"></i><b>7.4</b> 映射器和CC池化操作</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html"><i class="fa fa-check"></i><b>8</b> CCNNs的Hasse图解释</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#hasse-graph-interpretation-of-ccnns-2"><i class="fa fa-check"></i><b>8.1</b> CCNNs的Hasse图解释</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#ccs-as-hasse-graphs"><i class="fa fa-check"></i><b>8.1.1</b> CCs作为Hasse图</a></li>
+<li class="chapter" data-level="8.1.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs"><i class="fa fa-check"></i><b>8.1.2</b> 增强的Hasse图</a></li>
+<li class="chapter" data-level="8.1.3" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#reducibility-of-ccnns-to-graph-basedmodels"><i class="fa fa-check"></i><b>8.1.3</b> CCNN对图模型的归约能力</a></li>
+<li class="chapter" data-level="8.1.4" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs-and-cc-pooling"><i class="fa fa-check"></i><b>8.1.4</b> 增强Hasse图和CC-pooling</a></li>
+<li class="chapter" data-level="8.1.5" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-diagrams-message-passing-and-mergenodes"><i class="fa fa-check"></i><b>8.1.5</b> 增强Hasse图消息传递和聚合节点</a></li>
+<li class="chapter" data-level="8.1.6" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#higher-order-representation-learning"><i class="fa fa-check"></i><b>8.1.6</b> 高阶表征学习</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#on-the-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2</b> CCNNs的等变性</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#permutation-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2.1</b> CCNNs的置换等变</a></li>
+<li class="chapter" data-level="8.2.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#orientation-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2.2</b> CCNNs的方向等变</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>第四部分：应用，文献和结论</b></span></li>
+<li class="chapter" data-level="9" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html"><i class="fa fa-check"></i><b>9</b> 实现与实验</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#software-toponetx-topoembedx-and-topomodelx"><i class="fa fa-check"></i><b>9.1</b> 软件：TopoNetX, TopoEmbedX, and TopoModelX</a></li>
+<li class="chapter" data-level="9.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#datasets"><i class="fa fa-check"></i><b>9.2</b> 数据集</a></li>
+<li class="chapter" data-level="9.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#shape-analysis-mesh-segmentation-and-classification"><i class="fa fa-check"></i><b>9.3</b> 形状分析：网格分割与分类</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-segmentation"><i class="fa fa-check"></i><b>9.3.1</b> 网格分割</a></li>
+<li class="chapter" data-level="9.3.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-and-point-cloud-classification"><i class="fa fa-check"></i><b>9.3.2</b> Mesh and point cloud classification</a></li>
+<li class="chapter" data-level="9.3.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#graph-classification"><i class="fa fa-check"></i><b>9.3.3</b> Graph classification</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#pooling-with-mapper-on-graphs-and-data-classification"><i class="fa fa-check"></i><b>9.4</b> Pooling with mapper on graphs and data classification</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-and-edge-features"><i class="fa fa-check"></i><b>9.4.1</b> Mesh classification: CC-pooling with input vertex and edge features</a></li>
+<li class="chapter" data-level="9.4.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-features-only"><i class="fa fa-check"></i><b>9.4.2</b> Mesh classification: CC-pooling with input vertex features only</a></li>
+<li class="chapter" data-level="9.4.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#point-cloud-classification-cc-pooling-with-input-vertex-features-only"><i class="fa fa-check"></i><b>9.4.3</b> Point cloud classification: CC-pooling with input vertex features only</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#ablation-studies"><i class="fa fa-check"></i><b>9.5</b> Ablation studies</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="related-work.html"><a href="related-work.html"><i class="fa fa-check"></i><b>10</b> Related work</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="related-work.html"><a href="related-work.html#graph-based-models"><i class="fa fa-check"></i><b>10.1</b> Graph-based models</a></li>
+<li class="chapter" data-level="10.2" data-path="related-work.html"><a href="related-work.html#higher-order-deep-learning-models"><i class="fa fa-check"></i><b>10.2</b> Higher-order deep learning models</a></li>
+<li class="chapter" data-level="10.3" data-path="related-work.html"><a href="related-work.html#attention-based-models"><i class="fa fa-check"></i><b>10.3</b> Attention-based models</a></li>
+<li class="chapter" data-level="10.4" data-path="related-work.html"><a href="related-work.html#graph-based-pooling"><i class="fa fa-check"></i><b>10.4</b> Graph-based pooling</a></li>
+<li class="chapter" data-level="10.5" data-path="related-work.html"><a href="related-work.html#applied-algebraic-topology"><i class="fa fa-check"></i><b>10.5</b> Applied algebraic topology</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="conclusions.html"><a href="conclusions.html"><i class="fa fa-check"></i><b>11</b> Conclusions</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>A</b> 术语</a></li>
+<li class="chapter" data-level="B" data-path="lifting-maps.html"><a href="lifting-maps.html"><i class="fa fa-check"></i><b>B</b> Lifting maps</a>
+<ul>
+<li class="chapter" data-level="B.1" data-path="lifting-maps.html"><a href="lifting-maps.html#n-hop-cc-of-a-graph"><i class="fa fa-check"></i><b>B.1</b> n-hop CC of a graph</a></li>
+<li class="chapter" data-level="B.2" data-path="lifting-maps.html"><a href="lifting-maps.html#path-based-and-subgraph-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.2</b> Path-based and subgraph-based CC of a graph</a></li>
+<li class="chapter" data-level="B.3" data-path="lifting-maps.html"><a href="lifting-maps.html#loop-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.3</b> Loop-based CC of a graph</a></li>
+<li class="chapter" data-level="B.4" data-path="lifting-maps.html"><a href="lifting-maps.html#coface-cc-of-a-simplicial-complex-or-of-a-cc"><i class="fa fa-check"></i><b>B.4</b> Coface CC of a simplicial complex or of a CC</a></li>
+<li class="chapter" data-level="B.5" data-path="lifting-maps.html"><a href="lifting-maps.html#augmentation-of-ccs-by-higher-rank-cells"><i class="fa fa-check"></i><b>B.5</b> Augmentation of CCs by higher-rank cells</a></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="ccnn-architecture-search-and-topological-quantum-field-theories.html"><a href="ccnn-architecture-search-and-topological-quantum-field-theories.html"><i class="fa fa-check"></i><b>C</b> CCNN architecture search and topological quantum field theories</a></li>
+<li class="chapter" data-level="D" data-path="learning-discrete-exterior-calculus-operators-with-ccanns.html"><a href="learning-discrete-exterior-calculus-operators-with-ccanns.html"><i class="fa fa-check"></i><b>D</b> Learning discrete exterior calculus operators with CCANNs</a></li>
+<li class="chapter" data-level="E" data-path="a-mapper-induced-topology-preserving-cc-pooling-operation.html"><a href="a-mapper-induced-topology-preserving-cc-pooling-operation.html"><i class="fa fa-check"></i><b>E</b> A mapper-induced topology-preserving CC-pooling operation</a></li>
+<li class="chapter" data-level="" data-path="参考文献.html"><a href="参考文献.html"><i class="fa fa-check"></i>参考文献</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">拓扑深度学习：超越图数据</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="hasse-graph-interpretation-of-ccnns-1" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">第 8 章</span> CCNNs的Hasse图解释<a href="hasse-graph-interpretation-of-ccnns-1.html#hasse-graph-interpretation-of-ccnns-1" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>在本节中，我们将通过与已有的 GNN研究成果建立联系，仔细研究拓扑学习机的特性。首先将CCs解释为专门的图，例如哈斯图（<em>Hasse graphs</em>），然后针对置换和方向的作用描述它们的等变特性，还将进一步将等变性定义与Hasse图表示法下的传统等变定义联系起来。</p>
+<blockquote>
+<p>译者注：Hasse graphs，用来表示有限偏序集的一种数学图表，它是一种图形形式的对偏序集的传递简约。具体的说，对于偏序集合<span class="math inline">\((S, ≤)\)</span>，把<span class="math inline">\(S\)</span>的每个元素表示为平面上的顶点，并绘制从<span class="math inline">\(x\)</span>到<span class="math inline">\(y\)</span>向上的线段或弧线，只要<span class="math inline">\(y\)</span> 覆盖<span class="math inline">\(x\)</span>(就是说，只要<span class="math inline">\(x &lt; y\)</span>并且没有<span class="math inline">\(z\)</span>使得<span class="math inline">\(x &lt; z &lt; y\)</span>)。这些弧线可以相互交叉但不能触及任何非其端点的顶点。带有标注的顶点的这种图唯一确定这个集合的偏序。</p>
+</blockquote>
+<div id="hasse-graph-interpretation-of-ccnns-2" class="section level2 hasAnchor" number="8.1">
+<h2><span class="header-section-number">8.1</span> CCNNs的Hasse图解释<a href="hasse-graph-interpretation-of-ccnns-1.html#hasse-graph-interpretation-of-ccnns-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>我们将首先阐明，每个 CC 都可以归约为一个唯一且特定的图，即 <em>Hasse 图</em>。通过这种归约，就可以用基于图的模型来分析和理解 CCNN 的各种计算和概念。</p>
+<div id="ccs-as-hasse-graphs" class="section level3 hasAnchor" number="8.1.1">
+<h3><span class="header-section-number">8.1.1</span> CCs作为Hasse图<a href="hasse-graph-interpretation-of-ccnns-1.html#ccs-as-hasse-graphs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>定义 <a href="combinatorial-complexes.html#def:maps">4.2</a>表明CC是偏序的（poset）, 是一个部分有序集合，其部分有序关系是集合包含关系。 这也意味着，当且仅当两个 CC 的 偏序关系 等价时，它们才是等价的<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>。 定义<a href="hasse-graph-interpretation-of-ccnns-1.html#def:hg">8.1</a> 给CC引入了<em>Hasse图</em> <span class="citation">(<a href="#ref-wachs2006poset">Wachs 2006</a>; <a href="#ref-abramenko2008buildings">Abramenko and Brown 2008</a>)</span>，它是和有限偏序关系关联的有向图。</p>
+<div class="definition">
+<p><span id="def:hg" class="definition"><strong>定义 8.1  (Hasse 图) </strong></span>CC <span class="math inline">\((S, \mathcal{X},\mbox{rk})\)</span> 的<em>Hasse图</em>是有向图 <span class="math inline">\(\mathcal{H}_{\mathcal{X}}= (V (\mathcal{H}_{\mathcal{X}}), E(\mathcal{H}_{\mathcal{X}}) )\)</span>，顶点集为<span class="math inline">\(V (\mathcal{H}_{\mathcal{X}})=\mathcal{X}\)</span>，边集为 <span class="math inline">\(E(\mathcal{H}_{\mathcal{X}})=\{ (x,y) : x\subsetneq y, \mbox{rk}(x)=\mbox{rk}(y)-1 \}\)</span>。</p>
+</div>
+<p>CC <span class="math inline">\((S, \mathcal{X},\mbox{rk})\)</span>的Hasse图 <span class="math inline">\(\mathcal{H}_{\mathcal{X}}\)</span>的顶点是<span class="math inline">\(\mathcal{X}\)</span>中的胞腔，<span class="math inline">\(\mathcal{H}_{\mathcal{X}}\)</span>的边由胞腔间的直接互连关系（immediate incidence）确定，图 <a href="hasse-graph-interpretation-of-ccnns-1.html#fig:hasse-diagram">8.1</a> 提供了一个CC的Hasse图示例。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:hasse-diagram"></span>
+<img src="figures/poset.png" alt="CC的Hasse图示例。 (a): 莫比乌斯环（$M\ddot{o}bius$ strip）的CC。 (b): CC的Hasse图，描述了胞腔之间的偏序结构。 (c): 带有边$A_{0,1}$ and $coA_{2,1}$的增强Hasse图"  />
+<p class="caption">
+图 8.1: CC的Hasse图示例。 (a): 莫比乌斯环（<span class="math inline">\(M\ddot{o}bius\)</span> strip）的CC。 (b): CC的Hasse图，描述了胞腔之间的偏序结构。 (c): 带有边<span class="math inline">\(A_{0,1}\)</span> and <span class="math inline">\(coA_{2,1}\)</span>的增强Hasse图
+</p>
+</div>
+<p><em>CC 结构类（CC structure class）</em>是根据定义 <a href="combinatorial-complexes.html#def:maps">4.2</a>确定的同构 CC 的集合，命题<a href="hasse-graph-interpretation-of-ccnns-1.html#prp:structure">8.1</a>为确定 CC 结构类提供了充分的标准，命题<a href="hasse-graph-interpretation-of-ccnns-1.html#prp:structure">8.1</a>的证明依赖于对由底层Hasse图表示确定的 CC 结构类的观察，Hasse图提供了与关联矩阵<span class="math inline">\(\{B_{k,k+1}\}_{k=0}^{\dim(\mathcal{X})-1}\)</span>同样的信息。图<a href="hasse-graph-interpretation-of-ccnns-1.html#fig:vis-structure">8.2</a>给出了命题<a href="hasse-graph-interpretation-of-ccnns-1.html#prp:structure">8.1</a>的证明的第二、三部分的可视化。</p>
+<div class="proposition">
+<p><span id="prp:structure" class="proposition"><strong>命题 8.1  (CC 结构的确定 ) </strong></span>令 <span class="math inline">\((S, \mathcal{X},\mbox{rk})\)</span>是CC，对于<span class="math inline">\((S, \mathcal{X},\mbox{rk})\)</span>表示的CC结构类，需满足如下充分条件:</p>
+<ol style="list-style-type: decimal">
+<li>CC结构类由关联矩阵<span class="math inline">\(\{B_{k,k+1}\}_{k=0}^{ \dim(\mathcal{X}) -1}\)</span>确定。</li>
+<li>CC结构类由邻接矩阵 <span class="math inline">\(\{A_{k,1}\}_{k=0}^{\dim(\mathcal{X})-1}\)</span>确定。</li>
+<li>CC结构类由共邻矩阵 <span class="math inline">\(\{coA_{k,1}\}_{k=1}^{\dim(\mathcal{X})}\)</span>确定。</li>
+</ol>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-12" class="proof"><em>证明</em>. </span>如果注意到 CC 的结构完全由其 Hasse 图表示法决定，那么命题三部分的证明就水到渠成了。 命题的第一部分源于这样一个事实：Hasse图中的边正是矩阵<span class="math inline">\(\{B_{k,k+1}\}_{k=0}^{\dim(\mathcal{X}-1)}\)</span>的非零项。 第二部分是观察到，当且仅当存在一个<span class="math inline">\(k\)</span>-cell <span class="math inline">\(z^k\)</span>时（关联 <span class="math inline">\(x^{k-1}\)</span> 和 <span class="math inline">\(y^{k-1}\)</span>），<span class="math inline">\((k-1)\)</span> cells <span class="math inline">\(x^{k-1}\)</span> 和 <span class="math inline">\(y^{k-1}\)</span> 是 1-adjacent。 第三步是注意到，当且仅当存在一个<span class="math inline">\(k\)</span>-cell <span class="math inline">\(z^k\)</span>（关联<span class="math inline">\(x^{k+1}\)</span> 和 <span class="math inline">\(y^{k+1}\)</span>）时， <span class="math inline">\((k+1)\)</span>-cells <span class="math inline">\(x^{k+1}\)</span> 和 <span class="math inline">\(y^{k+1}\)</span> 是 1-coadjacent。</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:vis-structure"></span>
+<img src="figures/prop_structure.png" alt="在CC的Hasse图上，直接关联（immediate incidence）和（共）邻接之间的关系 。 (a):  当且仅当存在一个$k$-cell $z^k$ (粉色顶点)时（关联$x^{k-1}$ 和 $y^{k-1}$），$(k-1)$ cells $x^{k-1}$ 和 $y^{k-1}$ (橙色顶点) 是1-adjacent。 (b): 当且仅当存在一个$k$-cell $z^k$ (粉色顶点)时（关联$x^{k+1}$ 和 $y^{k+1}$），$(k+1)$ cells $x^{k+1}$ 和 $y^{k+1}$ (蓝色顶点) 是 1-coadjacent"  />
+<p class="caption">
+图 8.2: 在CC的Hasse图上，直接关联（immediate incidence）和（共）邻接之间的关系 。 (a): 当且仅当存在一个<span class="math inline">\(k\)</span>-cell <span class="math inline">\(z^k\)</span> (粉色顶点)时（关联<span class="math inline">\(x^{k-1}\)</span> 和 <span class="math inline">\(y^{k-1}\)</span>），<span class="math inline">\((k-1)\)</span> cells <span class="math inline">\(x^{k-1}\)</span> 和 <span class="math inline">\(y^{k-1}\)</span> (橙色顶点) 是1-adjacent。 (b): 当且仅当存在一个<span class="math inline">\(k\)</span>-cell <span class="math inline">\(z^k\)</span> (粉色顶点)时（关联<span class="math inline">\(x^{k+1}\)</span> 和 <span class="math inline">\(y^{k+1}\)</span>），<span class="math inline">\((k+1)\)</span> cells <span class="math inline">\(x^{k+1}\)</span> 和 <span class="math inline">\(y^{k+1}\)</span> (蓝色顶点) 是 1-coadjacent
+</p>
+</div>
+</div>
+<div id="augmented-hasse-graphs" class="section level3 hasAnchor" number="8.1.2">
+<h3><span class="header-section-number">8.1.2</span> 增强的Hasse图<a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>CC 的 Hasse 图非常有用，因为它表明高阶深度学习模型的计算可以归约为基于图的模型的计算。尤其，在 CC <span class="math inline">\(\mathcal{X}\)</span> 上处理的 <span class="math inline">\(k\)</span>-cochain（信号）可视为关联的Hasse图 <span class="math inline">\(\mathcal{H}_{mathcal{X}}\)</span> 上对应顶点的信号。 由矩阵 <span class="math inline">\(B_{k,k+1}\)</span> 指定的边决定了定义在 <span class="math inline">\(\mathcal{X}\)</span> 上的给定高阶模型的消息传递结构。然而，通过矩阵 <span class="math inline">\(A_{r,k}\)</span> 确定的消息传递结构并不直接支持 <span class="math inline">\(\mathcal{H}_{mathcal{X}}\)</span> 的相应边。 因此，除了CC的poset偏序关系所指定的边之外，有时还需要用额外的边来<em>增强Hasse图</em>。按照这种思路，定义<a href="hasse-graph-interpretation-of-ccnns-1.html#def:ahg">8.2</a>引入了增强Hasse图（augmented Hasse graph）的概念。</p>
+<div class="definition">
+<p><span id="def:ahg" class="definition"><strong>定义 8.2  (增强Hasse图，Augmented Hasse graph) </strong></span>令 <span class="math inline">\(\mathcal{X}\)</span> 是CC，<span class="math inline">\(\mathcal{H}_{\mathcal{X}}\)</span> 是它的Hasse图，顶点集为 <span class="math inline">\(V(\mathcal{H}_{\mathcal{X}})\)</span>，边集为 <span class="math inline">\(E(\mathcal{H}_{\mathcal{X}})\)</span>；<span class="math inline">\(\mathcal{N}=\{\mathcal{N}_1,\ldots,\mathcal{N}_n\}\)</span> 是定义在<span class="math inline">\(\mathcal{X}\)</span>上的邻域函数。如果存在<span class="math inline">\(\mathcal{N}_i \in \mathcal{N}\)</span>，使得<span class="math inline">\(x \in \mathcal{N}_i(y)\)</span> 或 <span class="math inline">\(y \in \mathcal{N}_i(x)\)</span>成立，那么称<span class="math inline">\(\mathcal{H}_{\mathcal{X}}\)</span>有<span class="math inline">\(\mathcal{N}\)</span>诱导的增强边<span class="math inline">\(e_{x,y}\)</span>。记<span class="math inline">\(\mathcal{N}\)</span>诱导的所有增强边集为<span class="math inline">\(E_{\mathcal{N}}\)</span>。<span class="math inline">\(\mathcal{N}\)</span>诱导的<span class="math inline">\(\mathcal{X}\)</span>的<em>增强Hasse图</em>定义了图<span class="math inline">\(\mathcal{H}_{\mathcal{X}}(\mathcal{N})= (V(\mathcal{H}_{\mathcal{X}}), E(\mathcal{H}_{\mathcal{X}}) \cup E_{\mathcal{N}})\)</span>.</p>
+</div>
+<p>定义中的增强Hasse图可以更容易地理解为矩阵：
+如果将<span class="math inline">\(\mathbf{G}=\{G_1,\ldots,G_n\}\)</span> 和邻域函数 <span class="math inline">\(\mathcal{N}=\{\mathcal{N}_1,\ldots,\mathcal{N}_n\}\)</span>联系起来，那么<span class="math inline">\(\mathcal{H}_{\mathcal{X}}(\mathcal{N})\)</span> 中的每条增强边将都对对应于某个<span class="math inline">\(G_i\in \mathbf{G}\)</span>中的非零项。由于<span class="math inline">\(\mathcal{N}\)</span> 和 <span class="math inline">\(\mathbf{G}\)</span> 存储了同样的信息，可以用 <span class="math inline">\(\mathcal{H}_{\mathcal{X}}(\mathbf{G})\)</span> 来标记由<span class="math inline">\(\mathbf{G}\)</span>确定的边所诱导的增强 Hasse图。 例如， 图<a href="hasse-graph-interpretation-of-ccnns-1.html#fig:hasse-diagram">8.1</a>(c)中给出的图可用 <span class="math inline">\(\mathcal{H}_{\mathcal{X}}( A_{0,1},coA_{2,1})\)</span>标记。</p>
+</div>
+<div id="reducibility-of-ccnns-to-graph-basedmodels" class="section level3 hasAnchor" number="8.1.3">
+<h3><span class="header-section-number">8.1.3</span> CCNN对图模型的归约能力<a href="hasse-graph-interpretation-of-ccnns-1.html#reducibility-of-ccnns-to-graph-basedmodels" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>在本节中，我们将展示任何基于 CCNN 的计算模型都可以通过底层 CC 的增强Hasse图的子图上的消息传递方案来实现。每个 CCNN 都是通过计算张量图确定的，而计算张量图可以使用基本的张量运算，即推前运算、聚合节点和分裂节点来构建。因此，通过证明这三种张量运算可以在增强的Hasse图上执行，就可以实现基于CCNN的计算对图上消息传递方案的归约能力。命题 <a href="hasse-graph-interpretation-of-ccnns-1.html#prp:hasse-pushforward">8.2</a>就表述了前推操作可以在增强的Hasse图上执行。</p>
+<div class="proposition">
+<p><span id="prp:hasse-pushforward" class="proposition"><strong>命题 8.2  (增强Hasse图上的计算，Computation over augmented Hasse graph) </strong></span>令<span class="math inline">\(\mathcal{X}\)</span>是CC，<span class="math inline">\(\mathcal{F}_G \colon \mathcal{C}^i(\mathcal{X})\to \mathcal{C}^j(\mathcal{X})\)</span>是共链映射<span class="math inline">\(G\colon\mathcal{C}^i(\mathcal{X})\to \mathcal{C}^j(\mathcal{X})\)</span>诱导的前推操作。任何通过<span class="math inline">\(\mathcal{F}_G\)</span>执行的计算都能归约为<span class="math inline">\(\mathcal{X}\)</span>的增强Hasse图<span class="math inline">\(\mathcal{H}_{\mathcal{X}}(G)\)</span> 上的相应计算。</p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-13" class="proof"><em>证明</em>. </span>令 <span class="math inline">\(\mathcal{X}\)</span>是CC，<span class="math inline">\(\mathcal{H}_{\mathcal{X}}(G)\)</span>是<span class="math inline">\(G\)</span>确定的<span class="math inline">\(\mathcal{X}\)</span>的增强Hasse图。增强Hasse图的定义表明，在顶点<span class="math inline">\(\mathcal{H}_{\mathcal{X}}(G)\)</span> 和<span class="math inline">\(\mathcal{X}\)</span>的胞腔之间有一对一的对应关系。 给定胞腔<span class="math inline">\(x\in \mathcal{X}\)</span>，令<span class="math inline">\(x^{\prime}\)</span>是<span class="math inline">\(\mathcal{H}_{\mathcal{X}}(G)\)</span>中的顶点，<span class="math inline">\(y\)</span>是<span class="math inline">\(\mathcal{X}\)</span>中带有特征向量<span class="math inline">\(\mathbf{h}_y\)</span>的胞腔，该特征向量是由公式<a href="combinatorial-complex-neural-networks.html#eq:functional">(5.2)</a>指定的前推操作计算得到。回想一下，<span class="math inline">\(\mathbf{h}_y\)</span> 向量是通过聚合<span class="math inline">\(x \in \mathcal{X}^i\)</span>中与<span class="math inline">\(y\)</span>相邻的所有向量<span class="math inline">\(\mathbf{h}_x\)</span>计算出来的，这与邻域函数<span class="math inline">\(\mathcal{N}_{G^T}\)</span>有关。令<span class="math inline">\(m_{x,y}\)</span>表示<span class="math inline">\(\mathcal{X}\)</span>中两个胞腔<span class="math inline">\(x\)</span> 和<span class="math inline">\(y\)</span>之间的计算（即：消息），该计算是前推操作<span class="math inline">\(\mathcal{F}_G\)</span>计算的一部分。根据增强 Hasse 图的定义，胞腔 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(y\)</span> 在矩阵 <span class="math inline">\(G\)</span> 中必须有相应的非零项。此外，这些非零项对应于<span class="math inline">\(\mathcal{H}_{\mathcal{X}}(G)\)</span>中<span class="math inline">\(x^{\prime}\)</span> 和 <span class="math inline">\(y^{\prime}\)</span>之间的一条边。因此， <span class="math inline">\(\mathcal{X}\)</span>的胞腔 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(y\)</span>之间的计算<span class="math inline">\(m_{x,y}\)</span>可以看作<span class="math inline">\(\mathcal{H}_{\mathcal{X}}(G)\)</span>的对应顶点<span class="math inline">\(x^{\prime}\)</span> 和 <span class="math inline">\(y^{\prime}\)</span>之间的计
+（消息）<span class="math inline">\(m_{x^{\prime},y^{\prime}}\)</span>。</p>
+</div>
+<p>同样，对任意聚合节点的计算都可以用对底层 CC 的增强 Hasse 图的子图的计算来描述。命题 <a href="hasse-graph-interpretation-of-ccnns-1.html#prp:hasse">8.3</a>正式表述了这一说法。</p>
+<div class="proposition">
+<p><span id="prp:hasse" class="proposition"><strong>命题 8.3  (聚合顶点到增强Hasse图的归约，Reduction of merge node to augmented Hasse graph) </strong></span>正如公式<a href="combinatorial-complex-neural-networks.html#eq:sum">(5.1)</a>中那样，通过聚合顶点<span class="math inline">\(\mathcal{M}_{\mathbf{G},\mathbf{W}}\)</span>执行的任何计算都可以归约到底层CC的增强Hasse图<span class="math inline">\(\mathcal{H}_{\mathcal{X}}(\mathbf{G})\)</span>上的相应计算。</p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-14" class="proof"><em>证明</em>. </span>令 <span class="math inline">\(\mathcal{X}\)</span>是CC，<span class="math inline">\(\mathbf{G}=\{ G_1,\ldots,G_n\}\)</span>是定义在<span class="math inline">\(\mathcal{X}\)</span>上的共链操作序列， <span class="math inline">\(\mathcal{H}_{\mathcal{X}}(\mathbf{G})\)</span> 是<span class="math inline">\(\mathbf{G}\)</span>确定的增强Hasse图。按照增强Hasse图的定义，<span class="math inline">\(\mathcal{H}_{\mathcal{X}}(\mathbf{G})\)</span>的顶点和<span class="math inline">\(\mathcal{X}\)</span>的胞腔之间有一对一的关系。对<span class="math inline">\(x\in \mathcal{X}\)</span>中的每个胞腔，令<span class="math inline">\(x^{\prime}\)</span> 是<span class="math inline">\(\mathcal{H}_{\mathcal{X}}(\mathbf{G})\)</span>中的对应顶点，令 <span class="math inline">\(m_{x,y}\)</span> 是 在<span class="math inline">\(\mathcal{X}\)</span>的两个胞腔<span class="math inline">\(x\)</span> 和 <span class="math inline">\(y\)</span>上执行的计算（消息），该计算是函数<span class="math inline">\(\mathcal{M}_{\mathbf{G},W}\)</span>计算的一部分。因此，两个胞腔 <span class="math inline">\(x\)</span>
+和<span class="math inline">\(y\)</span>必须在矩阵<span class="math inline">\(G_i\in\mathbf{G}\)</span>上有相应的一对一非零项。根据增强Hasse图的定义，非零项对应于 <span class="math inline">\(\mathcal{H}_{\mathcal{X}}(\mathbf{G})\)</span>中 <span class="math inline">\(x^{\prime}\)</span> 和 <span class="math inline">\(y^{\prime}\)</span>之间的一条边。因此，在<span class="math inline">\(\mathcal{X}\)</span>的两个胞腔<span class="math inline">\(x\)</span> 和 <span class="math inline">\(y\)</span>之间执行计算 <span class="math inline">\(m_{x,y}\)</span>就可以看作是在<span class="math inline">\(\mathcal{H}_{\mathcal{X}}(\mathbf{G})\)</span>的顶点<span class="math inline">\(x^{\prime}\)</span> 和 <span class="math inline">\(y^{\prime}\)</span>之间执行计算（消息）<span class="math inline">\(m_{x^{\prime},y^{\prime}}\)</span>。</p>
+</div>
+<p>命题 <a href="hasse-graph-interpretation-of-ccnns-1.html#prp:hasse-pushforward">8.2</a> 和 <a href="hasse-graph-interpretation-of-ccnns-1.html#prp:hasse">8.3</a> 确保了前推和聚合节点计算可以在增强Hasse图上实现。定理 <a href="hasse-graph-interpretation-of-ccnns-1.html#thm:hasse-theorem">8.1</a> 泛化了命题 <a href="hasse-graph-interpretation-of-ccnns-1.html#prp:hasse-pushforward">8.2</a> 和<a href="hasse-graph-interpretation-of-ccnns-1.html#prp:hasse">8.3</a>，表明张量图上的任何计算都可在增强哈塞图上实现.</p>
+<div class="theorem">
+<p><span id="thm:hasse-theorem" class="theorem"><strong>定理 8.1  (张量图可归约到增强Hasse图，Reduction of tensor diagram to augmented Hasse graph) </strong></span>通过张量图<span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span>执行的任何计算都可以归约到增强Hasse图<span class="math inline">\(\mathcal{H}_{\mathcal{X}}(\mathbf{G})\)</span>。</p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-15" class="proof"><em>证明</em>. </span>结论直接来自命题 <a href="hasse-graph-interpretation-of-ccnns-1.html#prp:hasse">8.3</a>和 <a href="hasse-graph-interpretation-of-ccnns-1.html#prp:hasse-pushforward">8.2</a>，以及任何张量图都可以用三个基本张量运算来实现这一事实。</p>
+</div>
+<p>根据定理 <a href="hasse-graph-interpretation-of-ccnns-1.html#thm:hasse-theorem">8.1</a>，张量图和它相应的增强Hasse图以两种可选的方式编码了同样的计算，图 <a href="hasse-graph-interpretation-of-ccnns-1.html#fig:hasse-diagram-examples">8.3</a> 演示了Hasse图提供了关联的CCNN的张量图表示的计算摘要。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:hasse-diagram-examples"></span>
+<img src="figures/augmented_hasse_graph_examples.png" alt="两个CCNNs的张量图以及他们相应的Hasse图。 为了避免杂乱，张量图中去掉了边标签，因为它们可以从相应的增强 Hasse 图中推断出来。(a): 从高阶信息传递方案中获得的张量图。 (b): 使用三种基本张量运算得到的张量图。"  />
+<p class="caption">
+图 8.3: 两个CCNNs的张量图以及他们相应的Hasse图。 为了避免杂乱，张量图中去掉了边标签，因为它们可以从相应的增强 Hasse 图中推断出来。(a): 从高阶信息传递方案中获得的张量图。 (b): 使用三种基本张量运算得到的张量图。
+</p>
+</div>
+</div>
+<div id="augmented-hasse-graphs-and-cc-pooling" class="section level3 hasAnchor" number="8.1.4">
+<h3><span class="header-section-number">8.1.4</span> 增强Hasse图和CC-pooling<a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs-and-cc-pooling" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Hasse 图及其增强版本是底层 CC 的偏序结构的图表示。 针对这些图解释（反）池化操作（定义 <a href="push-forward-pooling-and-unpooling.html#def:pooling-exact-definition">7.1</a> 和 <a href="push-forward-pooling-and-unpooling.html#def:unpooling-exact-definition">7.2</a>）是很有启发性的。定义 <a href="push-forward-pooling-and-unpooling.html#def:pooling-exact-definition">7.1</a>中的 CC 池化操作将 偏序结构中的信号从低秩胞腔映射到高秩胞腔。另一方面，定义 <a href="push-forward-pooling-and-unpooling.html#def:unpooling-exact-definition">7.2</a>中的 CC-unpooling 操作将信号映射到相反的方向。图（fig:hasse-graph-pooling）展示了一个在底层 CC 的增强 Hasse 图上可视化的 执行CC（反）池化操作的示例。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:hasse-graph-pooling"></span>
+<img src="figures/hasse_graph_pooling_scaled.png" alt="CC增强Hasse图视角下的CC池化于反池化操作。 图中的顶点代表底层 CC 中的骨架。黑色边代表这些顶点之间 Hasse 图中的边，而红色边代表从增强 Hasse 图结构中获得的边。CC-pooling对应于将偏序集合结构中的信号从低秩顶点推向高秩顶点，而 CC-unpooling对应于将偏序集合结构中的信号从高秩顶点推向低秩顶点。"  />
+<p class="caption">
+图 8.4: CC增强Hasse图视角下的CC池化于反池化操作。 图中的顶点代表底层 CC 中的骨架。黑色边代表这些顶点之间 Hasse 图中的边，而红色边代表从增强 Hasse 图结构中获得的边。CC-pooling对应于将偏序集合结构中的信号从低秩顶点推向高秩顶点，而 CC-unpooling对应于将偏序集合结构中的信号从高秩顶点推向低秩顶点。
+</p>
+</div>
+</div>
+<div id="augmented-hasse-diagrams-message-passing-and-mergenodes" class="section level3 hasAnchor" number="8.1.5">
+<h3><span class="header-section-number">8.1.5</span> 增强Hasse图消息传递和聚合节点<a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-diagrams-message-passing-and-mergenodes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>有两种方式可用来构造CCNN，一是用章节<a href="message-passing.html#definition-of-higher-order-message-passing">6.1</a>给出的高阶消息传递图来
+构造，二是使用章节 <a href="combinatorial-complex-neural-networks.html#the-main-three-tensor-operations">5.3</a> 给出的三个基本张量操作来构造，这在章节<a href="message-passing.html#merge-nodes-and-higher-order-message-passing-a-qualitative-comparison">6.3</a>中已经阐明。尤其，章节 <a href="message-passing.html#merge-nodes-and-higher-order-message-passing-a-qualitative-comparison">6.3</a>中 提到，聚合节点 与高阶消息传递范式相比，聚合节点自然可以实现更灵活的计算框架。
+这种灵活性体现在底层张量图以及所考虑的网络输入方面。如图 <a href="hasse-graph-interpretation-of-ccnns-1.html#fig:hasse-diagram-examples">8.3</a>所示，张量运算和高阶消息传递之间的区别也可以通过增强的 Hasse 图来突出显示。图 <a href="hasse-graph-interpretation-of-ccnns-1.html#fig:hasse-diagram-examples">8.3</a>(a)给出了从CCNN的高阶消息传递方案中获得的张量图。
+我们观察到这种 CCNN 的两个关键特性：初始输入的共链在域的所有维度的所有胞腔上都能支持，而且 CCNN 在每次迭代时都会按照预定的邻域函数来更新域的所有维度的所有胞腔上支持的所有共链。因此，相应的增强 Hasse 图呈现出统一的拓扑结构。相比之下，图 <a href="hasse-graph-interpretation-of-ccnns-1.html#fig:hasse-diagram-examples">8.3</a>(b) 显示的是使用三种基本张量运算构建的张量图。由于高阶信息传递规则不施加限制，因此得到的增强 Hasse 图呈现出更灵活的结构。</p>
+</div>
+<div id="higher-order-representation-learning" class="section level3 hasAnchor" number="8.1.6">
+<h3><span class="header-section-number">8.1.6</span> 高阶表征学习<a href="hasse-graph-interpretation-of-ccnns-1.html#higher-order-representation-learning" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>定理<a href="hasse-graph-interpretation-of-ccnns-1.html#thm:hasse-theorem">8.1</a>给出的增强Hasse图和CCs关系表明，许多基于的深度学习也有类似的CCs构造方法。在本节，我们将阐明<em>高阶表征学习（higher-order representation learning）</em>如何归约到图表示学习 <span class="citation">(<a href="#ref-hamilton2017representation">Hamilton, Ying, and Leskovec 2017</a>)</span>，将某些 CC 计算应用转为增强哈塞图计算。</p>
+<p>图形表示法(graph representation)的目标是学习一种映射，将图形的顶点、边或子图嵌入欧几里得空间，使由此产生的嵌入能捕捉到图形的有用信息。类似的，高阶表征学习 <span class="citation">(<a href="#ref-hajijcell">Hajij, Istvan, and Zamzmi 2020</a>)</span> 是学习一种嵌入，在保留拓扑域的主要结构属性的前提下，将给定拓扑域的胞腔嵌入到欧氏空间。更确切的说，对于给定复形<span class="math inline">\(\mathcal{X}\)</span>，高阶表征学习是要学习一对函数<span class="math inline">\((enc, dec)\)</span>，其中，<span class="math inline">\(enc\)</span>是<em>编码器映射（encoder map）</em> <span class="math inline">\(enc \colon \mathcal{X}^k \to \mathbb{R}^d\)</span>，<span class="math inline">\(dec\)</span>是<em>解码器映射（decoder map）</em> <span class="math inline">\(dec \colon \mathbb{R}^d \times \mathbb{R}^d \to \mathbb{R}\)</span>。编码器函数会为 <span class="math inline">\(\mathcal{X}\)</span> 中的每个 <span class="math inline">\(k\)</span>-cell <span class="math inline">\(x^k\)</span> 关联一个特征向量 <span class="math inline">\(enc(x^k)\)</span>，该特征向量会根据 <span class="math inline">\(\mathcal{X}\)</span> 中其他胞腔的结构对 <span class="math inline">\(x^k\)</span> 的结构进行编码。另一方面，解码器函数给
+另一方面，解码器函数为每一对胞腔嵌入关联了一个相似度量，它量化了相应胞腔之间的某种关系概念。我们使用特定上下文环境的<em>相似性度量</em> <span class="math inline">\(sim \colon \mathcal{X}^k \times \mathcal{X}^k \to \mathbb{R}\)</span> 和目标函数来优化可训练函数 <span class="math inline">\((enc,dec)\)</span>，目标函数形式如下：
+<span class="math display" id="eq:loss">\[\begin{equation}
+\mathcal{L}_k=\sum_{ x^k \in \mathcal{X}^k     } l(  dec(  enc(x^{k}), enc(y^{k})),sim(x^{k},y^k)),
+\tag{8.1}
+\end{equation}\]</span>
+其中， <span class="math inline">\(l \colon \mathbb{R} \times \mathbb{R} \to \mathbb{R}\)</span> 是损失函数。高阶表征学习和图表征学习的确切关系在命题<a href="hasse-graph-interpretation-of-ccnns-1.html#prp:convert-graphtocc">8.4</a>中给出</p>
+<div class="proposition">
+<p><span id="prp:convert-graphtocc" class="proposition"><strong>命题 8.4  (高阶表征学习可作为图表征学习，Higher-order representation learning as graph representation learning) </strong></span>高阶表征学习可以归约到图表征学习。</p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-16" class="proof"><em>证明</em>. </span>令 <span class="math inline">\(sim\colon \mathcal{X}^k \times \mathcal{X}^k \to \mathbb{R}\)</span> 是相似性度量， 图<span class="math inline">\(\mathcal{G}_{\mathcal{X}^k}\)</span>定义为：顶点集对应于<span class="math inline">\(\mathcal{X}^k\)</span>中的胞腔，边对应于<span class="math inline">\(\mathcal{X}^k \times \mathcal{X}^k\)</span>中通过函数<span class="math inline">\(sim\)</span>映射成非零值的胞腔对。因此，一对 <span class="math inline">\((enc, dec)\)</span> 就对应一对<span class="math inline">\((enc_{\mathcal{G}}, dec_{\mathcal{G}})\)</span>，各函数的形式分别为<span class="math inline">\(enc_{\mathcal{G}}\colon \mathcal{G}_{\mathcal{X}^k} \to \mathbb{R}\)</span> 和 <span class="math inline">\(dec_{\mathcal{G}}\colon \mathbb{R}^d \times \mathbb{R}^d \to \mathbb{R}\)</span>。所以，学习一对<span class="math inline">\((enc, dec)\)</span>可以归约为学习一对 <span class="math inline">\((enc_{\mathcal{G}}, dec_{\mathcal{G}})\)</span>。</p>
+</div>
+<p><a href="https://github.com/pyt-team/TopoEmbedX">TopoEmbedX</a>, 是我们贡献的三个软件包中的一个，支持胞腔复形、单纯复形、CCs上的高阶表征学习，其主要计算原则就是命题<a href="hasse-graph-interpretation-of-ccnns-1.html#prp:convert-graphtocc">8.4</a>。 需要特别说的是, TopoEmbedX 首先把高阶域转换为相应增强Hasse图的子图，然后利用已有的图表示学习算法来计算子图的元素嵌入。 鉴于增强 Hasse 图的元素与原始高阶域之间的对应关系，这样就可以获得高阶域的嵌入。</p>
+<div class="remark">
+<p><span id="unlabeled-div-17" class="remark"><em>备注</em>. </span>根据我们对 Hasse 图的讨论，特别是将 CCNN 上的计算转换为（Hasse）图上的计算的能力，有人可能会说，GNNs 已经足够，不需要 CCNN 了。然而，这是一个误导性线索，因为任何计算都可以用计算图来表示。在 CC 的增强 Hasse 图上应用标准 GNN 并不等同于应用 CCNN。这一点将在第 <a href="hasse-graph-interpretation-of-ccnns-1.html#on-the-equivariance-of-ccnns">8.2</a>节中变得更加清晰，在这一节中，我们将介绍CCNN的<em>等变性（equivariances）</em>。.</p>
+</div>
+</div>
+</div>
+<div id="on-the-equivariance-of-ccnns" class="section level2 hasAnchor" number="8.2">
+<h2><span class="header-section-number">8.2</span> CCNNs的等变性<a href="hasse-graph-interpretation-of-ccnns-1.html#on-the-equivariance-of-ccnns" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>与图类似，高阶深度学习模型，尤其是 CCNNs，应始终与其底层<em>等变性</em> <span class="citation">(<a href="#ref-bronstein2021geometric">Bronstein et al. 2021</a>)</span> 结合起来考虑。现在，我们为 CCNNs 的<em>置换（permutation）</em>和<em>方向等变（orientation equivariance）</em>提供新的定义，并提请注意它们与传统的GNNs等变性概念之间的关系。</p>
+<div id="permutation-equivariance-of-ccnns" class="section level3 hasAnchor" number="8.2.1">
+<h3><span class="header-section-number">8.2.1</span> CCNNs的置换等变<a href="hasse-graph-interpretation-of-ccnns-1.html#permutation-equivariance-of-ccnns" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>命题 <a href="hasse-graph-interpretation-of-ccnns-1.html#prp:structure">8.1</a>描述了CC的结构，受其启发，本节将介绍置换等变CCNNs。我们将首先定义置换群在共链映射空间上的行为。</p>
+<div class="definition">
+<p><span id="def:perm" class="definition"><strong>定义 8.3  (共链映射空间上的置换，Permutation action on space of cochain maps) </strong></span>令 <span class="math inline">\(\mathcal{X}\)</span>是CC，令<span class="math inline">\(\mbox{Sym}(\mathcal{X}) = \prod_{i=0}^{\dim(\mathcal{X})} \mbox{Sym}(\mathcal{X}^k)\)</span> 是 <span class="math inline">\(\mathcal{X}\)</span>上胞腔的秩保持置换（rank-preserving permutations）群，令 <span class="math inline">\(\mathbf{G}=\{G_k\}\)</span>是定义在<span class="math inline">\(\mathcal{X}\)</span>上的共链映射，<span class="math inline">\(G_k  \colon \mathcal{C}^{i_k}\to \mathcal{C}^{j_k}\)</span>, <span class="math inline">\(0\leq i_k,j_k\leq \dim(\mathcal{X})\)</span>的序列，令<span class="math inline">\(\mathcal{P}=(\mathbf{P}_i)_{i=0}^{\dim(\mathcal{X})} \in \mbox{Sym}(\mathcal{X})\)</span>. 则，可定义<span class="math inline">\(\mathbf{G}\)</span>上<span class="math inline">\(\mathcal{P}\)</span>的<em>置换行为（permutation (group) action）</em> 为<span class="math inline">\(\mathcal{P}(\mathbf{G}) = (\mathbf{P}_{j_k} G_{k} \mathbf{P}_{i_k}^T )_{i=0}^{\dim(\mathcal{X})}\)</span> .</p>
+</div>
+<p>在定义<a href="hasse-graph-interpretation-of-ccnns-1.html#def:eqv">8.4</a>中，我们用定义<a href="hasse-graph-interpretation-of-ccnns-1.html#def:perm">8.3</a>中给出的群操作引入了置换等变CCNNs。定义<a href="hasse-graph-interpretation-of-ccnns-1.html#def:eqv">8.4</a>泛化了文献<span class="citation">(<a href="#ref-roddenberry2021principled">T. Mitchell Roddenberry, Glaze, and Segarra 2021</a>; <a href="#ref-schaub2021signal">Schaub et al. 2021</a>)</span>中的相关定义，更详细的讨论可参阅文献<span class="citation">(<a href="#ref-joglwe2022">Jogl 2022</a>; <a href="#ref-velivckovic2022message">Veličković 2022</a>)</span>。定义中，我们使用 <span class="math inline">\(\mbox{Proj}_k \colon \mathcal{C}^1\times \cdots \times \mathcal{C}^m \to \mathcal{C}^k\)</span> 来表示满足 <span class="math inline">\(1\leq k \leq m\)</span>的标准 <span class="math inline">\(k\)</span>-th 投影（projection ），该投影通常表述为 <span class="math inline">\(\mbox{Proj}_k ( \mathbf{H}_{1},\ldots, \mathbf{H}_{k},\ldots,\mathbf{H}_{m})= \mathbf{H}_{k}\)</span> ）.</p>
+<div class="definition">
+<p><span id="def:eqv" class="definition"><strong>定义 8.4  (置换等变CCNN，Permutation-equivariant CCNN) </strong></span>令 <span class="math inline">\(\mathcal{X}\)</span>是CC，<span class="math inline">\(\mathbf{G}= \{G_k\}\)</span>是定义在<span class="math inline">\(\mathcal{X}\)</span>上的有限共链映射序列， <span class="math inline">\(\mathcal{P}=(\mathbf{P}_i)_{i=0}^{\dim(\mathcal{X})} \in \mbox{Sym}(\mathcal{X})\)</span>。 有如下形式的CCNN：
+<span class="math display">\[\begin{equation*}
+\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\colon \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m} \to \mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \cdots \times \mathcal{C}^{j_n}
+\end{equation*}\]</span>
+称上述形式为<em>置换等变CCNN</em>，如果：
+<span class="math display">\[\begin{equation}
+\mbox{Proj}_k \circ \mbox{CCNN}_{\mathbf{G};\mathbf{W}}(\mathbf{H}_{i_1},\ldots ,\mathbf{H}_{i_m})=
+\mathbf{P}_{k} \mbox{Proj}_k \circ
+\mbox{CCNN}_{\mathcal{P}(\mathbf{G});\mathbf{W}}(\mathbf{P}_{i_1} \mathbf{H}_{i_1}, \ldots ,\mathbf{P}_{i_m} \mathbf{H}_{i_m})
+\end{equation}\]</span>
+对所有<span class="math inline">\(1 \leq k\leq m\)</span> 和任意 <span class="math inline">\((\mathbf{H}_{i_1},\ldots ,\mathbf{H}_{i_m}) \in\mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m}\)</span> 都成立。</p>
+</div>
+<p>定义 <a href="hasse-graph-interpretation-of-ccnns-1.html#def:eqv">8.4</a> 泛化了GNNs的置换等变性的相应概念。对于一个有<span class="math inline">\(n\)</span>个顶点和邻接矩阵 <span class="math inline">\(A\)</span>的图，用<span class="math inline">\(\mathrm{GNN}_{A;W}\)</span>表示该图上的GNN。令 <span class="math inline">\(H \in \mathbb{R}^{n \times k}\)</span>是顶点特征，那么对于<span class="math inline">\(P \in \mbox{Sym}(n)\)</span>有<span class="math inline">\(P \,\mathrm{GNN}_{A;W}(H) = \mathrm{GNN}_{PAP^{T};W}(PH)\)</span>，
+则说<span class="math inline">\(\mathrm{GNN}_{A;W}\)</span> 是置换等变的。</p>
+<p>一般来讲，使用 Definition <a href="hasse-graph-interpretation-of-ccnns-1.html#def:eqv">8.4</a>可能很麻烦。用聚合节点来表征等变性更为简便。为此，请回想一下，张量图的高度是从任意源节点到任意目标节点的最长路径，且命题<a href="hasse-graph-interpretation-of-ccnns-1.html#prp:simple">8.5</a>允许我们用聚合节点来表达高度为1的张量图。</p>
+<div class="proposition">
+<p><span id="prp:simple" class="proposition"><strong>命题 8.5  (高度为1的张量图可看作聚合节点，Tensor diagrams of height one as merge nodes) </strong></span>令 <span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\colon \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m} \to \mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \cdots \times \mathcal{C}^{j_n}\)</span>是张量图高度为1的CCNN，那么
+<span class="math display" id="eq:merge-lemma">\[\begin{equation}
+        \label{merge_lemma}
+        \mbox{CCNN}_{\mathbf{G};\mathbf{W}}=(
+        \mathcal{M}_{\mathbf{G}_{j_1};\mathbf{W}_1},\ldots,
+        \mathcal{M}_{\mathbf{G}_{j_n};\mathbf{W}_n}),
+\tag{8.2}
+\end{equation}\]</span>
+其中， <span class="math inline">\(\mathbf{G}_k \subseteq \mathbf{G}\)</span>.</p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-18" class="proof"><em>证明</em>. </span>令 <span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\colon \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m} \to \mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \cdots \times \mathcal{C}^{j_n}\)</span>是张量图高度为1的CCNN。由于函数 <span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span>的共域是 <span class="math inline">\(\mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \ldots \times \mathcal{C}^{j_n}\)</span>，那么 <span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span>由<span class="math inline">\(n\)</span>个函数 <span class="math inline">\(F_k\colon  \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m} \to \mathcal{C}^{j_k}\)</span>确定（<span class="math inline">\(1 \leq k \leq n\)</span>）。 由于<span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span>的张量图高度为1，那么每个函数 <span class="math inline">\(F_k\)</span> 的高度也为1，因此根据定义它是一个聚合节点。结果得证。</p>
+</div>
+<p>命题 <a href="hasse-graph-interpretation-of-ccnns-1.html#prp:simple">8.5</a> 指出高度为1的张量图中的每个目标节点 <span class="math inline">\(j_k\)</span> 都是由目标节点 <span class="math inline">\(j_k\)</span> 的边的标签组成的算子 <span class="math inline">\(\mathbf{G}_{j_k}\)</span> 指定的聚合节点。定义<a href="hasse-graph-interpretation-of-ccnns-1.html#def:eqv">8.4</a> 引入了CCNNs置换不变性的一般性概念，定义<a href="hasse-graph-interpretation-of-ccnns-1.html#def:node-equivariance">8.5</a> 引入了置换不变聚合节点的概念。由于聚合节点是CCNN，所以定义 <a href="hasse-graph-interpretation-of-ccnns-1.html#def:node-equivariance">8.5</a>是定义<a href="hasse-graph-interpretation-of-ccnns-1.html#def:eqv">8.4</a>的特例。</p>
+<div class="definition">
+<p><span id="def:node-equivariance" class="definition"><strong>定义 8.5  (置换不变聚合节点，Permutation-equivariant merge node) </strong></span>令 <span class="math inline">\(\mathcal{X}\)</span>是CC，<span class="math inline">\(\mathbf{G}= \{G_k\}\)</span>是用<span class="math inline">\(G_k\colon C^{i_k}(\mathcal{X})\to C^{j}(\mathcal{X})\)</span>定义在<span class="math inline">\(\mathcal{X}\)</span>上的共链算子的有限序列，<span class="math inline">\(\mathcal{P}=(\mathbf{P}_i)_{i=0}^{\dim(\mathcal{X})} \in \mbox{Sym}(\mathcal{X})\)</span>。称公式<a href="combinatorial-complex-neural-networks.html#eq:sum">(5.1)</a>中的聚合节点是 <em>置换不变聚合节点</em>，如果满足：
+<span class="math display">\[\begin{equation}
+\mathcal{M}_{\mathbf{G};\mathbf{W}}(\mathbf{H}_{i_1},\ldots ,\mathbf{H}_{i_m})= \mathbf{P}_{j}  \mathcal{M}_{\mathcal{P}(\mathbf{G});\mathbf{W}}(\mathbf{P}_{i_1} \mathbf{H}_{i_1}, \ldots ,\mathbf{P}_{i_1} \mathbf{H}_{i_m})
+\end{equation}\]</span>
+对任何<span class="math inline">\((\mathbf{H}_{i_1},\ldots ,\mathbf{H}_{i_m}) \in \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m}\)</span>.</p>
+</div>
+<div class="proposition">
+<p><span id="prp:height1" class="proposition"><strong>命题 8.6  (高度为1且有聚合节点的的CCNNs) </strong></span>令 <span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\colon \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m} \to \mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \cdots \times \mathcal{C}^{j_n}\)</span>是张量图高度为1的CCNN，那么当且仅当公式<a href="hasse-graph-interpretation-of-ccnns-1.html#eq:merge-lemma">(8.2)</a>中的聚合节点<span class="math inline">\(\mathcal{M}_{\mathbf{G}_{j_k};\mathbf{W}_k}\)</span>，<span class="math inline">\(1 \leq k \leq n\)</span>，是置换等变时，<span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span> 是置换等变。</p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-19" class="proof"><em>证明</em>. </span>如果 CCNN高度为1，那么根据命题 <a href="hasse-graph-interpretation-of-ccnns-1.html#prp:simple">8.5</a>, 有<span class="math inline">\(\mbox{Proj}_k \circ \mbox{CCNN}_{\mathbf{G};\mathbf{W}}(\mathbf{H}_{i_1},\ldots ,\mathbf{H}_{i_m})= \mathcal{M}_{\mathbf{G}_{j_k};\mathbf{W}_k}\)</span>。从聚合节点等变（参见定义<a href="hasse-graph-interpretation-of-ccnns-1.html#def:node-equivariance">8.5</a>）和CCNN置换等变（参见定义<a href="hasse-graph-interpretation-of-ccnns-1.html#def:eqv">8.4</a>）可自然得出这个结论。</p>
+</div>
+<p>最后, 定理 <a href="hasse-graph-interpretation-of-ccnns-1.html#thm:height2">8.2</a> 用聚合节点来描述CCNNs的置换等变性，从这角度来看，定理<a href="hasse-graph-interpretation-of-ccnns-1.html#thm:height2">8.2</a>提供了CCNNs置换等变的适用版本。 provides a practical version of permutation equivariance for CCNNs.</p>
+<div class="theorem">
+<p><span id="thm:height2" class="theorem"><strong>定理 8.2  (置换等变CCNN和聚合节点，Permutation-equivariant CCNN and merge nodes) </strong></span>如果<span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span>是置换等变，当且仅当 <span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span>中每个聚合节点都是置换等变的。</p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-20" class="proof"><em>证明</em>. </span>命题 <a href="hasse-graph-interpretation-of-ccnns-1.html#prp:height1">8.6</a> 证明了高度为1的CCNNs的置换等变。对于高度为<span class="math inline">\(n\)</span>的CCNNs，只需注意到高度为<span class="math inline">\(n\)</span>的CCNN可由高度为1的CCNNs组合而得到，并且两个置换等变网络的组合也仍然是置换等变网络。</p>
+</div>
+<div class="remark">
+<p><span id="unlabeled-div-21" class="remark"><em>备注</em>. </span>置换等变假定每维的所有胞腔都是使用独立的索引来标注，如果标记CC中的胞腔用 <span class="math inline">\(\mathcal{P}(S)\)</span>的子集的幂集<span class="math inline">\(\mathcal{P}(S)\)</span>，而不是用索引，那么，我们只需考虑幂级置换 胞腔的置换引起的幂集置换，以确保结构保持关系。因此，只需要考虑由 0-cell构成的的幂集排列，以确保排等边差关系。</p>
+</div>
+<div class="remark">
+<p><span id="unlabeled-div-22" class="remark"><em>备注</em>. </span>GNN 具有等变性，指图形顶点集和顶点集上的输入信号的置换都产生相同的 GNN 输出置换。 因此，在底层 CC 的增强 Hasse 图上应用标准 GNN 并不等同于应用 CCNN。 虽然信息传递结构相同，但标准 GNN 和 CCNN 的权重共享和置换等变性却是不同的。 尤其，定义 <a href="combinatorial-complexes.html#def:maps">4.2</a> 给出了额外的结构，在对增强Hasse图的顶点进行任意置换时，这种结构不会被保持。 因此, 为了将 CCNN 上的信息传递归约为相关的增强Hasse图上的信息传递，就必须小心谨慎。具体来说，我们只需考虑增强Hasse图中由相应 CC 中 0-cells的置换诱导的顶点标签的置换子群。 因此，采用拓扑学的丰富概念来思考分布式结构化学习架构是有价值的，因为拓扑结构有助于推理计算，而这些方式并不存在基于图的方法范围内。</p>
+</div>
+<div class="remark">
+<p><span id="unlabeled-div-23" class="remark"><em>备注</em>. </span>请注意，命题 <a href="hasse-graph-interpretation-of-ccnns-1.html#prp:convert-graphtocc">8.4</a>)与前面的注释并不矛盾。事实上，命题<a href="hasse-graph-interpretation-of-ccnns-1.html#prp:convert-graphtocc">8.4</a> 中描述的计算是在 Hasse 图的一个特定子图上进行的，该子图的顶点是底层胞腔复形的 <span class="math inline">\(k\)</span>-cells。一旦在计算过程中同时考虑不同维度，基于图的网络和 TDL 网络之间的差异就会开始显现。</p>
+</div>
+</div>
+<div id="orientation-equivariance-of-ccnns" class="section level3 hasAnchor" number="8.2.2">
+<h3><span class="header-section-number">8.2.2</span> CCNNs的方向等变<a href="hasse-graph-interpretation-of-ccnns-1.html#orientation-equivariance-of-ccnns" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>当 CC 被归约为正则胞腔复形时，也可以将方向等变引入 CCNN。类似于定义 <a href="hasse-graph-interpretation-of-ccnns-1.html#def:perm">8.3</a>，我们将引入以下关于 CC 的方向作用的定义。</p>
+<div class="definition">
+<p><span id="def:orientation" class="definition"><strong>定义 8.6  (对角共链映射空间上的方向作用，Orientation action on space of diagonal-cochain maps) </strong></span>令 <span class="math inline">\(\mathcal{X}\)</span>是CC， <span class="math inline">\(\mathbf{G}=\{G_k\}\)</span>是定义在<span class="math inline">\(\mathcal{X}\)</span>上的<span class="math inline">\(G_k  \colon \mathcal{C}^{i_k}\to \mathcal{C}^{j_k}\)</span>, <span class="math inline">\(0\leq i_k,j_k\leq \dim(\mathcal{X})\)</span>的共链算子序列。令 <span class="math inline">\(O(\mathcal{X})\)</span>是<span class="math inline">\(\mathcal{D}=(\mathbf{D}_i)_{i=0}^{\dim(\mathcal{X})}\)</span> 对角矩阵群，对角线上的值为 <span class="math inline">\(\pm 1\)</span> ，矩阵大小为<span class="math inline">\(|\mathcal{X}^k| \times |\mathcal{X}^k|\)</span>，使得 <span class="math inline">\(\mathbf{D}_0=I\)</span>。 用<span class="math inline">\(\mathcal{D}(\mathbf{G}) = (\mathbf{D}_{j_k} G_{k} \mathbf{D}_{i_k})_{i=0}^{\dim(\mathcal{X})}\)</span>来定义<span class="math inline">\(\mathbf{G}\)</span>上的 <em>方向(群)作用</em><span class="math inline">\(\mathcal{D}\)</span>。</p>
+</div>
+<p>定义 <a href="hasse-graph-interpretation-of-ccnns-1.html#def:oe">8.7</a>使用定义<a href="hasse-graph-interpretation-of-ccnns-1.html#def:orientation">8.6</a>引入的群作用来定义了CCNNs的方向等变， CCNNs 的方向等变性(定义 <a href="hasse-graph-interpretation-of-ccnns-1.html#def:oe">8.7</a>) 用与CCNNs的置换等变类似的方式(定义 <a href="hasse-graph-interpretation-of-ccnns-1.html#def:eqv">8.4</a>)被提出。</p>
+<div class="definition">
+<p><span id="def:oe" class="definition"><strong>定义 8.7  (方向等变CCNN，Orientation-equivariant CCNN) </strong></span>令 <span class="math inline">\(\mathcal{X}\)</span>是CC，令 <span class="math inline">\(\mathbf{G}= \{G_k\}\)</span>定义在<span class="math inline">\(\mathcal{X}\)</span>上的有限共链算子序列，令 <span class="math inline">\(\mathcal{D} \in O(\mathcal{X})\)</span>，那么形如
+<span class="math display">\[\begin{equation*}
+\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\colon \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m} \to \mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \cdots \times \mathcal{C}^{j_n}
+\end{equation*}\]</span>
+的CCNN被称为 <em>方向等变CCNN</em> ，如果满足
+<span class="math display">\[\begin{equation}
+\mbox{Proj}_k \circ \mbox{CCNN}_{\mathbf{G};\mathbf{W}}(\mathbf{H}_{i_1},\ldots ,\mathbf{H}_{i_m})=\mathbf{D}_{k} \mbox{Proj}_k \circ \mbox{CCNN}_{\mathcal{D}(\mathbf{G});\mathbf{W}}((\mathbf{D}_{i_1} \mathbf{H}_{i_1}, \ldots ,\mathbf{D}_{i_1} \mathbf{H}_{i_m}))
+\end{equation}\]</span>
+对所有 <span class="math inline">\(1 \leq k\leq m\)</span> 和任何 <span class="math inline">\((\mathbf{H}_{i_1},\ldots ,\mathbf{H}_{i_m}) \in \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m}\)</span>.</p>
+</div>
+<p>命题 <a href="hasse-graph-interpretation-of-ccnns-1.html#prp:simple">8.5</a> 和 <a href="hasse-graph-interpretation-of-ccnns-1.html#prp:height1">8.6</a> 对于方向等变的情况也可以类比说明。我们在此跳过这些事实的陈述，只陈述用聚合节点表征 CCNN 方向等变的主要定理。</p>
+<div class="theorem">
+<p><span id="thm:height3" class="theorem"><strong>定理 8.3  (方向等变CCNN和聚合节点，Orientation-equivariant CCNN and merge nodes) </strong></span><span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span> 是方向等变的，当且仅当<span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span>中的每个聚合节点都是方向等变的。</p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-24" class="proof"><em>证明</em>. </span>定理 <a href="hasse-graph-interpretation-of-ccnns-1.html#thm:height3">8.3</a>的证明类似于定理 <a href="hasse-graph-interpretation-of-ccnns-1.html#thm:height2">8.2</a>的证明。</p>
+</div>
+
+</div>
+</div>
+</div>
+
+
+
+<h3>参考文献<a href="参考文献.html#参考文献" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-abramenko2008buildings" class="csl-entry">
+Abramenko, Peter, and Kenneth S. Brown. 2008. <em>Buildings: Theory and Applications</em>. Vol. 248. Springer Science &amp; Business Media.
+</div>
+<div id="ref-bronstein2021geometric" class="csl-entry">
+Bronstein, Michael M., Joan Bruna, Taco Cohen, and Petar Veličković. 2021. <span>“Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges.”</span> <em>arXiv Preprint arXiv:2104.13478</em>.
+</div>
+<div id="ref-hajijcell" class="csl-entry">
+Hajij, Mustafa, Kyle Istvan, and Ghada Zamzmi. 2020. <span>“Cell Complex Neural Networks.”</span> In <em>NeurIPS 2020 Workshop TDA and Beyond</em>.
+</div>
+<div id="ref-hamilton2017representation" class="csl-entry">
+Hamilton, William L., Rex Ying, and Jure Leskovec. 2017. <span>“Representation Learning on Graphs: Methods and Applications.”</span> <em>IEEE Data Engineering Bulletin</em> 40 (3): 52–74.
+</div>
+<div id="ref-joglwe2022" class="csl-entry">
+Jogl, Fabian. 2022. <span>“Do We Need to Improve Message Passing? Improving Graph Neural Networks with Graph Transformations.”</span> PhD thesis, Vienna University of Technology.
+</div>
+<div id="ref-roddenberry2021principled" class="csl-entry">
+Roddenberry, T. Mitchell, Nicholas Glaze, and Santiago Segarra. 2021. <span>“Principled Simplicial Neural Networks for Trajectory Prediction.”</span> In <em>International Conference on Machine Learning</em>.
+</div>
+<div id="ref-schaub2021signal" class="csl-entry">
+Schaub, Michael T., Yu Zhu, Jean-Baptiste Seby, T. Mitchell Roddenberry, and Santiago Segarra. 2021. <span>“Signal Processing on Higher-Order Networks: Livin’on the Edge... And Beyond.”</span> <em>Signal Processing</em> 187: 108149.
+</div>
+<div id="ref-velivckovic2022message" class="csl-entry">
+Veličković, Petar. 2022. <span>“Message Passing All the Way Up.”</span> <em>ICLR 2022 Workshop on Geometrical and Topological Representation Learning</em>.
+</div>
+<div id="ref-wachs2006poset" class="csl-entry">
+Wachs, Michelle L. 2006. <span>“Poset Topology: Tools and Applications.”</span> <em>arXiv Preprint Math/0602226</em>.
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="7">
+<li id="fn7"><p>对于相关结构 (例如, 单纯形/胞腔/胞腔复形), 偏序关系一般称为 <em>面偏序（face poset）</em> <span class="citation">(<a href="#ref-wachs2006poset">Wachs 2006</a>)</span>。<a href="hasse-graph-interpretation-of-ccnns-1.html#fnref7" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="push-forward-pooling-and-unpooling.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="implementation-and-numerical-results.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook/js/app.min.js"></script>
+<script src="libs/gitbook/js/clipboard.min.js"></script>
+<script src="libs/gitbook/js/plugin-search.js"></script>
+<script src="libs/gitbook/js/plugin-sharing.js"></script>
+<script src="libs/gitbook/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook/js/jquery.highlight.js"></script>
+<script src="libs/gitbook/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/pyt-team/tdlbook/edit/main/rmd/08-hasse-graph-interpretation.rmd",
+"text": "编辑"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "none"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

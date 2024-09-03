@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>第 4 章 组合复形 | 拓扑深度学习：超越图数据</title>
+  <meta name="description" content="一本关于拓扑深度学习的书。" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="第 4 章 组合复形 | 拓扑深度学习：超越图数据" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="一本关于拓扑深度学习的书。" />
+  <meta name="github-repo" content="pyt-team/tdlbook" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="第 4 章 组合复形 | 拓扑深度学习：超越图数据" />
+  
+  <meta name="twitter:description" content="一本关于拓扑深度学习的书。" />
+  
+
+<meta name="author" content="Mustafa Hajij, Theodore Papamarkou, Ghada Zamzmi, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Michael T. Schaub" />
+
+
+<meta name="date" content="2024-09-03" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="preliminaries.html"/>
+<link rel="next" href="combinatorial-complex-neural-networks.html"/>
+<script src="libs/jquery/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="css/glossarybox.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">拓扑深度学习</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>贡献者</a></li>
+<li class="chapter" data-level="" data-path="译者.html"><a href="译者.html"><i class="fa fa-check"></i>译者</a></li>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html"><i class="fa fa-check"></i>序言</a>
+<ul>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html#编译"><i class="fa fa-check"></i>编译</a></li>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html#致谢"><i class="fa fa-check"></i>致谢</a></li>
+</ul></li>
+<li class="part"><span><b>第一部分：基础知识</b></span></li>
+<li class="chapter" data-level="1" data-path="引言.html"><a href="引言.html"><i class="fa fa-check"></i><b>1</b> 引言</a></li>
+<li class="chapter" data-level="2" data-path="motivation.html"><a href="motivation.html"><i class="fa fa-check"></i><b>2</b> 研究动机</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="motivation.html"><a href="motivation.html#从拓扑空间数据中建模和学习"><i class="fa fa-check"></i><b>2.1</b> 从拓扑空间数据中建模和学习</a></li>
+<li class="chapter" data-level="2.2" data-path="motivation.html"><a href="motivation.html#the-utility-of-topology"><i class="fa fa-check"></i><b>2.2</b> 拓扑的有用性</a></li>
+<li class="chapter" data-level="2.3" data-path="motivation.html"><a href="motivation.html#深度学习和结构化计算的统一视角"><i class="fa fa-check"></i><b>2.3</b> 深度学习和结构化计算的统一视角</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preliminaries.html"><a href="preliminaries.html"><i class="fa fa-check"></i><b>3</b> 预备知识</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="preliminaries.html"><a href="preliminaries.html#邻域函数和拓扑空间"><i class="fa fa-check"></i><b>3.1</b> 邻域函数和拓扑空间</a></li>
+<li class="chapter" data-level="3.2" data-path="preliminaries.html"><a href="preliminaries.html#bridging-the-gap-among-higher-order-networks"><i class="fa fa-check"></i><b>3.2</b> 填补与高阶网络间的代沟</a></li>
+<li class="chapter" data-level="3.3" data-path="preliminaries.html"><a href="preliminaries.html#hierarchical-structure-and-set-type-relations"><i class="fa fa-check"></i><b>3.3</b> 层次化结构与集合型关系</a></li>
+</ul></li>
+<li class="part"><span><b>第二部分:组合复形</b></span></li>
+<li class="chapter" data-level="4" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html"><i class="fa fa-check"></i><b>4</b> 组合复形</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc-definition"><i class="fa fa-check"></i><b>4.1</b> 组合复形定义</a></li>
+<li class="chapter" data-level="4.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc-homomorphisms-and-sub-ccs"><i class="fa fa-check"></i><b>4.2</b> CC同态和子CCs</a></li>
+<li class="chapter" data-level="4.3" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#motivation-for-ccs"><i class="fa fa-check"></i><b>4.3</b> 引入CCs的动机</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#pooling-operations-on-ccs"><i class="fa fa-check"></i><b>4.3.1</b> CCs上的池化操作</a></li>
+<li class="chapter" data-level="4.3.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#structural-advantages-of-ccs"><i class="fa fa-check"></i><b>4.3.2</b> CCs的结构化优势</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#neighbourhood-functions-on-ccs"><i class="fa fa-check"></i><b>4.4</b> CCs上的邻域函数</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#incidence-in-a-cc"><i class="fa fa-check"></i><b>4.4.1</b> CC中的关联关系（Incidence）</a></li>
+<li class="chapter" data-level="4.4.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc内的邻接关系adjacency"><i class="fa fa-check"></i><b>4.4.2</b> CC内的邻接关系（Adjacency）</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#data-on-ccs"><i class="fa fa-check"></i><b>4.5</b> CCs上的数据</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html"><i class="fa fa-check"></i><b>5</b> 组合复形神经网络（Combinatorial complex neural networks）</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#building-ccnns-tensor-diagrams"><i class="fa fa-check"></i><b>5.1</b> 构建 CCNN：张量图</a></li>
+<li class="chapter" data-level="5.2" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#push-forward-operator-and-merge-node"><i class="fa fa-check"></i><b>5.2</b> 前推操作（Push-forward operator）和聚合节点</a></li>
+<li class="chapter" data-level="5.3" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#the-main-three-tensor-operations"><i class="fa fa-check"></i><b>5.3</b> 三种主要的张量操作</a></li>
+<li class="chapter" data-level="5.4" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#definition-of-combinatorial-complex-convolutional-networks"><i class="fa fa-check"></i><b>5.4</b> 组合复形卷积网络的定义（combinatorial complex convolutional networks）</a></li>
+<li class="chapter" data-level="5.5" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#combinatorial-complex-attention-neural-networks"><i class="fa fa-check"></i><b>5.5</b> 组合复形注意力神经网络</a></li>
+</ul></li>
+<li class="part"><span><b>第三部分：高阶消息传递（Higher-order message passing）</b></span></li>
+<li class="chapter" data-level="6" data-path="message-passing.html"><a href="message-passing.html"><i class="fa fa-check"></i><b>6</b> 消息传递</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="message-passing.html"><a href="message-passing.html#definition-of-higher-order-message-passing"><i class="fa fa-check"></i><b>6.1</b> 高阶消息传递的定义</a></li>
+<li class="chapter" data-level="6.2" data-path="message-passing.html"><a href="message-passing.html#higher-order-message-passing-neural-networks-are-ccnns"><i class="fa fa-check"></i><b>6.2</b> 高阶消息传递神经网络就是CCNNs</a></li>
+<li class="chapter" data-level="6.3" data-path="message-passing.html"><a href="message-passing.html#merge-nodes-and-higher-order-message-passing-a-qualitative-comparison"><i class="fa fa-check"></i><b>6.3</b> 聚合节点和高阶消息传递：量化比较</a></li>
+<li class="chapter" data-level="6.4" data-path="message-passing.html"><a href="message-passing.html#attention-higher-order-message-passing-and-ccanns"><i class="fa fa-check"></i><b>6.4</b> 注意力高阶消息传递和CCANNs</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html"><i class="fa fa-check"></i><b>7</b> 前推、池化和反池化</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#cc-pooling-and-unpooling"><i class="fa fa-check"></i><b>7.1</b> CC池化和反池化</a></li>
+<li class="chapter" data-level="7.2" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#formulating-common-pooling-operations-as-cc-pooling"><i class="fa fa-check"></i><b>7.2</b> 将常见的池化操作表述为 CC-pooling</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#graph-pooling-as-cc-pooling"><i class="fa fa-check"></i><b>7.2.1</b> 用CC-pooling表示图池化操作</a></li>
+<li class="chapter" data-level="7.2.2" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#image-pooling-as-cc-pooling"><i class="fa fa-check"></i><b>7.2.2</b> 图像池化作为CC-pooing</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#pooling-and-unpooling-ccnns"><i class="fa fa-check"></i><b>7.3</b> 池化与反池化CCNNs</a></li>
+<li class="chapter" data-level="7.4" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#mapper-and-the-cc-pooling-operation"><i class="fa fa-check"></i><b>7.4</b> 映射器和CC池化操作</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html"><i class="fa fa-check"></i><b>8</b> CCNNs的Hasse图解释</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#hasse-graph-interpretation-of-ccnns-2"><i class="fa fa-check"></i><b>8.1</b> CCNNs的Hasse图解释</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#ccs-as-hasse-graphs"><i class="fa fa-check"></i><b>8.1.1</b> CCs作为Hasse图</a></li>
+<li class="chapter" data-level="8.1.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs"><i class="fa fa-check"></i><b>8.1.2</b> 增强的Hasse图</a></li>
+<li class="chapter" data-level="8.1.3" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#reducibility-of-ccnns-to-graph-basedmodels"><i class="fa fa-check"></i><b>8.1.3</b> CCNN对图模型的归约能力</a></li>
+<li class="chapter" data-level="8.1.4" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs-and-cc-pooling"><i class="fa fa-check"></i><b>8.1.4</b> 增强Hasse图和CC-pooling</a></li>
+<li class="chapter" data-level="8.1.5" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-diagrams-message-passing-and-mergenodes"><i class="fa fa-check"></i><b>8.1.5</b> 增强Hasse图消息传递和聚合节点</a></li>
+<li class="chapter" data-level="8.1.6" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#higher-order-representation-learning"><i class="fa fa-check"></i><b>8.1.6</b> 高阶表征学习</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#on-the-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2</b> CCNNs的等变性</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#permutation-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2.1</b> CCNNs的置换等变</a></li>
+<li class="chapter" data-level="8.2.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#orientation-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2.2</b> CCNNs的方向等变</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>第四部分：应用，文献和结论</b></span></li>
+<li class="chapter" data-level="9" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html"><i class="fa fa-check"></i><b>9</b> 实现与实验</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#software-toponetx-topoembedx-and-topomodelx"><i class="fa fa-check"></i><b>9.1</b> 软件：TopoNetX, TopoEmbedX, and TopoModelX</a></li>
+<li class="chapter" data-level="9.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#datasets"><i class="fa fa-check"></i><b>9.2</b> 数据集</a></li>
+<li class="chapter" data-level="9.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#shape-analysis-mesh-segmentation-and-classification"><i class="fa fa-check"></i><b>9.3</b> 形状分析：网格分割与分类</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-segmentation"><i class="fa fa-check"></i><b>9.3.1</b> 网格分割</a></li>
+<li class="chapter" data-level="9.3.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-and-point-cloud-classification"><i class="fa fa-check"></i><b>9.3.2</b> Mesh and point cloud classification</a></li>
+<li class="chapter" data-level="9.3.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#graph-classification"><i class="fa fa-check"></i><b>9.3.3</b> Graph classification</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#pooling-with-mapper-on-graphs-and-data-classification"><i class="fa fa-check"></i><b>9.4</b> Pooling with mapper on graphs and data classification</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-and-edge-features"><i class="fa fa-check"></i><b>9.4.1</b> Mesh classification: CC-pooling with input vertex and edge features</a></li>
+<li class="chapter" data-level="9.4.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-features-only"><i class="fa fa-check"></i><b>9.4.2</b> Mesh classification: CC-pooling with input vertex features only</a></li>
+<li class="chapter" data-level="9.4.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#point-cloud-classification-cc-pooling-with-input-vertex-features-only"><i class="fa fa-check"></i><b>9.4.3</b> Point cloud classification: CC-pooling with input vertex features only</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#ablation-studies"><i class="fa fa-check"></i><b>9.5</b> Ablation studies</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="related-work.html"><a href="related-work.html"><i class="fa fa-check"></i><b>10</b> Related work</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="related-work.html"><a href="related-work.html#graph-based-models"><i class="fa fa-check"></i><b>10.1</b> Graph-based models</a></li>
+<li class="chapter" data-level="10.2" data-path="related-work.html"><a href="related-work.html#higher-order-deep-learning-models"><i class="fa fa-check"></i><b>10.2</b> Higher-order deep learning models</a></li>
+<li class="chapter" data-level="10.3" data-path="related-work.html"><a href="related-work.html#attention-based-models"><i class="fa fa-check"></i><b>10.3</b> Attention-based models</a></li>
+<li class="chapter" data-level="10.4" data-path="related-work.html"><a href="related-work.html#graph-based-pooling"><i class="fa fa-check"></i><b>10.4</b> Graph-based pooling</a></li>
+<li class="chapter" data-level="10.5" data-path="related-work.html"><a href="related-work.html#applied-algebraic-topology"><i class="fa fa-check"></i><b>10.5</b> Applied algebraic topology</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="conclusions.html"><a href="conclusions.html"><i class="fa fa-check"></i><b>11</b> Conclusions</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>A</b> 术语</a></li>
+<li class="chapter" data-level="B" data-path="lifting-maps.html"><a href="lifting-maps.html"><i class="fa fa-check"></i><b>B</b> Lifting maps</a>
+<ul>
+<li class="chapter" data-level="B.1" data-path="lifting-maps.html"><a href="lifting-maps.html#n-hop-cc-of-a-graph"><i class="fa fa-check"></i><b>B.1</b> n-hop CC of a graph</a></li>
+<li class="chapter" data-level="B.2" data-path="lifting-maps.html"><a href="lifting-maps.html#path-based-and-subgraph-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.2</b> Path-based and subgraph-based CC of a graph</a></li>
+<li class="chapter" data-level="B.3" data-path="lifting-maps.html"><a href="lifting-maps.html#loop-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.3</b> Loop-based CC of a graph</a></li>
+<li class="chapter" data-level="B.4" data-path="lifting-maps.html"><a href="lifting-maps.html#coface-cc-of-a-simplicial-complex-or-of-a-cc"><i class="fa fa-check"></i><b>B.4</b> Coface CC of a simplicial complex or of a CC</a></li>
+<li class="chapter" data-level="B.5" data-path="lifting-maps.html"><a href="lifting-maps.html#augmentation-of-ccs-by-higher-rank-cells"><i class="fa fa-check"></i><b>B.5</b> Augmentation of CCs by higher-rank cells</a></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="ccnn-architecture-search-and-topological-quantum-field-theories.html"><a href="ccnn-architecture-search-and-topological-quantum-field-theories.html"><i class="fa fa-check"></i><b>C</b> CCNN architecture search and topological quantum field theories</a></li>
+<li class="chapter" data-level="D" data-path="learning-discrete-exterior-calculus-operators-with-ccanns.html"><a href="learning-discrete-exterior-calculus-operators-with-ccanns.html"><i class="fa fa-check"></i><b>D</b> Learning discrete exterior calculus operators with CCANNs</a></li>
+<li class="chapter" data-level="E" data-path="a-mapper-induced-topology-preserving-cc-pooling-operation.html"><a href="a-mapper-induced-topology-preserving-cc-pooling-operation.html"><i class="fa fa-check"></i><b>E</b> A mapper-induced topology-preserving CC-pooling operation</a></li>
+<li class="chapter" data-level="" data-path="参考文献.html"><a href="参考文献.html"><i class="fa fa-check"></i>参考文献</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">拓扑深度学习：超越图数据</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="combinatorial-complexes" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">第 4 章</span> 组合复形<a href="combinatorial-complexes.html#combinatorial-complexes" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>在这一节，我们引入了组合复形（combinatorial complexes ，CCs），一类新的高阶域，它一般化了图、单纯复形、胞腔复形、超图等结构。图<a href="combinatorial-complexes.html#fig:hon">4.1</a>展示了CCs在这些域上一般化的第一个例子。表<a href="combinatorial-complexes.html#tab:complexsummary">4.1</a>列举了高阶域和图相关的关系特征,并概括了CCs对这种关系实现一般化的能力。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:hon"></span>
+<img src="figures/hon.png" alt="演示CCs怎样一般化不同的域. (a):集合$S$由实体（顶点）抽象组成，但不包含关系(b): 图建模了顶点间的二元关系(例如，$S$的元素). (c): 单纯复形建模了高阶关系的层次化结构 (例如，关系间的关系) ，但对其关系的“形状”有严格的约束。 (d): 与单纯复形类似，胞腔复形建模了高阶关系的层次化结构，但是在关系的形状的表现上更灵活(例如，胞腔)。 (f):超图建模了$S$中元素间的任意集合型关系,但是这些关系不能反应层次化结构。(e): CC组合了胞腔复形（关系间的层次化结构）和超图（任何集合型关系）的特征,将两种域进行了一般化。"  />
+<p class="caption">
+图 4.1: 演示CCs怎样一般化不同的域. (a):集合<span class="math inline">\(S\)</span>由实体（顶点）抽象组成，但不包含关系(b): 图建模了顶点间的二元关系(例如，<span class="math inline">\(S\)</span>的元素). (c): 单纯复形建模了高阶关系的层次化结构 (例如，关系间的关系) ，但对其关系的“形状”有严格的约束。 (d): 与单纯复形类似，胞腔复形建模了高阶关系的层次化结构，但是在关系的形状的表现上更灵活(例如，胞腔)。 (f):超图建模了<span class="math inline">\(S\)</span>中元素间的任意集合型关系,但是这些关系不能反应层次化结构。(e): CC组合了胞腔复形（关系间的层次化结构）和超图（任何集合型关系）的特征,将两种域进行了一般化。
+</p>
+</div>
+<table>
+<caption><span id="tab:complexsummary">表 4.1: </span>以表格形式总结拓扑域和图的关系的相关特征. 回想一下，关系是域的一个元素，域通过它的关系和这些关系相互关联的方式来指定的。与关系相关的理想特征在第一列中标出，关系的<em>层次结构</em>意味着高阶域的关系可以有不同的等级，<em>集合型关系</em>不受关系之间或关系长度的限制，<em>多关系耦合</em>意味着每个关系都可以通过定义在高阶域上的多个邻域函数来拥有其他邻近关系，<em>等级而非基数</em>表示在高阶域的给定层次中具有相同等级的关系不需要具有相同的基数。</caption>
+<thead>
+<tr class="header">
+<th align="left">关系相关的特征</th>
+<th align="center">CC</th>
+<th align="center">超图</th>
+<th align="center">胞腔复形</th>
+<th align="center">单纯复形</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">层次化关系(Hierarcy of relations)</td>
+<td align="center">√</td>
+<td align="center"></td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr class="even">
+<td align="left">集合型关系(Set-type relations)</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="left">多关系耦合(Multi-relation coupling)</td>
+<td align="center">√</td>
+<td align="center"></td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr class="even">
+<td align="left">秩而非基数(Rank not cardinality)</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<p>章节<a href="combinatorial-complexes.html#cc-definition">4.1</a> 引入了组合复形的定义并提供了若干CCs的示例，章节<a href="combinatorial-complexes.html#cc-homomorphisms-and-sub-ccs">4.2</a>定义了组合复形同态（CC-homomorphism）的概念并给出了了相关示例，章节<a href="combinatorial-complexes.html#motivation-for-ccs">4.3</a>从实用角度介绍 CC 结构背后的动，章节<a href="combinatorial-complexes.html#neighbourhood-functions-on-ccs">4.4</a>展示了邻域矩阵上邻域函数的计算方法，章节<a href="combinatorial-complexes.html#data-on-ccs">4.5</a>引入了组合复形共链（CC-cochain）的概念。</p>
+<div id="cc-definition" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> 组合复形定义<a href="combinatorial-complexes.html#cc-definition" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>我们希望定义一种结构，该结构能够填补单纯/胞腔复形和超图间的代沟，正如章节<a href="preliminaries.html#hierarchical-structure-and-set-type-relations">3.3</a>所描述的那样。为此，本章引入了组合复形（combinatorial complex，CC），一种高阶域，可以从三个角度来看，作为一个单纯复形，其胞腔和单纯子可以缺失；作为一个具有松弛结构的广义胞腔复形；或者作为一个通过加入秩函数而丰富的超图。</p>
+<div class="definition">
+<p><span id="def:cc" class="definition"><strong>定义 4.1  (组合复形，Combinatorial complex) </strong></span><em>组合复形（combinatorial complex，CC)</em>是一个三元组<span class="math inline">\((S,\mathcal{X},\mbox{rk})\)</span>, <span class="math inline">\(S\)</span>是集合，<span class="math inline">\(\mathcal{X}\)</span>是<span class="math inline">\(\mathcal{P}(S)\setminus\{\emptyset\}\)</span>的子集，<span class="math inline">\(\mbox{rk} \colon \mathcal{X}\to \mathbb{Z}_{\ge 0}\)</span>是秩函数且满足如下属性:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(\forall s\in S, \{s\}\in\mathcal{X}\)</span>;</li>
+<li>函数<span class="math inline">\(\mbox{rk}\)</span>是保序的（order-preserving），即：如果<span class="math inline">\(x,y\in \mathcal{X}\)</span>满足<span class="math inline">\(x\subseteq  y\)</span>，那么<span class="math inline">\(\mbox{rk}(x) \leq \mbox{rk}(y)\)</span>.</li>
+</ol>
+<p><span class="math inline">\(S\)</span>的元素称作<em>实体（entities）</em>或<em>顶点（vertices）</em>, <span class="math inline">\(\mathcal{X}\)</span>的元素称作<em>关系（relations）</em>或<em>胞腔（cells）</em>, <span class="math inline">\(\mbox{rk}\)</span>称作CC的<em>秩函数（rank function）</em>。</p>
+</div>
+<p>简单起见, <span class="math inline">\(\mathcal{X}\)</span>被用作CC<span class="math inline">\((S,\mathcal{X},\mbox{rk})\)</span>的速记符号。定义<a href="combinatorial-complexes.html#def:cc">4.1</a>建立了构建高阶网络的框架，在此基础上，我们可以定义通用的高阶深度学习架构。请注意，CC既表现出了层次关系，也表现出了集合类型关系。特别是，CC 的秩函数 <span class="math inline">\(\mbox{rk}\)</span>给CC引入了关系的层次结构。此外，由于定义 <a href="combinatorial-complexes.html#def:cc">4.1</a>中没有关系约束，CCs也可以包含集合型关系。因此，CCs包含了胞腔复形和超图，因为它们结合了两者与关系相关的特征。表 <a href="combinatorial-complexes.html#tab:complexsummary">4.1</a>提供了 CCs 与常见的高阶网络和图之间关系相关特征的比较总结。</p>
+<div class="remark">
+<p><span id="unlabeled-div-1" class="remark"><em>备注</em>. </span>我们通常要求CC中的每个单一胞腔<span class="math inline">\(\{s\}\)</span>的<span class="math inline">\(\mbox{rk}(\{s\})=0\)</span>，这种约定使 CCs 自然地与单纯复形和胞腔复形（cellular complexes）相一致。</p>
+</div>
+<p>胞腔<span class="math inline">\(x\in\mathcal{X}\)</span>的秩是<span class="math inline">\(x\)</span>上秩函数<span class="math inline">\(\mbox{rk}\)</span>的值<span class="math inline">\(\mbox{rk}(x)\)</span>，CC<span class="math inline">\(\mathcal{X}\)</span>的<em>维度</em><span class="math inline">\(\mbox{dim}(\mathcal{X})\)</span>是 <span class="math inline">\(\mathcal{X}\)</span> 中胞腔的最大秩。秩为<span class="math inline">\(k\)</span>的胞腔称作<em><span class="math inline">\(k\)</span>-cell</em>，记作<span class="math inline">\(x^k\)</span>；CC <span class="math inline">\(\mathcal{X}\)</span>的<em><span class="math inline">\(k\)</span>-骨架（skeleton）</em>记作<span class="math inline">\(\mathcal{X}^{(k)}\)</span>，表示<span class="math inline">\(\mathcal{X}\)</span>内秩最大为<span class="math inline">\(k\)</span>的胞腔的集合；秩为<span class="math inline">\(k\)</span>的胞腔集合记作<span class="math inline">\(\mathcal{X}^k\)</span>，该集合对应于<span class="math inline">\(\mathcal{X}^k=\mbox{rk}^{-1}(\{k\})\)</span>。<span class="math inline">\(1\)</span>-cells称作<span class="math inline">\(\mathcal{X}\)</span>的<em>边界（edges）</em>。一般来讲，CC的边界可以包含不止两个节点，而边仅有两个节点的CCs称作<em>基于图（graph-based）</em>的CCs。本文中，主要关注基于图的CCs。</p>
+<div class="example">
+<p><span id="exm:unnamed-chunk-3" class="example"><strong>示例 4.1  (维度为2和3的CCs) </strong></span>图<a href="combinatorial-complexes.html#fig:ccexother">4.2</a>给出了四个CCs示例。例如，图<a href="combinatorial-complexes.html#fig:ccexother">4.2</a>(a)是顶点集<span class="math inline">\(S=\{s_0,s_1,s_2\}\)</span>上的2维CC，由<span class="math inline">\(0\)</span>-cells <span class="math inline">\(\{s_0\}\)</span>, <span class="math inline">\(\{s_1\}\)</span>，<span class="math inline">\(\{s_2\}\)</span>组成 (用橙色表示)，<span class="math inline">\(1\)</span>-cell <span class="math inline">\(\{s_0, s_1\}\)</span> (紫色)，<span class="math inline">\(2\)</span>-cell <span class="math inline">\(\{s_0, s_1, s_2\} = S\)</span> (蓝色).</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:ccexother"></span>
+<img src="figures/cc_examples.png" alt="CCs示例，橙色圆圈代表顶点，粉色、蓝色和绿色分别代表秩为1、2和3的胞腔，(a)、(b) 和 (d) 中的每个 CC 的维度都等于 2，而 (c) 中的 CC 的维度等于 3。"  />
+<p class="caption">
+图 4.2: CCs示例，橙色圆圈代表顶点，粉色、蓝色和绿色分别代表秩为1、2和3的胞腔，(a)、(b) 和 (d) 中的每个 CC 的维度都等于 2，而 (c) 中的 CC 的维度等于 3。
+</p>
+</div>
+</div>
+<div id="cc-homomorphisms-and-sub-ccs" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> CC同态和子CCs<a href="combinatorial-complexes.html#cc-homomorphisms-and-sub-ccs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>CC 同态是将 CC 互相联系起来的映射，CC 同态在描述将图或其他高阶域提升为 CC 的过程中发挥着重要作用。直观地说，提升映射是一个定义明确的过程，它将特定类型的域（如图）转换为另一种类型的域（如 CC）。提升映射的用处在于，它能将定义在 CC 上的深度学习模型的应用实现在更常见的域上，如图、胞腔复形或单纯复形。我们将在附录 <a href="lifting-maps.html#lifting-maps">B</a>中详细研究提升映射，并提供相关示例。定义 <a href="combinatorial-complexes.html#def:maps">4.2</a>正式提出了CC同态的概念。</p>
+<div class="definition">
+<p><span id="def:maps" class="definition"><strong>定义 4.2  (CC-同态，CC-homomorphism) </strong></span>从CC <span class="math inline">\((S_1, \mathcal{X}_1, \mbox{rk}_1)\)</span>到另一个CC<span class="math inline">\((S_2, \mathcal{X}_2, \mbox{rk}_2)\)</span>的同态，也称作<em>CC-同态</em>，是一个映射函数 <span class="math inline">\(f \colon \mathcal{X}_1 \to \mathcal{X}_2\)</span>，该函数需满足如下属性：</p>
+<ol style="list-style-type: decimal">
+<li>如果 <span class="math inline">\(x,y\in\mathcal{X}_1\)</span> 满足 <span class="math inline">\(x\subseteq y\)</span>, 那么 <span class="math inline">\(f(x) \subseteq f(y)\)</span>.</li>
+<li>如果 <span class="math inline">\(x\in\mathcal{X}_1\)</span>，那么<span class="math inline">\(\mbox{rk}_1(x)\geq \mbox{rk}_2(f(x))\)</span>.</li>
+</ol>
+</div>
+<p>定义<a href="combinatorial-complexes.html#def:maps">4.2</a>的条件2确保CC同态仅映射<span class="math inline">\(\mathcal{X}_1\)</span>中的<span class="math inline">\(k\)</span>-cell到<span class="math inline">\(\mathcal{X}_2\)</span>中秩不大于<span class="math inline">\(k\)</span>的胞腔。如果<span class="math inline">\(\forall x \in \mathcal{X}_1, \mbox{rk}_1(x) = \mbox{rk}_2(f(x))\)</span> 并且 <span class="math inline">\(f\)</span>是单射（injective），那么称同态映射<span class="math inline">\(f\)</span>是<em>CC-嵌入（CC-embedding）</em>。CC 嵌入在实践中非常有用，因为它们可以通过用高阶胞腔来增强域（例如图结构），从而将该域 “提升（lifting）”为 CC。示例 <a href="combinatorial-complexes.html#exm:augmentation">4.2</a> 给出了三种CC嵌入，而示例<a href="combinatorial-complexes.html#exm:homomorphism">4.3</a>给出的CC同态不是CC嵌入。</p>
+<div class="example">
+<p><span id="exm:augmentation" class="example"><strong>示例 4.2  (CC嵌入，CC-embeddings) </strong></span>图<a href="combinatorial-complexes.html#fig:non-embedd-hom">4.3</a>(a) 和 (b)展示了两种CC嵌入。图<a href="combinatorial-complexes.html#fig:non-embedd-hom">4.3</a>(a)中，左侧图形中的每个胞腔都会被发送到右侧 CC 中的相应胞腔。同样，在图<a href="combinatorial-complexes.html#fig:non-embedd-hom">4.3</a>(b)中，左边胞腔复形中的每个胞腔都被传送到右边 CC 中的对应胞腔。很容易验证这两个映射都是 CC 嵌入。</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:non-embedd-hom"></span>
+<img src="figures/cc_map.png" alt="CC同态示例. 粉色、蓝色和绿色分别代表秩为1、2、3胞腔。(a): 将 1 维 CC 嵌入 2 维 CC。(b)：一个 2 维的 CC 嵌入一个 3 维的 CC。(c) CC 同态的一个例子。左边CC $\mathcal{X}_1$，右边是$\mathcal{X}_2$，同态映射$f$用黑箭头表示。直观地说，CC同态映射 $f$ 可以类似看作是 $S_1 =\{1, 2, 3、 4\}$ 和 $S_2 =\{a, b, c\}$ 之间连续函数的组合（combinatorial analogue），该连续函数*塌缩（collapses）*胞腔$\{1,2,3\}$到胞腔$\{a,b\}$，胞腔$\{1,2,3,4\}$到胞腔$\{a,b,c\}$。从这个角度观察，CC 同态推广了单纯映射[@munkres2018elements]。"  />
+<p class="caption">
+图 4.3: CC同态示例. 粉色、蓝色和绿色分别代表秩为1、2、3胞腔。(a): 将 1 维 CC 嵌入 2 维 CC。(b)：一个 2 维的 CC 嵌入一个 3 维的 CC。(c) CC 同态的一个例子。左边CC <span class="math inline">\(\mathcal{X}_1\)</span>，右边是<span class="math inline">\(\mathcal{X}_2\)</span>，同态映射<span class="math inline">\(f\)</span>用黑箭头表示。直观地说，CC同态映射 <span class="math inline">\(f\)</span> 可以类似看作是 <span class="math inline">\(S_1 =\{1, 2, 3、 4\}\)</span> 和 <span class="math inline">\(S_2 =\{a, b, c\}\)</span> 之间连续函数的组合（combinatorial analogue），该连续函数<em>塌缩（collapses）</em>胞腔<span class="math inline">\(\{1,2,3\}\)</span>到胞腔<span class="math inline">\(\{a,b\}\)</span>，胞腔<span class="math inline">\(\{1,2,3,4\}\)</span>到胞腔<span class="math inline">\(\{a,b,c\}\)</span>。从这个角度观察，CC 同态推广了单纯映射<span class="citation">(<a href="#ref-munkres2018elements">Munkres 2018</a>)</span>。
+</p>
+</div>
+<div class="glossarybox">
+<blockquote>
+<p><strong>译者注</strong>
+单纯映射(simplicial map)是联系复形的多面体之间的一类重要映射,它是从复形K的多面体|K|到复形L的多面体|L|的连续映射.</p>
+</blockquote>
+</div>
+<div class="example">
+<p><span id="exm:homomorphism" class="example"><strong>示例 4.3  (CC同态，CC-homomorphism) </strong></span>这里给出一个非CC嵌入的CC同态例子。考虑集合<span class="math inline">\(S_1 = \{1, 2, 3,4\}\)</span>和<span class="math inline">\(S_2 = \{a, b, c\}\)</span>，令<span class="math inline">\(\mathcal{X}_1\)</span>表示由与<span class="math inline">\(S_1\)</span>中元素对应的1个3-cell<span class="math inline">\(\{1,2,3,4\}\)</span>、1个2-cell<span class="math inline">\(\{1,2,3\}\)</span>和4个0-cells组成的<span class="math inline">\(S_1\)</span>上的CC。同样，令<span class="math inline">\(\mathcal{X}_2\)</span>表示由与<span class="math inline">\(S_2\)</span>中元素对应的1个3-cell<span class="math inline">\(\{a,b,c\}\)</span>、1个2-cell <span class="math inline">\(\{a,b\}\)</span>和3个0-cells。图<a href="combinatorial-complexes.html#fig:non-embedd-hom">4.3</a>(c)可视化了CCs<span class="math inline">\(\mathcal{X}_1\)</span> 和 <span class="math inline">\(\mathcal{X}_2\)</span>。设有函数<span class="math inline">\(f \colon S_1 \to S_2\)</span>定义为<span class="math inline">\(f(1) = f(2) = a,~f(3) = b\)</span>和<span class="math inline">\(f(4) = c\)</span>，很容易验证<span class="math inline">\(f\)</span>诱导了从<span class="math inline">\(\mathcal{X}_1\)</span> 到 <span class="math inline">\(\mathcal{X}_2\)</span>的CC同态。</p>
+</div>
+<div class="definition">
+<p><span id="def:sub-cc" class="definition"><strong>定义 4.3  (子CC，Sub-CC) </strong></span>令<span class="math inline">\((S,\mathcal{X}, \mbox{rk})\)</span>是一个CC，CC <span class="math inline">\((S,\mathcal{X}, \mbox{rk})\)</span>的<em>子组合复形（sub-combinatorial complex，sub-CC）</em> 是 CC <span class="math inline">\((A,\mathcal{Y},\mbox{rk}^{\prime})\)</span>，使得 <span class="math inline">\(A\subseteq S\)</span>, <span class="math inline">\(\mathcal{Y}\subseteq\mathcal{X}\)</span> 且 <span class="math inline">\(\mbox{rk}^{\prime} = \mbox{rk}|_{\mathcal{Y}}\)</span>是<span class="math inline">\(\mbox{rk}\)</span>在<span class="math inline">\(\mathcal{Y}\)</span>上的约束（restriction）.</p>
+</div>
+<p>简单起见，本文把子CC <span class="math inline">\((A,\mathcal{Y},\mbox{rk}^{\prime})\)</span>记作<span class="math inline">\(\mathcal{Y}\)</span>，任何<span class="math inline">\(A \subseteq S\)</span>的子集都能用于按下述方式诱导子CC。考虑带有约束 <span class="math inline">\(\mbox{rk}|_{\mathcal{X}_A}\)</span>的集合<span class="math inline">\(\mathcal{X}_A = \{x \in \mathcal{X}  \mid x \subseteq A\}\)</span> ，很容易看到三角<span class="math inline">\((A,\mathcal{X}_A,\mbox{rk}|_{\mathcal{X}_A})\)</span> 构成了一个CC，称之为由<span class="math inline">\(A\)</span>诱导的<span class="math inline">\(\mathcal{X}\)</span>的子CC。注意， 集合 <span class="math inline">\(\mathcal{X}\)</span> 中的任何一个胞腔都会诱导出一个子 CC，这个子 CC 是通过考虑包含在其中的所有胞腔而得到的。最后，对于任意 <span class="math inline">\(k\)</span>，我们不难发现，CC <span class="math inline">\(\mathcal{X}^{k}\)</span> 的骨架 <span class="math inline">\(\mathcal{X}\)</span> 是一个子 CC。</p>
+<div class="example">
+<p><span id="exm:sub-cc-ex" class="example"><strong>示例 4.4  (子CC，Sub-CC) </strong></span>回忆一下图 <a href="combinatorial-complexes.html#fig:ccexother">4.2</a>(a)中给出的CC <span class="math inline">\(\mathcal{X}= \{\{s_0\}, \{s_1\}, \{s_2\}, \{s_0, s_1\}, \{s_0, s_1, s_2\}\}\)</span>，集合<span class="math inline">\(A = \{s_0, s_1\}\)</span>诱导了<span class="math inline">\(\mathcal{X}\)</span>的子CC<span class="math inline">\(\mathcal{X}_A = \{\{s_0\}, \{s_1\}, \{s_0, s_1\}\}\)</span></p>
+</div>
+</div>
+<div id="motivation-for-ccs" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> 引入CCs的动机<a href="combinatorial-complexes.html#motivation-for-ccs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>CCs的定义<a href="combinatorial-complexes.html#def:cc">4.1</a>旨在实现高阶建模的所有目标，正如章节<a href="motivation.html#motivation">2</a>所概述的那样。为了进一步说明定义 <a href="combinatorial-complexes.html#def:cc">4.1</a>的动机，我们考虑了 CCs 的池化操作以及 CCs在结构上的一些优势。</p>
+<div id="pooling-operations-on-ccs" class="section level3 hasAnchor" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> CCs上的池化操作<a href="combinatorial-complexes.html#pooling-operations-on-ccs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>我们首先考虑图上池化的一般特征，然后演示如何通过 CCs 以统一的方式实现基于图的池化。图 <span class="math inline">\(\mathcal{G}\)</span> 上的通用池化函数是 <span class="math inline">\(\mathcal{POOL} \colon \mathcal{G} \to \mathcal{G}^{\prime }\)</span>，其中 <span class="math inline">\(\mathcal{G}^{\prime}\)</span> 是代表 <span class="math inline">\(\mathcal{G}\)</span>的粗粒度版本的池化图。 <span class="math inline">\(\mathcal{G}^{\prime}\)</span>的顶点对应于原图<span class="math inline">\(\mathcal{G}\)</span>中的顶点簇（超级顶点），而<span class="math inline">\(\mathcal{G}^{\prime}\)</span>中的边表示这些顶点簇之间是否存在连接。参见图 <a href="combinatorial-complexes.html#fig:pooling-motivation">4.4</a>。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:pooling-motivation"></span>
+<img src="figures/pooling_motivation.png" alt="通过 CCs 实现的基于图的池化操作。(a): 在这里，图的池化操作用池化函数来表示，该函数将图及其上定义的数据映射到该图的粗粒度版本上。右侧池化图中的超级顶点（super-vertices）与左侧原图中的顶点簇相对应，而右侧图中的边则表示这些簇之间是否存在连接关系。 (b-d): 右侧池化图中的超级顶点可以通过从原图中得到的 CC 中的高阶增强胞腔（蓝色胞腔）来实现，右侧池化图中的边可以通过顶点与高阶增强胞腔之间的 CC的 关联矩阵来实现。"  />
+<p class="caption">
+图 4.4: 通过 CCs 实现的基于图的池化操作。(a): 在这里，图的池化操作用池化函数来表示，该函数将图及其上定义的数据映射到该图的粗粒度版本上。右侧池化图中的超级顶点（super-vertices）与左侧原图中的顶点簇相对应，而右侧图中的边则表示这些簇之间是否存在连接关系。 (b-d): 右侧池化图中的超级顶点可以通过从原图中得到的 CC 中的高阶增强胞腔（蓝色胞腔）来实现，右侧池化图中的边可以通过顶点与高阶增强胞腔之间的 CC的 关联矩阵来实现。
+</p>
+</div>
+<p>基于CCs提出的一些形式化描述将把基于图的池化操作作为特例来描述。尤其，在<span class="math inline">\(\mathcal{G}^{\prime}\)</span>的顶点上定义的超级顶点（<span class="math inline">\(\mathcal{G}\)</span>上的顶点簇），通过将超级顶点表示为胞腔来增强<span class="math inline">\(\mathcal{G}\)</span>，从而可以实现为CC上的高秩胞腔（higher-order ranked cells）。这种层次化结构由原图<span class="math inline">\(\mathcal{G}\)</span>，还有带高秩胞腔增强的CC一起组成。这种以基于CC的高秩胞腔为基础实现的图上的池化操作是层次化的，因为新的胞腔可以以递归的方式组合在一起，从而获得底层空间的粗粒度版本。有了这种对 CCs 进行高阶池化操作的概念，我们在 <a href="push-forward-pooling-and-unpooling.html#graph-pooling-as-cc-pooling">7.2.1</a>和 <a href="push-forward-pooling-and-unpooling.html#image-pooling-as-cc-pooling">7.2.2</a>两节中分别演示了如何表达图/网格上的池化操作和基于图像的池化操作。 从这个角度来看，CCs提供了在图、图像等高阶网络上定义池化操作的通用框架。</p>
+<p>此外，还通过高阶池化操作探讨了 CCs 的两个主要特点。首先，CCs模型化集合型胞腔的能力为在顶点簇的形状上定义池化操作提供了灵活性，这种灵活性是实现自定义池化操作所必需的，在这种操作中，簇的形状可能是特定于任务的。其次，CC上的高秩胞腔（higher-order ranked， cells）对应于底层空间的粗粒度版本，这里提出的高阶池化可用于构建更粗粒度的表征，参见图<a href="combinatorial-complexes.html#fig:pooling-motivation">4.4</a>。需要注意的是，超图和胞腔复形等通用性较低的结构无法同时灵活地进行簇整形（ cluster shaping）和生成更粗粒度的底层空间表示。</p>
+</div>
+<div id="structural-advantages-of-ccs" class="section level3 hasAnchor" number="4.3.2">
+<h3><span class="header-section-number">4.3.2</span> CCs的结构化优势<a href="combinatorial-complexes.html#structural-advantages-of-ccs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>除了实现基于图的池化操作，CCs还提供了多种结构优势。尤其，具体来说，CCs统一了众多常用的高阶网络，使得可以对拓扑特性进行细粒度分析，促进深度学习中拓扑特征的消息传递，并能灵活建模关系之间的关系。</p>
+<p><strong>灵活的高阶结构和细粒度消息传递</strong>。消息传递图模型在图的顶点之间传递消息，以学习图的表示，消息是根据顶点和边的特征计算出来的。这些消息更新顶点和边的特征，并从图的局部邻域收集消息。与其他高阶网络和图相比，CCs 的秩函数在两个方面更具通用性。首先，秩函数使得CCs在高阶结构表示方面更具灵活性；其次，在深度学习场景下，秩函数为CC提供了更细粒度的信息传递能力。例如，超图中的每个超边都被视为一个集合，没有秩的概念，因此所有超边都被统一处理，没有任何区别。更多详情请参见章节<a href="combinatorial-complex-neural-networks.html#combinatorial-complex-neural-networks">5</a>。</p>
+<p><strong>在关系间灵活的建模关系</strong>，在用拓扑数据填充拓扑域的过程中，由于域中所有胞腔都缺乏可自然支持的数据，因此构建有意义的关系可能具有挑战性，在处理单纯复形或胞腔复形时尤其如此。例如，一个单纯复形的 <span class="math inline">\(k\)</span> 个实体之间的任何关系都必须从 <span class="math inline">\(k-1\)</span> 个实体的所有相应子集的关系中建立。现实世界的数据可能包含这些关系的一个子集，而不是全部。虽然胞腔复形在关系建模方面提供了更大的灵活性，但胞腔复形必须满足的边界条件限制了允许的关系类型。为了消除关系之间的所有限制，超图可以提供帮助，因为超图允许任意的集合类型关系。不过，超图不提供层次特征，这在需要同时考虑局部和全局特征的应用中可能会处于劣势。</p>
+</div>
+</div>
+<div id="neighbourhood-functions-on-ccs" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> CCs上的邻域函数<a href="combinatorial-complexes.html#neighbourhood-functions-on-ccs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>我们在 CC 上引入了 CC 邻域函数的概念作为一种利用CC中拓扑信息的机制。在实践中，精心设计邻域函数通常是学习任务的一部分。出于我们的目的，我们只讨论两类广义邻域函数，即指定邻接和关联的函数(adjacency and incidence)。从深度学习的角度来看，
+从深度学习的角度看，CC-邻域函数奠定了扩展深度学习模型的一般性消息传递方案的基础，从而涵盖了几种最先进的 GNNs <span class="citation">(<a href="#ref-battaglia2016interaction">P. Battaglia et al. 2016</a>; <a href="#ref-kipf2016semi">Kipf and Welling 2016</a>; <a href="#ref-battaglia2018relational">P. W. Battaglia et al. 2018</a>; <a href="#ref-fey2019fast">Fey and Lenssen 2019</a>; <a href="#ref-loukas2019graph">Loukas 2019</a>; <a href="#ref-morris2019weisfeiler">Morris et al. 2019</a>)</span>.</p>
+<p>给定一个 CC，我们的目标是描述该 CC 的子 CC 的局部邻近的胞腔。为此，我们定义了 CC 邻近函数，该函数与CC s上下文环境中的定义 <a href="preliminaries.html#def:ns">3.1</a>类似。</p>
+<div class="definition">
+<p><span id="def:cc-neighborhood-function" class="definition"><strong>定义 4.4  (CC领域函数，CC-neighborhood function) </strong></span>CC <span class="math inline">\((S,\mathcal{X}, \mbox{rk})\)</span>上的<em>CC邻域函数</em>记作<span class="math inline">\(\mathcal{N}\)</span>，该函数可为CC的每个子CC <span class="math inline">\((A,\mathcal{Y},\mbox{rk}^{\prime})\)</span> 分配一个<span class="math inline">\(S\)</span>子集的非空集合<span class="math inline">\(\mathcal{N}(\mathcal{Y})\)</span>。</p>
+</div>
+<p>不失一般性，我们假定邻域<span class="math inline">\(\mathcal{N}(\mathcal{Y})\)</span>的元素是<span class="math inline">\(\mathcal{X}\)</span>的胞腔或子CCs。直观上来讲，sub-CC <span class="math inline">\(\mathcal{Y}\)</span>的邻域<span class="math inline">\(\mathcal{N}(\mathcal{Y})\)</span>是<span class="math inline">\(S\)</span>子集的集合，他们位于<span class="math inline">\(\mathcal{Y}\)</span>的局部邻近地区（local vicinity）。术语“局部邻近地区”是一般性描述，通常由具体情况而定。</p>
+<p>定义 <a href="combinatorial-complexes.html#def:cc-neighborhood-function">4.4</a>是定义<a href="preliminaries.html#def:ns">3.1</a>的离散化版本，两个定义的相对应可参见图<a href="combinatorial-complexes.html#fig:cc-neighborhood">4.5</a>。在本文的其余部分，CC 邻域函数被简地称为邻域函数。实际上，CC 邻域函数中编码的信息是用矩阵来表示的，如下所述。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:cc-neighborhood"></span>
+<img src="figures/cts_discrete_nbhd.png" alt="连续域邻域函数与 CC 邻域函数的可视化比较. (a): 具有连续域 $S$ 的邻域函数为 $x\in S$ 分配了一组$S$ 的子集 $\mathcal{N}(x)$ ，这些子集位于 $x$ 的局部邻近地区。 (b): 类似的，CC $(S,\mathcal{X}, \mbox{rk})$上的CC邻域函数分配给$x\in S$一组$\mathcal{X}$的子集$\mathcal{N}(x)$，它们也在 $x$的局部邻近地区。"  />
+<p class="caption">
+图 4.5: 连续域邻域函数与 CC 邻域函数的可视化比较. (a): 具有连续域 <span class="math inline">\(S\)</span> 的邻域函数为 <span class="math inline">\(x\in S\)</span> 分配了一组<span class="math inline">\(S\)</span> 的子集 <span class="math inline">\(\mathcal{N}(x)\)</span> ，这些子集位于 <span class="math inline">\(x\)</span> 的局部邻近地区。 (b): 类似的，CC <span class="math inline">\((S,\mathcal{X}, \mbox{rk})\)</span>上的CC邻域函数分配给<span class="math inline">\(x\in S\)</span>一组<span class="math inline">\(\mathcal{X}\)</span>的子集<span class="math inline">\(\mathcal{N}(x)\)</span>，它们也在 <span class="math inline">\(x\)</span>的局部邻近地区。
+</p>
+</div>
+<p><strong>邻域函数诱导的邻域矩阵</strong>。 为了便于计算，可以用矩阵来表示邻域函数。关联矩阵、邻接矩阵和共邻接矩阵是编码各类邻域函数的常见矩阵形式。在定义 <a href="combinatorial-complexes.html#def:neighborhood-matrix">4.5</a>中，我们引入了这些矩阵的广义化，称为 “邻域矩阵”。在这个定义中以及以后，我们用 <span class="math inline">\(|S|\)</span> 表示集合 <span class="math inline">\(S\)</span> 的基数（cardinality）。</p>
+<div class="definition">
+<p><span id="def:neighborhood-matrix" class="definition"><strong>定义 4.5  (邻域矩阵，Neighborhood matrix) </strong></span>令<span class="math inline">\(\mathcal{N}\)</span>是定义在 CC <span class="math inline">\(\mathcal{X}\)</span>上的邻域函数，令<span class="math inline">\(\mathcal{Y}=\{y_1,\ldots,y_n\}\)</span> 和 <span class="math inline">\(\mathcal{Z}=\{z_1,\ldots,z_m\}\)</span> 是 <span class="math inline">\(\mathcal{X}\)</span>上两个胞腔的集合，使得<span class="math inline">\(\forall 1\leq i \leq n，\mathcal{N}(y_{i}) \subseteq \mathcal{Z}\)</span>。则，<em><span class="math inline">\(\mathcal{N}\)</span>上关于<span class="math inline">\(\mathcal{Y}\)</span>和<span class="math inline">\(\mathcal{Z}\)</span>的邻域矩阵</em>是<span class="math inline">\(|\mathcal{Z}| \times|\mathcal{Y}|\)</span>二值矩阵(binary matrix)<span class="math inline">\(G\)</span>，如果<span class="math inline">\(z_i\in \mathcal{N}(y_j)\)</span>，则其第<span class="math inline">\((i,j)\)</span>个项<span class="math inline">\([G]_{ij}\)</span>的值为<span class="math inline">\(1\)</span>，否则为<span class="math inline">\(0\)</span>。</p>
+</div>
+<div class="remark">
+<p><span id="unlabeled-div-2" class="remark"><em>备注</em>. </span>在定义<a href="combinatorial-complexes.html#def:neighborhood-matrix">4.5</a>中，<span class="math inline">\(\mathcal{N}(y_j)\)</span>存储在邻域矩阵<span class="math inline">\(G\)</span>的第<span class="math inline">\(j-th\)</span>列。因此，当我们使用邻域矩阵 <span class="math inline">\(G\)</span> 时，我们用 <span class="math inline">\(\mathcal{N}_{G}(j)\)</span> 表示胞腔 <span class="math inline">\(y_j\)</span> 的邻域函数。</p>
+</div>
+<p>在 CC 上定义有用的邻接函数有很多种方法。在这项工作中，我们仅限于最直接的邻域函数：关联邻域函数和邻接邻域函数。</p>
+<div id="incidence-in-a-cc" class="section level3 hasAnchor" number="4.4.1">
+<h3><span class="header-section-number">4.4.1</span> CC中的关联关系（Incidence）<a href="combinatorial-complexes.html#incidence-in-a-cc" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>我们定义了关联的三种术语，以捕捉 CC 中胞腔关联结构的不同方面。首先，在定义<a href="combinatorial-complexes.html#def:nstruct">4.6</a>种，我们引入了下关联（down-incidence）和上关联（up-incidence）邻域函数来描述，通过任意秩的胞腔来描述胞腔的关联结构。其次，在定义<a href="combinatorial-complexes.html#def:filtered-incidence">4.7</a>，引入了<span class="math inline">\(k-down\)</span>下关联和<span class="math inline">\(k-up\)</span>上关联邻域函数，通过特定秩<span class="math inline">\(k\)</span>的胞腔来描述胞腔的关联结构。然后，在定义<a href="combinatorial-complexes.html#def:inc-mat">4.8</a>，引入<span class="math inline">\((r, k)\)</span>-incidence关联矩阵，以描述特定秩<span class="math inline">\(r\)</span>和<span class="math inline">\(k\)</span>的胞腔的关联结构。在下文中，我们假定 CC<span class="math inline">\((S,\mathcal{X}, \mbox{rk})\)</span>的<span class="math inline">\(\mathcal{X}\)</span> 集合中的胞腔有固定的顺序。</p>
+<div class="definition">
+<p><span id="def:nstruct" class="definition"><strong>定义 4.6  (下/上关联邻域函数，Down/up-incidence neighborhood functions) </strong></span>令<span class="math inline">\((S,\mathcal{X}, \mbox{rk})\)</span>是一个CC，CC的两个胞腔<span class="math inline">\(x, y\in\mathcal{X}\)</span>被称作关联的（ <em>incident</em>），如果<span class="math inline">\(x \subsetneq y\)</span>或<span class="math inline">\(y \subsetneq x\)</span>。尤其，胞腔<span class="math inline">\(x\in\mathcal{X}\)</span>的<em>下关联邻域函数（down-incidence neighborhood function）</em> <span class="math inline">\(\mathcal{N}_{\searrow}(x)\)</span> 被定义为集合<span class="math inline">\(\{ y\in \mathcal{X} \mid y \subsetneq x\}\)</span>，而<span class="math inline">\(x\)</span>的<em>上关联邻域函数（up-incidence neighborhood function）</em> <span class="math inline">\(\mathcal{N}_{\nearrow}(x)\)</span> 被定义为集合 <span class="math inline">\(\{ y\in \mathcal{X} \mid x \subsetneq y\}\)</span>.</p>
+</div>
+<p>定义<a href="combinatorial-complexes.html#def:filtered-incidence">4.7</a></p>
+<p>与定义 <a href="combinatorial-complexes.html#def:nstruct">4.6</a>相比，定义 <a href="combinatorial-complexes.html#def:filtered-incidence">4.7</a>提供了更精细的关联结构规定。具体来说，定义 <a href="combinatorial-complexes.html#def:filtered-incidence">4.7</a> 和 <a href="combinatorial-complexes.html#def:nstruct">4.6</a> 分别描述了一个胞腔相对于特定秩或任意秩胞腔的关联结构。</p>
+<div class="definition">
+<p><span id="def:filtered-incidence" class="definition"><strong>定义 4.7  (k-down/up incidence neighborhood functions) </strong></span>令<span class="math inline">\((S,\mathcal{X}, \mbox{rk})\)</span> 是一个CC，对于任何<span class="math inline">\(k\in\mathbb{N}\)</span>, 胞腔<span class="math inline">\(x\)</span>的<em><span class="math inline">\(k-down\)</span>下关联邻域函数</em> <span class="math inline">\(\mathcal{N}_{\searrow,k}(x)\)</span>被定义为集合<span class="math inline">\(\{ y\in \mathcal{X} \mid y \subsetneq x, \mbox{rk}(y)=\mbox{rk}(x)-k \}\)</span>。胞腔<span class="math inline">\(x\)</span>的<em><span class="math inline">\(k-up\)</span>上关联邻域函数</em> <span class="math inline">\(\mathcal{N}_{\nearrow,k}(x)\)</span> 被定义为集合<span class="math inline">\(\{ y\in \mathcal{X} \mid y \subsetneq x,\mbox{rk}(y)=\mbox{rk}(x)+k \}\)</span>。</p>
+</div>
+<p>显然，<span class="math inline">\(\mathcal{N}_{\searrow}(x)= \bigcup_{k\in \mathbb{N}} \mathcal{N}_{\searrow,k}(x)\)</span>，并且<span class="math inline">\(\mathcal{N}_{\nearrow}(x)= \bigcup_{k\in\mathbb{N}} \mathcal{N}_{\nearrow,k}(x)\)</span>。直接关联（immediate incidence）尤其重要，为此，胞腔<span class="math inline">\(x \in \mathcal{X}\)</span>的<em>面（faces）</em>集合定义为<span class="math inline">\(\mathcal{N}_{\searrow,1} (x)\)</span>，并且<em>共面（cofaces）</em>集合定义为<span class="math inline">\(\mathcal{N}_{\nearrow,1} (x)\)</span>。参见图<a href="combinatorial-complexes.html#fig:structure-inc">4.6</a>，给出了<span class="math inline">\(k\)</span>-down和<span class="math inline">\(k\)</span>-up关联邻域函数的描述。</p>
+<div class="definition">
+<p><span id="def:inc-mat" class="definition"><strong>定义 4.8  (邻域矩阵，Neighborhood matrix) </strong></span>令<span class="math inline">\((S,\mathcal{X}, \mbox{rk})\)</span>是CC，对于任何<span class="math inline">\(0\leq r&lt;k \leq \dim(\mathcal{X})\)</span>下的<span class="math inline">\(r,k \in \mathbb{Z}{\ge 0}\)</span>， <span class="math inline">\(\mathcal{X}^{r}\)</span> 和 <span class="math inline">\(\mathcal{X}^{k}\)</span>之间的<em><span class="math inline">\((r,k)\)</span>关联矩阵</em> <span class="math inline">\(B_{r,k}\)</span>被定义为 <span class="math inline">\(|\mathcal{X}^r| \times |\mathcal{X}^k|\)</span>二值矩阵，其中，如果<span class="math inline">\(x^r_i\)</span>关联于<span class="math inline">\(x^k_j\)</span>，那么第<span class="math inline">\((i, j)\)</span>-th项<span class="math inline">\([B_{r,k}]_{ij}\)</span>等于1，否则等于0。</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:structure-inc"></span>
+<img src="figures/structure_inc.png" alt="维度为3的CC上的$k$-down 和 $k$-up 关联邻域函数。 (a): $k$-down 关联邻域函数， 目标橙色胞腔 $x$ 的秩为3。从左到右，红色胞腔标记了$\mathcal{N}_{\searrow,1}(x)$, $\mathcal{N}_{\searrow,2}(x)$ 和 $\mathcal{N}_{\searrow,3}(x)$. (b): $k$-up 关联邻域函数，目标橙色胞腔$x$秩为0，从左到右，红色胞腔标记了$\mathcal{N}_{\nearrow,1}(x)$, $\mathcal{N}_{\nearrow,2}(x)$ and $\mathcal{N}_{\nearrow,3}(x)$."  />
+<p class="caption">
+图 4.6: 维度为3的CC上的<span class="math inline">\(k\)</span>-down 和 <span class="math inline">\(k\)</span>-up 关联邻域函数。 (a): <span class="math inline">\(k\)</span>-down 关联邻域函数， 目标橙色胞腔 <span class="math inline">\(x\)</span> 的秩为3。从左到右，红色胞腔标记了<span class="math inline">\(\mathcal{N}_{\searrow,1}(x)\)</span>, <span class="math inline">\(\mathcal{N}_{\searrow,2}(x)\)</span> 和 <span class="math inline">\(\mathcal{N}_{\searrow,3}(x)\)</span>. (b): <span class="math inline">\(k\)</span>-up 关联邻域函数，目标橙色胞腔<span class="math inline">\(x\)</span>秩为0，从左到右，红色胞腔标记了<span class="math inline">\(\mathcal{N}_{\nearrow,1}(x)\)</span>, <span class="math inline">\(\mathcal{N}_{\nearrow,2}(x)\)</span> and <span class="math inline">\(\mathcal{N}_{\nearrow,3}(x)\)</span>.
+</p>
+</div>
+<p>定义<a href="combinatorial-complexes.html#def:inc-mat">4.8</a>种的关联矩阵<span class="math inline">\(B_{r,k}\)</span>规定了CC的邻域函数，关联矩阵诱导的邻域函数可用于构造CCs上的高阶消息传递实现方案，正如章节<a href="combinatorial-complex-neural-networks.html#combinatorial-complex-neural-networks">5</a>所描述的。</p>
+</div>
+<div id="cc内的邻接关系adjacency" class="section level3 hasAnchor" number="4.4.2">
+<h3><span class="header-section-number">4.4.2</span> CC内的邻接关系（Adjacency）<a href="combinatorial-complexes.html#cc内的邻接关系adjacency" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>CCs 既有关联函数，也有其他邻域函数。例如，对于简化为图的 CC，更自然的邻域函数是基于邻接关系的概念。关联关系定义了不同秩的胞腔之间的关系，而邻接关系定义了相同秩的胞腔之间的关系。定义 <a href="combinatorial-complexes.html#def:coa-nf">4.9</a>、 <a href="combinatorial-complexes.html#def:k-coa-nf">4.10</a>和 <a href="combinatorial-complexes.html#def:adj-mat">4.11</a>/<a href="combinatorial-complexes.html#def:coadj-mat">4.12</a>引入了各自与关联关系相关的定义 <a href="combinatorial-complexes.html#def:nstruct">4.6</a>、 <a href="combinatorial-complexes.html#def:filtered-incidence">4.7</a>和 <a href="combinatorial-complexes.html#def:inc-mat">4.8</a>类似的（共）邻接关系。</p>
+<div class="definition">
+<p><span id="def:coa-nf" class="definition"><strong>定义 4.9  (共邻接邻域函数，(Co)adjacency neighborhood functions) </strong></span>令<span class="math inline">\((S,\mathcal{X}, \mbox{rk})\)</span>是CC，胞腔<span class="math inline">\(x\in \mathcal{X}\)</span>的<em>邻接邻域函数（adjacency neighborhood function）</em> <span class="math inline">\(\mathcal{N}_{a}(x)\)</span>定义为集合
+<span class="math display">\[\begin{equation*}
+\{  y \in \mathcal{X} \mid \mbox{rk}(y)=\mbox{rk}(x), \exists z \in \mathcal{X} \text{ with } \mbox{rk}(z)&gt;\mbox{rk}(x) \text{ such that } x,y\subsetneq z\}.
+\end{equation*}\]</span>
+<span class="math inline">\(x\)</span>的<em>共邻接邻域函数（coadjacency neighborhood function）</em> <span class="math inline">\(\mathcal{N}_{co}(x)\)</span> 定义为集合
+<span class="math display">\[\begin{equation*}
+\{ y \in \mathcal{X} \mid \mbox{rk}(y)=\mbox{rk}(x), \exists z \in \mathcal{X}
+\text{ with } \mbox{rk}(z)&lt;\mbox{rk}(x) \text{ such that } z\subsetneq y\text{ and }z\subsetneq x \}.
+\end{equation*}\]</span>
+满足条件<span class="math inline">\(\mathcal{N}_{a}(x)\)</span> 或 <span class="math inline">\(\mathcal{N}_{co}(x)\)</span>的胞腔<span class="math inline">\(z\)</span>称为<em>桥接胞腔（bridge cell）</em>.</p>
+</div>
+<div class="definition">
+<p><span id="def:k-coa-nf" class="definition"><strong>定义 4.10  (k-(共)邻接领域函数，k-(co)adjacency neighborhood functions) </strong></span>令<span class="math inline">\((S, \mathcal{X}, \mbox{rk})\)</span>是CC，对于任何<span class="math inline">\(k\in\mathbb{N}\)</span>, 胞腔<span class="math inline">\(x \in \mathcal{X}\)</span>的<em><span class="math inline">\(k\)</span>-邻接邻域函数</em> <span class="math inline">\(\mathcal{N}_{a,k}(x)\)</span>定义为集合</p>
+<p><span class="math display">\[\begin{equation*}
+\{ y \in \mathcal{X} \mid \mbox{rk}(y)=\mbox{rk}(x),
+\exists z \in \mathcal{X}
+\text{ with } \mbox{rk}(z)=\mbox{rk}(x)+k \text{ such that } x,y\subsetneq z \}.
+\end{equation*}\]</span></p>
+<p><span class="math inline">\(x\)</span>的<em><span class="math inline">\(k\)</span>-共邻邻域函数</em> <span class="math inline">\(\mathcal{N}_{co,k}(x)\)</span>定义为集合</p>
+<p><span class="math display">\[\begin{equation*}
+\{ y \in \mathcal{X} \mid \mbox{rk}(y)=\mbox{rk}(x),
+\exists z \in \mathcal{X}
+\text{ with } \mbox{rk}(z)=\mbox{rk}(x)-k
+\text{ such that } z\subsetneq y\text{ and }z\subsetneq x \}.
+\end{equation*}\]</span></p>
+</div>
+<div class="definition">
+<p><span id="def:adj-mat" class="definition"><strong>定义 4.11  (邻接矩阵，Adjacency matrix) </strong></span>对于满足<span class="math inline">\(0\leq r&lt;r+k \leq \dim(\mathcal{X})\)</span>的任何<span class="math inline">\(r\in\mathbb{Z}_{\ge 0}\)</span> and <span class="math inline">\(k\in \mathbb{Z}_{&gt;0}\)</span> ， <span class="math inline">\(\mathcal{X}^{r}\)</span>关于 <span class="math inline">\(\mathcal{X}^{k}\)</span>的胞腔之间的 <em><span class="math inline">\((r,k)\)</span>-邻接矩阵</em> <span class="math inline">\(A_{r,k}\)</span>被定义为<span class="math inline">\(|\mathcal{X}^r| \times |\mathcal{X}^r|\)</span> 二值矩阵（binary matrix），该矩阵的第<span class="math inline">\((i, j)\)</span>-th项，如果<span class="math inline">\(x^r_i\)</span> <span class="math inline">\(k\)</span>-邻接于 <span class="math inline">\(x^r_j\)</span>，那么<span class="math inline">\([A_{r,k}]_{ij}\)</span>等于1，否则等于0。</p>
+</div>
+<div class="definition">
+<p><span id="def:coadj-mat" class="definition"><strong>定义 4.12  (共邻接矩阵，Coadjacency matrix) </strong></span>对于满足<span class="math inline">\(0\leq r-k&lt;r \leq \dim(\mathcal{X})\)</span>的任何<span class="math inline">\(r\in \mathbb{Z}_{\ge 0}\)</span> and <span class="math inline">\(k\in\mathbb{N}\)</span> ， <span class="math inline">\(\mathcal{X}^{r}\)</span>关于<span class="math inline">\(\mathcal{X}^{k}\)</span>的胞腔之间的<em><span class="math inline">\((r,k)\)</span>-共邻接矩阵</em> <span class="math inline">\(coA_{r,k}\)</span> among the cells of <span class="math inline">\(\mathcal{X}^{r}\)</span> 定义为 <span class="math inline">\(|\mathcal{X}^r| \times |\mathcal{X}^r|\)</span>二值矩阵，如果<span class="math inline">\(x^r_i\)</span> <span class="math inline">\(k\)</span>-共邻于<span class="math inline">\(x^r_j\)</span> ，那么该矩阵的<span class="math inline">\((i, j)\)</span>-th项<span class="math inline">\([coA_{r,k}]_{ij}\)</span>等于1，否则等于0。</p>
+</div>
+<p>显然, <span class="math inline">\(\mathcal{N}_{a}(x)= \cup_{k\in\mathbb{N}} \mathcal{N}_{a,k}(x)\)</span>，并且 <span class="math inline">\(\mathcal{N}_{co}(x)= \cup_{k\in\mathbb{N}} \mathcal{N}_{co,k}(x)\)</span>。图<a href="combinatorial-complexes.html#fig:structure-adj">4.7</a>给出了<span class="math inline">\(k\)</span>-邻接和<span class="math inline">\(k\)</span>-共邻邻域函数的描述。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:structure-adj"></span>
+<img src="figures/structure_adj.png" alt="维度为3的域CC的$k$-(共)邻接邻域函数。(a): $k$-邻接邻域函数。目标橙色胞腔$x$ 秩为0，从左到右，红色胞腔标记了$\mathcal{N}_{a,1}(x)$, $\mathcal{N}_{a,2}(x)$ 和 $\mathcal{N}_{a,3}(x)$。 (b): $k$-共邻邻域函数，目标橙色胞腔$x$秩为2，从左到右，红色胞腔标记了$\mathcal{N}_{co,1}(x)$, $\mathcal{N}_{co,2}(x)$和$\mathcal{N}_{co,3}(x)$."  />
+<p class="caption">
+图 4.7: 维度为3的域CC的<span class="math inline">\(k\)</span>-(共)邻接邻域函数。(a): <span class="math inline">\(k\)</span>-邻接邻域函数。目标橙色胞腔<span class="math inline">\(x\)</span> 秩为0，从左到右，红色胞腔标记了<span class="math inline">\(\mathcal{N}_{a,1}(x)\)</span>, <span class="math inline">\(\mathcal{N}_{a,2}(x)\)</span> 和 <span class="math inline">\(\mathcal{N}_{a,3}(x)\)</span>。 (b): <span class="math inline">\(k\)</span>-共邻邻域函数，目标橙色胞腔<span class="math inline">\(x\)</span>秩为2，从左到右，红色胞腔标记了<span class="math inline">\(\mathcal{N}_{co,1}(x)\)</span>, <span class="math inline">\(\mathcal{N}_{co,2}(x)\)</span>和<span class="math inline">\(\mathcal{N}_{co,3}(x)\)</span>.
+</p>
+</div>
+</div>
+</div>
+<div id="data-on-ccs" class="section level2 hasAnchor" number="4.5">
+<h2><span class="header-section-number">4.5</span> CCs上的数据<a href="combinatorial-complexes.html#data-on-ccs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>由于我们对处理定义在 CC <span class="math inline">\((S,\mathcal{X},\mbox{rk})\)</span> 上的数据感兴趣，因此我们引入了 <span class="math inline">\(k\)</span>-共链空间（<span class="math inline">\(k\)</span>-cochain spaces）、<span class="math inline">\(k\)</span>-共链（<span class="math inline">\(k\)</span>-cochains）和共链映射(cochain maps)等概念。</p>
+<div class="definition">
+<p><span id="def:k-cochain-spaces" class="definition"><strong>定义 4.13  (k-共链空间，k-cochain spaces) </strong></span>令<span class="math inline">\(\mathcal{C}^k(\mathcal{X},\mathbb{R}^d )\)</span>是秩为<span class="math inline">\(k \in \mathbb{Z}_{\ge 0}\)</span>且维度为<span class="math inline">\(d\)</span>的函数<span class="math inline">\(\mathbf{H}_k\colon\mathcal{X}^k\to \mathbb{R}^d\)</span>的<span class="math inline">\(\mathbb{R}\)</span>-向量空间（vector space）。<span class="math inline">\(d\)</span> 称作<em>数据维度（data dimension）</em>，<span class="math inline">\(\mathcal{C}^k(\mathcal{X},\mathbb{R}^d)\)</span>称作<em><span class="math inline">\(k\)</span>-共链空间（cochain space）</em>，<span class="math inline">\(\mathcal{C}^k(\mathcal{X},\mathbb{R}^d)\)</span>中的元素<span class="math inline">\(\mathbf{H}_k\)</span>称作<em><span class="math inline">\(k\)</span>-共链（cochains）</em> 或 <em><span class="math inline">\(k\)</span>-信号（signals）</em>。</p>
+</div>
+<p>当底层CC很明确的时候，可以直接使用<span class="math inline">\(\mathcal{C}^k(\mathcal{X})\)</span> 或 <span class="math inline">\(\mathcal{C}^k\)</span>来简略表示。此外，还可以说<span class="math inline">\(k\)</span>-共链空间<span class="math inline">\(\mathcal{C}^k(\mathcal{X})\)</span>被定义在<span class="math inline">\(\mathcal{X}\)</span>上。直观来讲，<span class="math inline">\(k\)</span>-cochain可被解释为定义在<span class="math inline">\(\mathcal{X}\)</span>的<span class="math inline">\(k\)</span>-cells上的信号<span class="citation">(<a href="#ref-grady2010discrete">Grady and Polimeni 2010</a>)</span>。图<a href="combinatorial-complexes.html#fig:cc-cochain">4.8</a>(a)给出了单纯复形的0、1、2秩上支持的共链。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:cc-cochain"></span>
+<img src="figures/mapping_cochain.png" alt="CC在维度4上支持的$k$-cochains (左图) 和共链映射（ cochain maps，右图) 。左图： $k$-cochain可以被解释为定义在$k$-cells上的信号或特征向量（feature vector）。图中，维度3的共链附在顶点上，维度2的共链附在1-cells上，维度4的共链附在2-cells上。右图：$coA_{r,k}$ 和 $A_{r,k}$ 定义了等维共链空间之间的共链映射（cochain map），$B_{r,k}$定义了不同维度空间之间的共链映射。"  />
+<p class="caption">
+图 4.8: CC在维度4上支持的<span class="math inline">\(k\)</span>-cochains (左图) 和共链映射（ cochain maps，右图) 。左图： <span class="math inline">\(k\)</span>-cochain可以被解释为定义在<span class="math inline">\(k\)</span>-cells上的信号或特征向量（feature vector）。图中，维度3的共链附在顶点上，维度2的共链附在1-cells上，维度4的共链附在2-cells上。右图：<span class="math inline">\(coA_{r,k}\)</span> 和 <span class="math inline">\(A_{r,k}\)</span> 定义了等维共链空间之间的共链映射（cochain map），<span class="math inline">\(B_{r,k}\)</span>定义了不同维度空间之间的共链映射。
+</p>
+</div>
+<p>当<span class="math inline">\(\mathcal{X}\)</span>是图时，<span class="math inline">\(0\)</span>-cochains对应于图上的信号<span class="citation">(<a href="#ref-ortega2018graph">Ortega et al. 2018</a>)</span>。通过对<span class="math inline">\(\mathcal{X}^k\)</span>中的胞腔排序，我们可以用欧式向量空间<span class="math inline">\(\mathbb{R}^{ |\mathcal{X}^k| \times d}\)</span> 规范地识别出<span class="math inline">\(\mathcal{C}^k(\mathcal{X},\mathbb{R}^d )\)</span> ，并且直接将<span class="math inline">\(\mathbf{H}_k\)</span>写作向量<span class="math inline">\([ \mathbf{h}_{x^k_1},\ldots,\mathbf{h}_{x^k_{|\mathcal{X}^k|} }]\)</span>。其中，<span class="math inline">\(\mathbf{h}_{x^k_j} \in \mathbb{R}^d\)</span>是与胞腔<span class="math inline">\(x^k_j\)</span>相关的特征向量。符号<span class="math inline">\(\mathbf{H}_{k,j}\)</span>指特征向量<span class="math inline">\(\mathbf{h}_{x^k_j}\)</span> ，以避免明确引用胞腔<span class="math inline">\(x^k_j\)</span>。我们也可以处理共链空间之间的映射，他们被称为共链映射。</p>
+<div class="definition">
+<p><span id="def:cochain-maps" class="definition"><strong>定义 4.14  (共链映射，Cochain maps) </strong></span>对于<span class="math inline">\(r&lt; k\)</span>, 关联矩阵<span class="math inline">\(B_{r,k}\)</span> 产生映射
+<span class="math display">\[\begin{align*}
+B_{r,k}\colon \mathcal{C}^k(\mathcal{X}) &amp;\to   \mathcal{C}^r(\mathcal{X}),\\
+\mathbf{H}_k &amp;\to  B_{r,k}(\mathbf{H}_k),
+\end{align*}\]</span>
+其中，<span class="math inline">\(B_{r,k}(\mathbf{H}_k)\)</span> 表示矩阵<span class="math inline">\(B_{r,k}\)</span>和向量<span class="math inline">\(\mathbf{H}_k\)</span>的通常意义上的乘积<span class="math inline">\(B_{r,k}\mathbf{H}_k\)</span>。类似的，<span class="math inline">\((r,k)\)</span>-邻接矩阵<span class="math inline">\(A_{r,k}\)</span>产生映射
+<span class="math display">\[\begin{align*}
+A_{r,k}\colon \mathcal{C}^r(\mathcal{X}) &amp;\to   \mathcal{C}^r(\mathcal{X}),\\
+\mathbf{H}_r &amp;\to  A_{r,k}(\mathbf{H}_r).
+\end{align*}\]</span>
+共链空间之间的这两类映射都称为 <em>共链映射（cochain maps）</em>。</p>
+</div>
+<p>共链映射可以作为算子来用，例如在底层CC上的“变换（shuffle）”、“再分布（redistribute）”数据等操作。在TDL场景下，共链映射是定义高阶消息传递(Section <a href="message-passing.html#definition-of-higher-order-message-passing">6.1</a>)和反池化/池化操作(Section <a href="push-forward-pooling-and-unpooling.html#cc-pooling-and-unpooling">7.1</a>)的主要工具。每个邻接矩阵<span class="math inline">\(A_{r,k}\)</span>或共邻接矩阵<span class="math inline">\(coA_{r,k}\)</span>都定义了等维共链空间之间的共链映射，而每个关联矩阵<span class="math inline">\(B_{r,k}\)</span>都定义了不同维度空间之间的共链映射。参见图<a href="combinatorial-complexes.html#fig:cc-cochain">4.8</a>(b) 给出的维度4下的CC的共链映射示例。</p>
+
+<hr />
+</div>
+</div>
+<h3>参考文献<a href="参考文献.html#参考文献" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-battaglia2018relational" class="csl-entry">
+Battaglia, Peter W., Jessica B. Hamrick, Victor Bapst, Alvaro Sanchez-Gonzalez, Vinicius Zambaldi, Mateusz Malinowski, Andrea Tacchetti, et al. 2018. <span>“Relational Inductive Biases, Deep Learning, and Graph Networks.”</span> <em>arXiv Preprint arXiv:1806.01261</em>.
+</div>
+<div id="ref-battaglia2016interaction" class="csl-entry">
+Battaglia, Peter, Razvan Pascanu, Matthew Lai, Danilo Jimenez Rezende, and Koray kavukcuoglu. 2016. <span>“Interaction Networks for Learning about Objects, Relations and Physics.”</span> In <em>Proceedings of the 30th International Conference on Neural Information Processing Systems</em>, 4509–17. NIPS’16. Red Hook, NY, USA: Curran Associates Inc.
+</div>
+<div id="ref-fey2019fast" class="csl-entry">
+Fey, Matthias, and Jan Eric Lenssen. 2019. <span>“Fast Graph Representation Learning with <span>P</span>y<span>T</span>orch <span>G</span>eometric.”</span> <em>arXiv Preprint arXiv:1903.02428</em>.
+</div>
+<div id="ref-grady2010discrete" class="csl-entry">
+Grady, Leo J., and Jonathan R. Polimeni. 2010. <em>Discrete Calculus: Applied Analysis on Graphs for Computational Science</em>. Vol. 3. Springer.
+</div>
+<div id="ref-kipf2016semi" class="csl-entry">
+Kipf, Thomas N., and Max Welling. 2016. <span>“Semi-Supervised Classification with Graph Convolutional Networks.”</span> <em>arXiv Preprint arXiv:1609.02907</em>.
+</div>
+<div id="ref-loukas2019graph" class="csl-entry">
+Loukas, Andreas. 2019. <span>“What Graph Neural Networks Cannot Learn: Depth Vs Width.”</span> <em>arXiv Preprint arXiv:1907.03199</em>.
+</div>
+<div id="ref-morris2019weisfeiler" class="csl-entry">
+Morris, Christopher, Martin Ritzert, Matthias Fey, William L. Hamilton, Jan Eric Lenssen, Gaurav Rattan, and Martin Grohe. 2019. <span>“Weisfeiler and <span>L</span>eman Go Neural: Higher-Order Graph Neural Networks.”</span> In <em>Proceedings of the AAAI Conference on Artificial Intelligence</em>.
+</div>
+<div id="ref-munkres2018elements" class="csl-entry">
+———. 2018. <em>Elements of Algebraic Topology</em>. CRC press.
+</div>
+<div id="ref-ortega2018graph" class="csl-entry">
+Ortega, Antonio, Pascal Frossard, Jelena Kovačević, José MF Moura, and Pierre Vandergheynst. 2018. <span>“Graph Signal Processing: Overview, Challenges, and Applications.”</span> <em>Proceedings of the IEEE</em> 106 (5): 808–28.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="preliminaries.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="combinatorial-complex-neural-networks.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook/js/app.min.js"></script>
+<script src="libs/gitbook/js/clipboard.min.js"></script>
+<script src="libs/gitbook/js/plugin-search.js"></script>
+<script src="libs/gitbook/js/plugin-sharing.js"></script>
+<script src="libs/gitbook/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook/js/jquery.highlight.js"></script>
+<script src="libs/gitbook/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/pyt-team/tdlbook/edit/main/rmd/04-ccs.rmd",
+"text": "编辑"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "none"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

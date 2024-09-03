@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>第 2 章 研究动机 | 拓扑深度学习：超越图数据</title>
+  <meta name="description" content="一本关于拓扑深度学习的书。" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="第 2 章 研究动机 | 拓扑深度学习：超越图数据" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="一本关于拓扑深度学习的书。" />
+  <meta name="github-repo" content="pyt-team/tdlbook" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="第 2 章 研究动机 | 拓扑深度学习：超越图数据" />
+  
+  <meta name="twitter:description" content="一本关于拓扑深度学习的书。" />
+  
+
+<meta name="author" content="Mustafa Hajij, Theodore Papamarkou, Ghada Zamzmi, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Michael T. Schaub" />
+
+
+<meta name="date" content="2024-09-03" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="引言.html"/>
+<link rel="next" href="preliminaries.html"/>
+<script src="libs/jquery/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="css/glossarybox.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">拓扑深度学习</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>贡献者</a></li>
+<li class="chapter" data-level="" data-path="译者.html"><a href="译者.html"><i class="fa fa-check"></i>译者</a></li>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html"><i class="fa fa-check"></i>序言</a>
+<ul>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html#编译"><i class="fa fa-check"></i>编译</a></li>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html#致谢"><i class="fa fa-check"></i>致谢</a></li>
+</ul></li>
+<li class="part"><span><b>第一部分：基础知识</b></span></li>
+<li class="chapter" data-level="1" data-path="引言.html"><a href="引言.html"><i class="fa fa-check"></i><b>1</b> 引言</a></li>
+<li class="chapter" data-level="2" data-path="motivation.html"><a href="motivation.html"><i class="fa fa-check"></i><b>2</b> 研究动机</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="motivation.html"><a href="motivation.html#从拓扑空间数据中建模和学习"><i class="fa fa-check"></i><b>2.1</b> 从拓扑空间数据中建模和学习</a></li>
+<li class="chapter" data-level="2.2" data-path="motivation.html"><a href="motivation.html#the-utility-of-topology"><i class="fa fa-check"></i><b>2.2</b> 拓扑的有用性</a></li>
+<li class="chapter" data-level="2.3" data-path="motivation.html"><a href="motivation.html#深度学习和结构化计算的统一视角"><i class="fa fa-check"></i><b>2.3</b> 深度学习和结构化计算的统一视角</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preliminaries.html"><a href="preliminaries.html"><i class="fa fa-check"></i><b>3</b> 预备知识</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="preliminaries.html"><a href="preliminaries.html#邻域函数和拓扑空间"><i class="fa fa-check"></i><b>3.1</b> 邻域函数和拓扑空间</a></li>
+<li class="chapter" data-level="3.2" data-path="preliminaries.html"><a href="preliminaries.html#bridging-the-gap-among-higher-order-networks"><i class="fa fa-check"></i><b>3.2</b> 填补与高阶网络间的代沟</a></li>
+<li class="chapter" data-level="3.3" data-path="preliminaries.html"><a href="preliminaries.html#hierarchical-structure-and-set-type-relations"><i class="fa fa-check"></i><b>3.3</b> 层次化结构与集合型关系</a></li>
+</ul></li>
+<li class="part"><span><b>第二部分:组合复形</b></span></li>
+<li class="chapter" data-level="4" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html"><i class="fa fa-check"></i><b>4</b> 组合复形</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc-definition"><i class="fa fa-check"></i><b>4.1</b> 组合复形定义</a></li>
+<li class="chapter" data-level="4.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc-homomorphisms-and-sub-ccs"><i class="fa fa-check"></i><b>4.2</b> CC同态和子CCs</a></li>
+<li class="chapter" data-level="4.3" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#motivation-for-ccs"><i class="fa fa-check"></i><b>4.3</b> 引入CCs的动机</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#pooling-operations-on-ccs"><i class="fa fa-check"></i><b>4.3.1</b> CCs上的池化操作</a></li>
+<li class="chapter" data-level="4.3.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#structural-advantages-of-ccs"><i class="fa fa-check"></i><b>4.3.2</b> CCs的结构化优势</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#neighbourhood-functions-on-ccs"><i class="fa fa-check"></i><b>4.4</b> CCs上的邻域函数</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#incidence-in-a-cc"><i class="fa fa-check"></i><b>4.4.1</b> CC中的关联关系（Incidence）</a></li>
+<li class="chapter" data-level="4.4.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc内的邻接关系adjacency"><i class="fa fa-check"></i><b>4.4.2</b> CC内的邻接关系（Adjacency）</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#data-on-ccs"><i class="fa fa-check"></i><b>4.5</b> CCs上的数据</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html"><i class="fa fa-check"></i><b>5</b> 组合复形神经网络（Combinatorial complex neural networks）</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#building-ccnns-tensor-diagrams"><i class="fa fa-check"></i><b>5.1</b> 构建 CCNN：张量图</a></li>
+<li class="chapter" data-level="5.2" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#push-forward-operator-and-merge-node"><i class="fa fa-check"></i><b>5.2</b> 前推操作（Push-forward operator）和聚合节点</a></li>
+<li class="chapter" data-level="5.3" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#the-main-three-tensor-operations"><i class="fa fa-check"></i><b>5.3</b> 三种主要的张量操作</a></li>
+<li class="chapter" data-level="5.4" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#definition-of-combinatorial-complex-convolutional-networks"><i class="fa fa-check"></i><b>5.4</b> 组合复形卷积网络的定义（combinatorial complex convolutional networks）</a></li>
+<li class="chapter" data-level="5.5" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#combinatorial-complex-attention-neural-networks"><i class="fa fa-check"></i><b>5.5</b> 组合复形注意力神经网络</a></li>
+</ul></li>
+<li class="part"><span><b>第三部分：高阶消息传递（Higher-order message passing）</b></span></li>
+<li class="chapter" data-level="6" data-path="message-passing.html"><a href="message-passing.html"><i class="fa fa-check"></i><b>6</b> 消息传递</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="message-passing.html"><a href="message-passing.html#definition-of-higher-order-message-passing"><i class="fa fa-check"></i><b>6.1</b> 高阶消息传递的定义</a></li>
+<li class="chapter" data-level="6.2" data-path="message-passing.html"><a href="message-passing.html#higher-order-message-passing-neural-networks-are-ccnns"><i class="fa fa-check"></i><b>6.2</b> 高阶消息传递神经网络就是CCNNs</a></li>
+<li class="chapter" data-level="6.3" data-path="message-passing.html"><a href="message-passing.html#merge-nodes-and-higher-order-message-passing-a-qualitative-comparison"><i class="fa fa-check"></i><b>6.3</b> 聚合节点和高阶消息传递：量化比较</a></li>
+<li class="chapter" data-level="6.4" data-path="message-passing.html"><a href="message-passing.html#attention-higher-order-message-passing-and-ccanns"><i class="fa fa-check"></i><b>6.4</b> 注意力高阶消息传递和CCANNs</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html"><i class="fa fa-check"></i><b>7</b> 前推、池化和反池化</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#cc-pooling-and-unpooling"><i class="fa fa-check"></i><b>7.1</b> CC池化和反池化</a></li>
+<li class="chapter" data-level="7.2" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#formulating-common-pooling-operations-as-cc-pooling"><i class="fa fa-check"></i><b>7.2</b> 将常见的池化操作表述为 CC-pooling</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#graph-pooling-as-cc-pooling"><i class="fa fa-check"></i><b>7.2.1</b> 用CC-pooling表示图池化操作</a></li>
+<li class="chapter" data-level="7.2.2" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#image-pooling-as-cc-pooling"><i class="fa fa-check"></i><b>7.2.2</b> 图像池化作为CC-pooing</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#pooling-and-unpooling-ccnns"><i class="fa fa-check"></i><b>7.3</b> 池化与反池化CCNNs</a></li>
+<li class="chapter" data-level="7.4" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#mapper-and-the-cc-pooling-operation"><i class="fa fa-check"></i><b>7.4</b> 映射器和CC池化操作</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html"><i class="fa fa-check"></i><b>8</b> CCNNs的Hasse图解释</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#hasse-graph-interpretation-of-ccnns-2"><i class="fa fa-check"></i><b>8.1</b> CCNNs的Hasse图解释</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#ccs-as-hasse-graphs"><i class="fa fa-check"></i><b>8.1.1</b> CCs作为Hasse图</a></li>
+<li class="chapter" data-level="8.1.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs"><i class="fa fa-check"></i><b>8.1.2</b> 增强的Hasse图</a></li>
+<li class="chapter" data-level="8.1.3" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#reducibility-of-ccnns-to-graph-basedmodels"><i class="fa fa-check"></i><b>8.1.3</b> CCNN对图模型的归约能力</a></li>
+<li class="chapter" data-level="8.1.4" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs-and-cc-pooling"><i class="fa fa-check"></i><b>8.1.4</b> 增强Hasse图和CC-pooling</a></li>
+<li class="chapter" data-level="8.1.5" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-diagrams-message-passing-and-mergenodes"><i class="fa fa-check"></i><b>8.1.5</b> 增强Hasse图消息传递和聚合节点</a></li>
+<li class="chapter" data-level="8.1.6" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#higher-order-representation-learning"><i class="fa fa-check"></i><b>8.1.6</b> 高阶表征学习</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#on-the-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2</b> CCNNs的等变性</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#permutation-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2.1</b> CCNNs的置换等变</a></li>
+<li class="chapter" data-level="8.2.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#orientation-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2.2</b> CCNNs的方向等变</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>第四部分：应用，文献和结论</b></span></li>
+<li class="chapter" data-level="9" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html"><i class="fa fa-check"></i><b>9</b> 实现与实验</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#software-toponetx-topoembedx-and-topomodelx"><i class="fa fa-check"></i><b>9.1</b> 软件：TopoNetX, TopoEmbedX, and TopoModelX</a></li>
+<li class="chapter" data-level="9.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#datasets"><i class="fa fa-check"></i><b>9.2</b> 数据集</a></li>
+<li class="chapter" data-level="9.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#shape-analysis-mesh-segmentation-and-classification"><i class="fa fa-check"></i><b>9.3</b> 形状分析：网格分割与分类</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-segmentation"><i class="fa fa-check"></i><b>9.3.1</b> 网格分割</a></li>
+<li class="chapter" data-level="9.3.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-and-point-cloud-classification"><i class="fa fa-check"></i><b>9.3.2</b> Mesh and point cloud classification</a></li>
+<li class="chapter" data-level="9.3.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#graph-classification"><i class="fa fa-check"></i><b>9.3.3</b> Graph classification</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#pooling-with-mapper-on-graphs-and-data-classification"><i class="fa fa-check"></i><b>9.4</b> Pooling with mapper on graphs and data classification</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-and-edge-features"><i class="fa fa-check"></i><b>9.4.1</b> Mesh classification: CC-pooling with input vertex and edge features</a></li>
+<li class="chapter" data-level="9.4.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-features-only"><i class="fa fa-check"></i><b>9.4.2</b> Mesh classification: CC-pooling with input vertex features only</a></li>
+<li class="chapter" data-level="9.4.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#point-cloud-classification-cc-pooling-with-input-vertex-features-only"><i class="fa fa-check"></i><b>9.4.3</b> Point cloud classification: CC-pooling with input vertex features only</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#ablation-studies"><i class="fa fa-check"></i><b>9.5</b> Ablation studies</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="related-work.html"><a href="related-work.html"><i class="fa fa-check"></i><b>10</b> Related work</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="related-work.html"><a href="related-work.html#graph-based-models"><i class="fa fa-check"></i><b>10.1</b> Graph-based models</a></li>
+<li class="chapter" data-level="10.2" data-path="related-work.html"><a href="related-work.html#higher-order-deep-learning-models"><i class="fa fa-check"></i><b>10.2</b> Higher-order deep learning models</a></li>
+<li class="chapter" data-level="10.3" data-path="related-work.html"><a href="related-work.html#attention-based-models"><i class="fa fa-check"></i><b>10.3</b> Attention-based models</a></li>
+<li class="chapter" data-level="10.4" data-path="related-work.html"><a href="related-work.html#graph-based-pooling"><i class="fa fa-check"></i><b>10.4</b> Graph-based pooling</a></li>
+<li class="chapter" data-level="10.5" data-path="related-work.html"><a href="related-work.html#applied-algebraic-topology"><i class="fa fa-check"></i><b>10.5</b> Applied algebraic topology</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="conclusions.html"><a href="conclusions.html"><i class="fa fa-check"></i><b>11</b> Conclusions</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>A</b> 术语</a></li>
+<li class="chapter" data-level="B" data-path="lifting-maps.html"><a href="lifting-maps.html"><i class="fa fa-check"></i><b>B</b> Lifting maps</a>
+<ul>
+<li class="chapter" data-level="B.1" data-path="lifting-maps.html"><a href="lifting-maps.html#n-hop-cc-of-a-graph"><i class="fa fa-check"></i><b>B.1</b> n-hop CC of a graph</a></li>
+<li class="chapter" data-level="B.2" data-path="lifting-maps.html"><a href="lifting-maps.html#path-based-and-subgraph-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.2</b> Path-based and subgraph-based CC of a graph</a></li>
+<li class="chapter" data-level="B.3" data-path="lifting-maps.html"><a href="lifting-maps.html#loop-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.3</b> Loop-based CC of a graph</a></li>
+<li class="chapter" data-level="B.4" data-path="lifting-maps.html"><a href="lifting-maps.html#coface-cc-of-a-simplicial-complex-or-of-a-cc"><i class="fa fa-check"></i><b>B.4</b> Coface CC of a simplicial complex or of a CC</a></li>
+<li class="chapter" data-level="B.5" data-path="lifting-maps.html"><a href="lifting-maps.html#augmentation-of-ccs-by-higher-rank-cells"><i class="fa fa-check"></i><b>B.5</b> Augmentation of CCs by higher-rank cells</a></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="ccnn-architecture-search-and-topological-quantum-field-theories.html"><a href="ccnn-architecture-search-and-topological-quantum-field-theories.html"><i class="fa fa-check"></i><b>C</b> CCNN architecture search and topological quantum field theories</a></li>
+<li class="chapter" data-level="D" data-path="learning-discrete-exterior-calculus-operators-with-ccanns.html"><a href="learning-discrete-exterior-calculus-operators-with-ccanns.html"><i class="fa fa-check"></i><b>D</b> Learning discrete exterior calculus operators with CCANNs</a></li>
+<li class="chapter" data-level="E" data-path="a-mapper-induced-topology-preserving-cc-pooling-operation.html"><a href="a-mapper-induced-topology-preserving-cc-pooling-operation.html"><i class="fa fa-check"></i><b>E</b> A mapper-induced topology-preserving CC-pooling operation</a></li>
+<li class="chapter" data-level="" data-path="参考文献.html"><a href="参考文献.html"><i class="fa fa-check"></i>参考文献</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">拓扑深度学习：超越图数据</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="motivation" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">第 2 章</span> 研究动机<a href="motivation.html#motivation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>本文介绍的组合复形神经网络（CCNNs）通过拓扑结构推广了图神经网络（GNNs）及其高阶类似物。在本节中，我们将从三个角度介绍在机器学习，特别是深度学习中使用拓扑结构的动机。第一，<em>数据建模(</em> data modeling)<em>：拓扑抽象如何帮助我们推理和计算拓扑空间上支持的各种数据类型；第二，</em>实用性(<em>utility)</em>：怎了利用拓扑结构来提高性能。第三，<em>统一性（unification）</em>：拓扑如何用于综合和抽象不同的概念。</p>
+<div id="从拓扑空间数据中建模和学习" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> 从拓扑空间数据中建模和学习<a href="motivation.html#从拓扑空间数据中建模和学习" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>在机器学习上下文中，域上支持的典型数据类型是线性或者说向量空间。这种底层向量空间为许多计算提供了便利，并且经常被隐含地假定。然而，正如几何深度学习所认识到的那样，考虑不同领域支持的数据往往至关重要。事实上，出于各种原因，明确考虑域所支持的数据并对其进行建模至关重要。</p>
+<p>首先，不同的域可能具有不同的特征和属性，这就需要不同类型的深度学习模型来有效处理和分析数据。例如，图域可能需要图卷积网络 <span class="citation">(<a href="#ref-kipf2016semi">Kipf and Welling 2016</a>)</span> 来考虑非欧结构，而点云域则可能需要类似 PointNet 的架构 <span class="citation">(<a href="#ref-qi2017pointnet">Qi et al. 2017</a>; <a href="#ref-zaheer2017deep">Zaheer et al. 2017</a>)</span>来处理无序的点集。</p>
+<p>其次， 每个域中的具体数据在大小、复杂性和噪声方面都会有很大差异。通过了解特定域内的特定数据属性，研究人员可以开发出针对这些特定属性的模型。例如，针对高噪声点云设计的模型可能会采用离群点去除或局部特征聚合等技术。</p>
+<p>第三，准确区分领域和数据对于开发能够很好地概括新的、未见过的数据的模型非常重要。通过识别域的底层结构，研究人员可以开发出既能适应数据变化，又能捕捉相关几何特征的模型。总之，通过同时考虑域和数据，研究人员可以开发出更适合处理不同几何学习任务的特定挑战和复杂性的模型。</p>
+<p><strong>数据的不同视角：域（domains）和关系（relations）</strong>。文献中提到拓扑数据或拓扑数据分析时，对于实际数据包括什么以及数据应该建模什么存在不同观点。在此，我们遵循<span class="citation">(<a href="#ref-bick2021higher">Bick et al. 2021</a>)</span>的观点，区分不同类型的数据和我们学习过程的目标，尽管这些不同类型数据之间的区别有时可能比这里介绍的更加模糊。</p>
+<p><em>关系数据（Relational data）</em>，用于描述不同实体或对象间的关系，这一基本概念有多种表现形式，例如社交网络中用户之间的联系，朋友关系或追随者关系，就是这种关系的例子。传统上，人们通过图来理解这些关系，图中的顶点和边分别代表实体和实体之间的成对连接（<em>pairwise connections</em>）。换句话说，图中的边被视为度量单位，每条关系数据都涉及两个顶点。</p>
+<p>然而，现实世界中的许多现象自然涉及复杂的多方互动，涉及不止两个实体以错综复杂的方式相互影响。例如，社会中的个人群体、合著者集合、相互影响的基因或蛋白质都是这种高阶关系的例子。这种依赖关系超越了成对的相互作用，可以用高阶关系（<em>higher-order relations</em>）来建模，并恰当地抽象为超图、胞腔复形或 CCs。显然，拓扑学思想可以在理解这些数据方面发挥重要作用，关键是能让我们从模拟成对关系的图转向更丰富的表征。</p>
+<p><em>数据作为域的实例</em>，与TDA 采用的相关概念类似，即我们的观测数据应该代表什么。也就是说，所有观测到的数据都应该对应于拓扑对象本身的噪声实例。例如，我们的目标是学习数据的 “拓扑形状”。请注意，在这种情况下，我们通常不会直接观察相关数据，而是从观察到的数据中构建关系，然后利用这些关系对观察到的数据集进行分类，对点云数据进行的持久同源性分析就是这种观点的一个主流例子。</p>
+<p><em>拓扑域上支持的数据类型</em>，当在拓扑域（例如图）上考察数据时，拓扑化思想起着重要的作用。它可能会是某种特定的动态变化，例如流行病的传播，也可能是顶点上支持的任何类型的其他数据或信号(图上的边缘信号（edage-signals）的情况不经常被考虑，尽管存在例外情况<span class="citation">(<a href="#ref-schaub2018denoising">Schaub and Segarra 2018</a>; <a href="#ref-schaub2021signal">Schaub et al. 2021</a>)</span>)。在图信号处理（graph signal processing）的语境下，在图域上可以定义多种函数或信号，并且称他们是<em>被该域支持</em>。重要的是，图本身可以任意复杂，典型情况下看作是固定的，观察到的数据不是关系的，而是图的顶点上支持所支持的。</p>
+<p>在超越图结构方面更一般的拓扑结构，例如CCs，可支持的数据不仅在顶点和边上，也在其他的高阶实体上，正如图<a href="motivation.html#fig:support">2.1</a>(a-b)上所展示的。例如，计算机图形学中定义在网格上的向量场（vector fields）就是边和面上通常支持的数据形式，可以很方便地建模为高阶域上支持的数据形式 <span class="citation">(<a href="#ref-de2016vector">Goes, Desbrun, and Tong 2016</a>)</span>。类似的，类别标签化的数据也可以在给定网格的边和面上提供支持，看图 <a href="motivation.html#fig:support">2.1</a>(c)中的例子。为了处理这样的数据，就需要再去考虑底层拓扑域上的结构。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:support"></span>
+<img src="figures/two_tori_horse.png" alt="数据可以在高阶关系上很自然的得到支持. (a): 基于边的向量场（edge-based vector field）. (b): 基于面的向量场（face-based vector field）.（a）和（b）上的向量场都定义在胞腔复形torus结构上^[此URL提供（a）和（b）的交互式可视化[戳这里](https://app.vectary.com/p/5uLAflZj6U2kvACv2kk2tN).]。（c）：类别标签化的拓扑数据可以很自然的在高阶关系上被支持。例如，二维面（2-Face）上的网格分割标签（mesh segmentation labels）可以用不同的颜色来描述（蓝色，绿色，绿松石色，粉色，棕色），以表示马的不同部分（头部，颈部，身体，腿部，尾部）"  />
+<p class="caption">
+图 2.1: 数据可以在高阶关系上很自然的得到支持. (a): 基于边的向量场（edge-based vector field）. (b): 基于面的向量场（face-based vector field）.（a）和（b）上的向量场都定义在胞腔复形torus结构上<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>。（c）：类别标签化的拓扑数据可以很自然的在高阶关系上被支持。例如，二维面（2-Face）上的网格分割标签（mesh segmentation labels）可以用不同的颜色来描述（蓝色，绿色，绿松石色，粉色，棕色），以表示马的不同部分（头部，颈部，身体，腿部，尾部）
+</p>
+</div>
+<p><strong>建模和处理图之外的数据：示例。</strong>图非常适合建模表现出成对相互作用的系统，例如，如图<a href="motivation.html#fig:cloth">2.2</a>(a)所示，基于粒子的流体模拟可以用图有效地表示，消息传递用于更新流体分子的物理状态。采用这种方法，每个分子都表示为包含流体分子物理状态的顶点，边则将他们连接起来，以进行交互作用的计算<span class="citation">(<a href="#ref-sanchez2020learning">Sanchez-Gonzalez et al. 2020</a>; <a href="#ref-shlomi2020graph">Shlomi, Battaglia, and Vlimant 2020</a>)</span>。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:cloth"></span>
+<img src="figures/cloth.png" alt="在图或高阶网络上处理数据的例子。 (a): 图可用于建模流体动力学中的分子相互作用，其中，顶点表示粒子， 粒子与粒子之间的相互作用通过顶点之间的信息传递来模拟  [@sanchez2020learning; @shlomi2020graph]. (b): 在对弹性（spring）和自碰撞(self-collision)建模时，自然要使用边而不是顶点，这是 这是因为布料的拉伸行为是由沿边缘作用的拉力和压力决定的，而不仅仅是由单个颗粒的位置决定的。 为了模拟多条边之间的相互作用，可以使用多边形面来表示布的局部几何形状,多边形面可提供计算边缘间高阶信息传递的方法"  />
+<p class="caption">
+图 2.2: 在图或高阶网络上处理数据的例子。 (a): 图可用于建模流体动力学中的分子相互作用，其中，顶点表示粒子， 粒子与粒子之间的相互作用通过顶点之间的信息传递来模拟 <span class="citation">(<a href="#ref-sanchez2020learning">Sanchez-Gonzalez et al. 2020</a>; <a href="#ref-shlomi2020graph">Shlomi, Battaglia, and Vlimant 2020</a>)</span>. (b): 在对弹性（spring）和自碰撞(self-collision)建模时，自然要使用边而不是顶点，这是 这是因为布料的拉伸行为是由沿边缘作用的拉力和压力决定的，而不仅仅是由单个颗粒的位置决定的。 为了模拟多条边之间的相互作用，可以使用多边形面来表示布的局部几何形状,多边形面可提供计算边缘间高阶信息传递的方法
+</p>
+</div>
+<p>图不适用于布料仿真等更复杂的系统建模，因为状态变量是和边或三角面等关联的，而非顶点，在这种情况下，就需要高阶消息传递来计算和更新物理状态，如图<a href="motivation.html#fig:cloth">2.2</a>(b)所示。在自然语言处理中也有类似的挑战，语言表现出了多层次的语法、语义和语境。虽然，GNN可以捕获词汇间基本的语法和语义关系，但是否定、讽刺或挖苦等更复杂的关系可能难以表述 <span class="citation">(<a href="#ref-girault2017towards">Girault, Narayanan, and Ortega 2017</a>)</span>。将高阶关系和层次关系纳入其中，可以为这些关系提供更好的模型，并能更细致、更准确地理解语言。</p>
+</div>
+<div id="the-utility-of-topology" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> 拓扑的有用性<a href="motivation.html#the-utility-of-topology" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>除了为复杂系统建模提供多功能框架外，TDL 模型还具有广泛的用途：它们可以为模型学习推导出有意义的归纳偏差，促进底层域中更大范围内的高效信息传播，增强现有基于图的模型的表达能力，并有可能揭示深度网络本身的关键特征，下文将对此进行介绍。</p>
+<p><strong>建立数据的分层表示</strong>， 虽然利用高阶信息对学习表征很重要，但保留实体间复杂的高阶关系对实现强大而多变的表征也很关键。例如，人们可以通过分层建立关系之间的关系来形成抽象和类比。然而，常用于在各种实体间建立关系推理的基于图的模型<span class="citation">(<a href="#ref-santoro2017simple">Adam Santoro et al. 2017</a>; <a href="#ref-zhang2020deep">S.-X. Zhang et al. 2020</a>; <a href="#ref-chen2019graph">Yunpeng Chen et al. 2019</a>; <a href="#ref-schlichtkrull2018modeling">Schlichtkrull et al. 2018</a>)</span>在建立实体间高阶关系的能力方面却是是有限的。</p>
+<p>分层关系推理的需求<span class="citation">(<a href="#ref-xu2022groupnet">C. Xu et al. 2022</a>)</span>要求所用方法能够捕捉关系之间更深层次的抽象关系，而不仅仅是模拟原始实体之间的关系。高阶网络模型为应对高阶关系推理的挑战提供了一个很有前景的解决方案，如图所示<a href="motivation.html#fig:hs">2.3</a>。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:hs"></span>
+<img src="figures/hs.png" alt="用高阶网络表示分层数据的示例。黑色箭头表示通过高阶关系扩增图，橙色箭头表示粗略的图提取。(a): 表示抽象实体（黄色顶点）间二元关系（粉色边）的图编码。 (b): 蓝色胞腔表示的高阶关系可看作是原始图中顶点或边之间的关系。 (c): 提取原始图的粗略版本。在粗略图中，顶点代表原始图的高阶关系（蓝色胞腔），边代表这些蓝色胞腔的交集。 (d-e): 重复同样的过程，可以得到原始图的更粗略版本。整个过程对应于分层的高阶关系，即关系之间的关系，从而提取意义和内容 (包括数据形状),这是拓扑数据分析的常见任务[@carlsson2009topology; @dey22]."  />
+<p class="caption">
+图 2.3: 用高阶网络表示分层数据的示例。黑色箭头表示通过高阶关系扩增图，橙色箭头表示粗略的图提取。(a): 表示抽象实体（黄色顶点）间二元关系（粉色边）的图编码。 (b): 蓝色胞腔表示的高阶关系可看作是原始图中顶点或边之间的关系。 (c): 提取原始图的粗略版本。在粗略图中，顶点代表原始图的高阶关系（蓝色胞腔），边代表这些蓝色胞腔的交集。 (d-e): 重复同样的过程，可以得到原始图的更粗略版本。整个过程对应于分层的高阶关系，即关系之间的关系，从而提取意义和内容 (包括数据形状),这是拓扑数据分析的常见任务<span class="citation">(<a href="#ref-carlsson2009topology">G. Carlsson 2009</a>; <a href="#ref-dey22">Dey and Wang 2022a</a>)</span>.
+</p>
+</div>
+<p><strong>通过归纳偏置提高性能</strong>，
+拓扑深度学习模型通过提供一个定义明确的过程，以将图形提升到指定的高阶网络，从而提高基于图形的学习任务的预测性能。通过这种方法纳入多节顶点关系可被视为一种归纳偏差，可用于提高预测性能。归纳偏置允许学习算法根据观察到的数据之外的因素，优先选择一种解决方案，而不是另一种解决方案<span class="citation">(<a href="#ref-mitchell1980need">T. M. Mitchell 1980</a>)</span>。图 <a href="motivation.html#fig:inductivebias">2.4</a> 展示了使用高阶胞腔对图进行增强的两种形式。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:inductivebias"></span>
+<img src="figures/inductive_bias.png" alt="中间的图可以用高阶关系来增强，以改进学习任务.在(a)中,在缺失的面上添加了胞腔；[@bodnar2021weisfeiler]考虑了类似的归纳偏置，以改进分子数据的分类。在（b）中，图中的一些顶点添加了单跳邻域；[@feng2019hypergraph]，并使用一种基于将图提升到其相应单跳邻域超图的归纳偏置，以提高基于顶点任务的性能"  />
+<p class="caption">
+图 2.4: 中间的图可以用高阶关系来增强，以改进学习任务.在(a)中,在缺失的面上添加了胞腔；<span class="citation">(<a href="#ref-bodnar2021weisfeiler">Bodnar et al. 2021</a>)</span>考虑了类似的归纳偏置，以改进分子数据的分类。在（b）中，图中的一些顶点添加了单跳邻域；<span class="citation">(<a href="#ref-feng2019hypergraph">Feng et al. 2019</a>)</span>，并使用一种基于将图提升到其相应单跳邻域超图的归纳偏置，以提高基于顶点任务的性能
+</p>
+</div>
+<p><strong>构建基于图的高效远程消息传递系统</strong>，TDL 网络的分层结构有助于高效地构建远距离交互。利用这种结构，定义在域顶点上的信号可以在通过长边路径连接的顶点之间有效传播远距离依赖关系。图 <a href="motivation.html#fig:ft">2.5</a>说明了通过增加拓扑关系对图进行扩充，并将信号反池化（unpooling）回顶点，从而提升定义在图顶点上的信号的过程。<span class="citation">(<a href="#ref-hajij2022high">Hajij, Ramamurthy, et al. 2022</a>)</span> 利用这种池化和反池化操作来构建能够捕捉远距离依赖关系的模型，从而更有效、更自适应地学习底层域上的局部和全局结构。关于基于图的池化的相关工作，我们推荐读者参阅<span class="citation">(<a href="#ref-su2021hierarchical">Su, Hu, and Li 2021</a>; <a href="#ref-itoh2022multi">Itoh, Kubo, and Ikeda 2022</a>)</span>。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:ft"></span>
+<img src="figures/factors_thru.png" alt="二元或高阶胞腔之间的消息传递示意图。(a): 使用基于图的消息传递方案时，一些从顶点$x$ 开始的信息需要经过很长的距离，即长边路径，才能到达顶点 $y$。(b): 使用蓝色胞腔表示的高阶胞腔结构，消息可以从顶点提升到高阶胞腔，从而以更少的步骤在顶点 $x$ 和 $y$ 之间来回传播。这种快捷方式可以在属于蓝色胞腔的所有顶点之间，以更少的计算步骤高效地共享信息[@hajij2022high]。"  />
+<p class="caption">
+图 2.5: 二元或高阶胞腔之间的消息传递示意图。(a): 使用基于图的消息传递方案时，一些从顶点<span class="math inline">\(x\)</span> 开始的信息需要经过很长的距离，即长边路径，才能到达顶点 <span class="math inline">\(y\)</span>。(b): 使用蓝色胞腔表示的高阶胞腔结构，消息可以从顶点提升到高阶胞腔，从而以更少的步骤在顶点 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(y\)</span> 之间来回传播。这种快捷方式可以在属于蓝色胞腔的所有顶点之间，以更少的计算步骤高效地共享信息<span class="citation">(<a href="#ref-hajij2022high">Hajij, Ramamurthy, et al. 2022</a>)</span>。
+</p>
+</div>
+<p><strong>提高表达能力</strong>，TDL 可以捕捉传统基于图的模型无法捕捉的复杂而微妙的依赖关系。通过允许更丰富的高阶交互，高阶网络可以提高表达能力，并在许多任务中带来卓越的性能<span class="citation">(<a href="#ref-morris2019weisfeiler">Morris et al. 2019</a>; <a href="#ref-bodnar2021weisfeiler">Bodnar et al. 2021</a>)</span>。</p>
+</div>
+<div id="深度学习和结构化计算的统一视角" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> 深度学习和结构化计算的统一视角<a href="motivation.html#深度学习和结构化计算的统一视角" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>拓扑学提供了一个框架来泛化科学计算中通常会遇到的众多离散域。这些领域的例子包括图、单纯复形和胞腔复形；见图<a href="motivation.html#fig:unifying">2.6</a>。在这些域上支持的计算模型可以被视为各种深度学习架构的泛化；也就是说，可以为比较和设计 TDL 架构提供一个统一的框架。此外，通过统一理论了解不同类型 TDL 之间的联系，可以为复杂系统的底层结构和行为提供有价值的见解，因为在复杂系统中自然会出现高阶关系<span class="citation">(<a href="#ref-hansen2019toward">Hansen and Ghrist 2019</a>; <a href="#ref-hajijcell">Hajij, Istvan, and Zamzmi 2020</a>; <a href="#ref-bick2021higher">Bick et al. 2021</a>; <a href="#ref-majhi2022dynamics">Majhi, Perc, and Ghosh 2022</a>)</span>。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unifying"></span>
+<img src="figures/unifying.png" alt="我们的工作引入了组合复形，它是一种高阶网络，可泛化科学计算中通常遇到的大多数离散域。 包括 (a) 序列和图像, (b) 图, (c) 3D形状和单纯复形, (d) 立方体（cubical）和胞腔复形（cellular complexes）, (e) 离散流形（discrete manifolds）, (f) 超图."  />
+<p class="caption">
+图 2.6: 我们的工作引入了组合复形，它是一种高阶网络，可泛化科学计算中通常遇到的大多数离散域。 包括 (a) 序列和图像, (b) 图, (c) 3D形状和单纯复形, (d) 立方体（cubical）和胞腔复形（cellular complexes）, (e) 离散流形（discrete manifolds）, (f) 超图.
+</p>
+</div>
+<p><strong>了解深度网络的工作原理</strong>，当代深度神经网络的一个显著特点是，即使拥有大量参数，它们也能很好地泛化未见数据。这与我们以往对统计学习理论的理解相矛盾，促使研究人员寻求新的方法来理解深度神经网络的底层工作原理<span class="citation">(<a href="#ref-neyshabur2019role">Neyshabur et al. 2019</a>)</span>。最近的研究发现，深度神经网络推导出的图拓扑或其相应的训练轨迹（建模为马尔科夫链）与泛化性能表现出很强的相关性 <span class="citation">(<a href="#ref-birdal2021intrinsic">Birdal et al. 2021</a>; <a href="#ref-dupuis2023generalization">Dupuis, Deligiannidis, and Şimşekli 2023</a>)</span>。一个悬而未决的问题是，在支持高阶域的学习架构中，拓扑结构、计算函数和泛化特性之间能在多大程度上存在这种关联。我们相信，通过使用我们提出的拓扑结构（如 CCs 和 CCNNs）来研究这些问题，不仅能深入了解 TDL，还能更广泛地了解深度学习。</p>
+
+</div>
+</div>
+<h3>参考文献<a href="参考文献.html#参考文献" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-bick2021higher" class="csl-entry">
+Bick, Christian, Elizabeth Gross, Heather A Harrington, and Michael T Schaub. 2021. <span>“What Are Higher-Order Networks?”</span> <em>arXiv Preprint arXiv:2104.11329</em>.
+</div>
+<div id="ref-birdal2021intrinsic" class="csl-entry">
+Birdal, Tolga, Aaron Lou, Leonidas J Guibas, and Umut Simsekli. 2021. <span>“Intrinsic Dimension, Persistent Homology and Generalization in Neural Networks.”</span> <em>Advances in Neural Information Processing Systems</em>.
+</div>
+<div id="ref-bodnar2021weisfeiler" class="csl-entry">
+Bodnar, Cristian, Fabrizio Frasca, Nina Otter, Yuguang Wang, Pietro Lio, Guido F Montufar, and Michael Bronstein. 2021. <span>“Weisfeiler and <span>L</span>ehman Go Cellular: <span>CW</span> Networks.”</span> In <em>Advances in Neural Information Processing Systems</em>.
+</div>
+<div id="ref-carlsson2009topology" class="csl-entry">
+Carlsson, Gunnar. 2009. <span>“Topology and Data.”</span> <em>Bulletin of the American Mathematical Society</em> 46 (2): 255–308.
+</div>
+<div id="ref-chen2019graph" class="csl-entry">
+Chen, Yunpeng, Marcus Rohrbach, Zhicheng Yan, Yan Shuicheng, Jiashi Feng, and Yannis Kalantidis. 2019. <span>“Graph-Based Global Reasoning Networks.”</span> In <em>Conference on Computer Vision and Pattern Recognition</em>.
+</div>
+<div id="ref-dey22" class="csl-entry">
+Dey, Tamal K., and Yusu Wang. 2022a. <em>Computational Topology for Data Analysis</em>. Cambridge University Press.
+</div>
+<div id="ref-dupuis2023generalization" class="csl-entry">
+Dupuis, Benjamin, George Deligiannidis, and Umut Şimşekli. 2023. <span>“Generalization Bounds with Data-Dependent Fractal Dimensions.”</span> <em>arXiv Preprint arXiv:2302.02766</em>.
+</div>
+<div id="ref-feng2019hypergraph" class="csl-entry">
+Feng, Yifan, Haoxuan You, Zizhao Zhang, Rongrong Ji, and Yue Gao. 2019. <span>“Hypergraph Neural Networks.”</span> <em>Proceedings of the AAAI Conference on Artificial Intelligence</em> 33 (01): 3558–65.
+</div>
+<div id="ref-girault2017towards" class="csl-entry">
+Girault, Benjamin, Shrikanth S. Narayanan, and Antonio Ortega. 2017. <span>“Towards a Definition of Local Stationarity for Graph Signals.”</span> In <em>IEEE International Conference on Acoustics, Speech and Signal Processing</em>.
+</div>
+<div id="ref-de2016vector" class="csl-entry">
+Goes, Fernando de, Mathieu Desbrun, and Yiying Tong. 2016. <span>“Vector Field Processing on Triangle Meshes.”</span> In <em>ACM SIGGRAPH 2016 Courses</em>, 1–49. Association for Computing Machinery.
+</div>
+<div id="ref-hajijcell" class="csl-entry">
+Hajij, Mustafa, Kyle Istvan, and Ghada Zamzmi. 2020. <span>“Cell Complex Neural Networks.”</span> In <em>NeurIPS 2020 Workshop TDA and Beyond</em>.
+</div>
+<div id="ref-hajij2022high" class="csl-entry">
+Hajij, Mustafa, Karthikeyan Natesan Ramamurthy, Aldo Saenz, and Ghada Zamzmi. 2022. <span>“High Skip Networks: A Higher Order Generalization of Skip Connections.”</span> In <em>ICLR 2022 Workshop on Geometrical and Topological Representation Learning</em>.
+</div>
+<div id="ref-hansen2019toward" class="csl-entry">
+Hansen, Jakob, and Robert Ghrist. 2019. <span>“Toward a Spectral Theory of Cellular Sheaves.”</span> <em>Journal of Applied and Computational Topology</em> 3 (4): 315–58.
+</div>
+<div id="ref-itoh2022multi" class="csl-entry">
+Itoh, Takeshi D., Takatomi Kubo, and Kazushi Ikeda. 2022. <span>“Multi-Level Attention Pooling for Graph Neural Networks: Unifying Graph Representations with Multiple Localities.”</span> <em>Neural Networks</em> 145: 356–73.
+</div>
+<div id="ref-kipf2016semi" class="csl-entry">
+Kipf, Thomas N., and Max Welling. 2016. <span>“Semi-Supervised Classification with Graph Convolutional Networks.”</span> <em>arXiv Preprint arXiv:1609.02907</em>.
+</div>
+<div id="ref-majhi2022dynamics" class="csl-entry">
+Majhi, Soumen, Matjaž Perc, and Dibakar Ghosh. 2022. <span>“Dynamics on Higher-Order Networks: A Review.”</span> <em>Journal of the Royal Society Interface</em> 19 (188): 20220043.
+</div>
+<div id="ref-mitchell1980need" class="csl-entry">
+Mitchell, Tom M. 1980. <span>“The Need for Biases in Learning Generalizations.”</span>
+</div>
+<div id="ref-morris2019weisfeiler" class="csl-entry">
+Morris, Christopher, Martin Ritzert, Matthias Fey, William L. Hamilton, Jan Eric Lenssen, Gaurav Rattan, and Martin Grohe. 2019. <span>“Weisfeiler and <span>L</span>eman Go Neural: Higher-Order Graph Neural Networks.”</span> In <em>Proceedings of the AAAI Conference on Artificial Intelligence</em>.
+</div>
+<div id="ref-neyshabur2019role" class="csl-entry">
+Neyshabur, Behnam, Zhiyuan Li, Srinadh Bhojanapalli, Yann LeCun, and Nathan Srebro. 2019. <span>“The Role of over-Parametrization in Generalization of Neural Networks.”</span> In <em>International Conference on Learning Representations</em>.
+</div>
+<div id="ref-qi2017pointnet" class="csl-entry">
+Qi, Charles R., Hao Su, Kaichun Mo, and Leonidas J. Guibas. 2017. <span>“Point<span>N</span>et: Deep Learning on Point Sets for 3<span>D</span> Classification and Segmentation.”</span> In <em>Cvpr</em>, 652–60.
+</div>
+<div id="ref-sanchez2020learning" class="csl-entry">
+Sanchez-Gonzalez, Alvaro, Jonathan Godwin, Tobias Pfaff, Rex Ying, Jure Leskovec, and Peter Battaglia. 2020. <span>“Learning to Simulate Complex Physics with Graph Networks.”</span> In <em>International Conference on Machine Learning</em>.
+</div>
+<div id="ref-santoro2017simple" class="csl-entry">
+Santoro, Adam, David Raposo, David G Barrett, Mateusz Malinowski, Razvan Pascanu, Peter Battaglia, and Timothy Lillicrap. 2017. <span>“A Simple Neural Network Module for Relational Reasoning.”</span> In <em>Advances in Neural Information Processing Systems</em>.
+</div>
+<div id="ref-schaub2018denoising" class="csl-entry">
+Schaub, Michael T., and Santiago Segarra. 2018. <span>“Flow Smoothing and Denoising: Graph Signal Processing in the Edge-Space.”</span> In <em>2018 IEEE Global Conference on Signal and Information Processing (GlobalSIP)</em>, 735–39.
+</div>
+<div id="ref-schaub2021signal" class="csl-entry">
+Schaub, Michael T., Yu Zhu, Jean-Baptiste Seby, T. Mitchell Roddenberry, and Santiago Segarra. 2021. <span>“Signal Processing on Higher-Order Networks: Livin’on the Edge... And Beyond.”</span> <em>Signal Processing</em> 187: 108149.
+</div>
+<div id="ref-schlichtkrull2018modeling" class="csl-entry">
+Schlichtkrull, Michael, Thomas N Kipf, Peter Bloem, Rianne Van Den Berg, Ivan Titov, and Max Welling. 2018. <span>“Modeling Relational Data with Graph Convolutional Networks.”</span> In <em>European Semantic Web Conference</em>.
+</div>
+<div id="ref-shlomi2020graph" class="csl-entry">
+Shlomi, Jonathan, Peter Battaglia, and Jean-Roch Vlimant. 2020. <span>“Graph Neural Networks in Particle Physics.”</span> <em>Machine Learning: Science and Technology</em> 2 (2): 021001.
+</div>
+<div id="ref-su2021hierarchical" class="csl-entry">
+Su, Zidong, Zehui Hu, and Yangding Li. 2021. <span>“Hierarchical Graph Representation Learning with Local Capsule Pooling.”</span> In <em>ACM International Conference on Multimedia in Asia</em>.
+</div>
+<div id="ref-xu2022groupnet" class="csl-entry">
+Xu, Chenxin, Maosen Li, Zhenyang Ni, Ya Zhang, and Siheng Chen. 2022. <span>“Group<span>N</span>et: Multiscale Hypergraph Neural Networks for Trajectory Prediction with Relational Reasoning.”</span> In <em>Conference on Computer Vision and Pattern Recognition</em>.
+</div>
+<div id="ref-zaheer2017deep" class="csl-entry">
+Zaheer, Manzil, Satwik Kottur, Siamak Ravanbakhsh, Barnabas Poczos, Russ R Salakhutdinov, and Alexander J Smola. 2017. <span>“Deep Sets.”</span> In <em>Advances in Neural Information Processing Systems</em>.
+</div>
+<div id="ref-zhang2020deep" class="csl-entry">
+Zhang, Shi-Xue, Xiaobin Zhu, Jie-Bo Hou, Chang Liu, Chun Yang, Hongfa Wang, and Xu-Cheng Yin. 2020. <span>“Deep Relational Reasoning Graph Network for Arbitrary Shape Text Detection.”</span> In <em>Cvpr</em>, 9699–9708.
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="2">
+<li id="fn2"><p>此URL提供（a）和（b）的交互式可视化<a href="https://app.vectary.com/p/5uLAflZj6U2kvACv2kk2tN">戳这里</a>.<a href="motivation.html#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="引言.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="preliminaries.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook/js/app.min.js"></script>
+<script src="libs/gitbook/js/clipboard.min.js"></script>
+<script src="libs/gitbook/js/plugin-search.js"></script>
+<script src="libs/gitbook/js/plugin-sharing.js"></script>
+<script src="libs/gitbook/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook/js/jquery.highlight.js"></script>
+<script src="libs/gitbook/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/pyt-team/tdlbook/edit/main/rmd/02-motivation.rmd",
+"text": "编辑"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "none"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

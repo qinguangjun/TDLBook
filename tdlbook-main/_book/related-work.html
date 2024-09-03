@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>第 10 章 Related work | 拓扑深度学习：超越图数据</title>
+  <meta name="description" content="一本关于拓扑深度学习的书。" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="第 10 章 Related work | 拓扑深度学习：超越图数据" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="一本关于拓扑深度学习的书。" />
+  <meta name="github-repo" content="pyt-team/tdlbook" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="第 10 章 Related work | 拓扑深度学习：超越图数据" />
+  
+  <meta name="twitter:description" content="一本关于拓扑深度学习的书。" />
+  
+
+<meta name="author" content="Mustafa Hajij, Theodore Papamarkou, Ghada Zamzmi, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Michael T. Schaub" />
+
+
+<meta name="date" content="2024-09-03" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="implementation-and-numerical-results.html"/>
+<link rel="next" href="conclusions.html"/>
+<script src="libs/jquery/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="css/glossarybox.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">拓扑深度学习</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>贡献者</a></li>
+<li class="chapter" data-level="" data-path="译者.html"><a href="译者.html"><i class="fa fa-check"></i>译者</a></li>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html"><i class="fa fa-check"></i>序言</a>
+<ul>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html#编译"><i class="fa fa-check"></i>编译</a></li>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html#致谢"><i class="fa fa-check"></i>致谢</a></li>
+</ul></li>
+<li class="part"><span><b>第一部分：基础知识</b></span></li>
+<li class="chapter" data-level="1" data-path="引言.html"><a href="引言.html"><i class="fa fa-check"></i><b>1</b> 引言</a></li>
+<li class="chapter" data-level="2" data-path="motivation.html"><a href="motivation.html"><i class="fa fa-check"></i><b>2</b> 研究动机</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="motivation.html"><a href="motivation.html#从拓扑空间数据中建模和学习"><i class="fa fa-check"></i><b>2.1</b> 从拓扑空间数据中建模和学习</a></li>
+<li class="chapter" data-level="2.2" data-path="motivation.html"><a href="motivation.html#the-utility-of-topology"><i class="fa fa-check"></i><b>2.2</b> 拓扑的有用性</a></li>
+<li class="chapter" data-level="2.3" data-path="motivation.html"><a href="motivation.html#深度学习和结构化计算的统一视角"><i class="fa fa-check"></i><b>2.3</b> 深度学习和结构化计算的统一视角</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preliminaries.html"><a href="preliminaries.html"><i class="fa fa-check"></i><b>3</b> 预备知识</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="preliminaries.html"><a href="preliminaries.html#邻域函数和拓扑空间"><i class="fa fa-check"></i><b>3.1</b> 邻域函数和拓扑空间</a></li>
+<li class="chapter" data-level="3.2" data-path="preliminaries.html"><a href="preliminaries.html#bridging-the-gap-among-higher-order-networks"><i class="fa fa-check"></i><b>3.2</b> 填补与高阶网络间的代沟</a></li>
+<li class="chapter" data-level="3.3" data-path="preliminaries.html"><a href="preliminaries.html#hierarchical-structure-and-set-type-relations"><i class="fa fa-check"></i><b>3.3</b> 层次化结构与集合型关系</a></li>
+</ul></li>
+<li class="part"><span><b>第二部分:组合复形</b></span></li>
+<li class="chapter" data-level="4" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html"><i class="fa fa-check"></i><b>4</b> 组合复形</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc-definition"><i class="fa fa-check"></i><b>4.1</b> 组合复形定义</a></li>
+<li class="chapter" data-level="4.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc-homomorphisms-and-sub-ccs"><i class="fa fa-check"></i><b>4.2</b> CC同态和子CCs</a></li>
+<li class="chapter" data-level="4.3" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#motivation-for-ccs"><i class="fa fa-check"></i><b>4.3</b> 引入CCs的动机</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#pooling-operations-on-ccs"><i class="fa fa-check"></i><b>4.3.1</b> CCs上的池化操作</a></li>
+<li class="chapter" data-level="4.3.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#structural-advantages-of-ccs"><i class="fa fa-check"></i><b>4.3.2</b> CCs的结构化优势</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#neighbourhood-functions-on-ccs"><i class="fa fa-check"></i><b>4.4</b> CCs上的邻域函数</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#incidence-in-a-cc"><i class="fa fa-check"></i><b>4.4.1</b> CC中的关联关系（Incidence）</a></li>
+<li class="chapter" data-level="4.4.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc内的邻接关系adjacency"><i class="fa fa-check"></i><b>4.4.2</b> CC内的邻接关系（Adjacency）</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#data-on-ccs"><i class="fa fa-check"></i><b>4.5</b> CCs上的数据</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html"><i class="fa fa-check"></i><b>5</b> 组合复形神经网络（Combinatorial complex neural networks）</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#building-ccnns-tensor-diagrams"><i class="fa fa-check"></i><b>5.1</b> 构建 CCNN：张量图</a></li>
+<li class="chapter" data-level="5.2" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#push-forward-operator-and-merge-node"><i class="fa fa-check"></i><b>5.2</b> 前推操作（Push-forward operator）和聚合节点</a></li>
+<li class="chapter" data-level="5.3" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#the-main-three-tensor-operations"><i class="fa fa-check"></i><b>5.3</b> 三种主要的张量操作</a></li>
+<li class="chapter" data-level="5.4" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#definition-of-combinatorial-complex-convolutional-networks"><i class="fa fa-check"></i><b>5.4</b> 组合复形卷积网络的定义（combinatorial complex convolutional networks）</a></li>
+<li class="chapter" data-level="5.5" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#combinatorial-complex-attention-neural-networks"><i class="fa fa-check"></i><b>5.5</b> 组合复形注意力神经网络</a></li>
+</ul></li>
+<li class="part"><span><b>第三部分：高阶消息传递（Higher-order message passing）</b></span></li>
+<li class="chapter" data-level="6" data-path="message-passing.html"><a href="message-passing.html"><i class="fa fa-check"></i><b>6</b> 消息传递</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="message-passing.html"><a href="message-passing.html#definition-of-higher-order-message-passing"><i class="fa fa-check"></i><b>6.1</b> 高阶消息传递的定义</a></li>
+<li class="chapter" data-level="6.2" data-path="message-passing.html"><a href="message-passing.html#higher-order-message-passing-neural-networks-are-ccnns"><i class="fa fa-check"></i><b>6.2</b> 高阶消息传递神经网络就是CCNNs</a></li>
+<li class="chapter" data-level="6.3" data-path="message-passing.html"><a href="message-passing.html#merge-nodes-and-higher-order-message-passing-a-qualitative-comparison"><i class="fa fa-check"></i><b>6.3</b> 聚合节点和高阶消息传递：量化比较</a></li>
+<li class="chapter" data-level="6.4" data-path="message-passing.html"><a href="message-passing.html#attention-higher-order-message-passing-and-ccanns"><i class="fa fa-check"></i><b>6.4</b> 注意力高阶消息传递和CCANNs</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html"><i class="fa fa-check"></i><b>7</b> 前推、池化和反池化</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#cc-pooling-and-unpooling"><i class="fa fa-check"></i><b>7.1</b> CC池化和反池化</a></li>
+<li class="chapter" data-level="7.2" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#formulating-common-pooling-operations-as-cc-pooling"><i class="fa fa-check"></i><b>7.2</b> 将常见的池化操作表述为 CC-pooling</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#graph-pooling-as-cc-pooling"><i class="fa fa-check"></i><b>7.2.1</b> 用CC-pooling表示图池化操作</a></li>
+<li class="chapter" data-level="7.2.2" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#image-pooling-as-cc-pooling"><i class="fa fa-check"></i><b>7.2.2</b> 图像池化作为CC-pooing</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#pooling-and-unpooling-ccnns"><i class="fa fa-check"></i><b>7.3</b> 池化与反池化CCNNs</a></li>
+<li class="chapter" data-level="7.4" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#mapper-and-the-cc-pooling-operation"><i class="fa fa-check"></i><b>7.4</b> 映射器和CC池化操作</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html"><i class="fa fa-check"></i><b>8</b> CCNNs的Hasse图解释</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#hasse-graph-interpretation-of-ccnns-2"><i class="fa fa-check"></i><b>8.1</b> CCNNs的Hasse图解释</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#ccs-as-hasse-graphs"><i class="fa fa-check"></i><b>8.1.1</b> CCs作为Hasse图</a></li>
+<li class="chapter" data-level="8.1.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs"><i class="fa fa-check"></i><b>8.1.2</b> 增强的Hasse图</a></li>
+<li class="chapter" data-level="8.1.3" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#reducibility-of-ccnns-to-graph-basedmodels"><i class="fa fa-check"></i><b>8.1.3</b> CCNN对图模型的归约能力</a></li>
+<li class="chapter" data-level="8.1.4" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs-and-cc-pooling"><i class="fa fa-check"></i><b>8.1.4</b> 增强Hasse图和CC-pooling</a></li>
+<li class="chapter" data-level="8.1.5" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-diagrams-message-passing-and-mergenodes"><i class="fa fa-check"></i><b>8.1.5</b> 增强Hasse图消息传递和聚合节点</a></li>
+<li class="chapter" data-level="8.1.6" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#higher-order-representation-learning"><i class="fa fa-check"></i><b>8.1.6</b> 高阶表征学习</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#on-the-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2</b> CCNNs的等变性</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#permutation-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2.1</b> CCNNs的置换等变</a></li>
+<li class="chapter" data-level="8.2.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#orientation-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2.2</b> CCNNs的方向等变</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>第四部分：应用，文献和结论</b></span></li>
+<li class="chapter" data-level="9" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html"><i class="fa fa-check"></i><b>9</b> 实现与实验</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#software-toponetx-topoembedx-and-topomodelx"><i class="fa fa-check"></i><b>9.1</b> 软件：TopoNetX, TopoEmbedX, and TopoModelX</a></li>
+<li class="chapter" data-level="9.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#datasets"><i class="fa fa-check"></i><b>9.2</b> 数据集</a></li>
+<li class="chapter" data-level="9.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#shape-analysis-mesh-segmentation-and-classification"><i class="fa fa-check"></i><b>9.3</b> 形状分析：网格分割与分类</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-segmentation"><i class="fa fa-check"></i><b>9.3.1</b> 网格分割</a></li>
+<li class="chapter" data-level="9.3.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-and-point-cloud-classification"><i class="fa fa-check"></i><b>9.3.2</b> Mesh and point cloud classification</a></li>
+<li class="chapter" data-level="9.3.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#graph-classification"><i class="fa fa-check"></i><b>9.3.3</b> Graph classification</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#pooling-with-mapper-on-graphs-and-data-classification"><i class="fa fa-check"></i><b>9.4</b> Pooling with mapper on graphs and data classification</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-and-edge-features"><i class="fa fa-check"></i><b>9.4.1</b> Mesh classification: CC-pooling with input vertex and edge features</a></li>
+<li class="chapter" data-level="9.4.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-features-only"><i class="fa fa-check"></i><b>9.4.2</b> Mesh classification: CC-pooling with input vertex features only</a></li>
+<li class="chapter" data-level="9.4.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#point-cloud-classification-cc-pooling-with-input-vertex-features-only"><i class="fa fa-check"></i><b>9.4.3</b> Point cloud classification: CC-pooling with input vertex features only</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#ablation-studies"><i class="fa fa-check"></i><b>9.5</b> Ablation studies</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="related-work.html"><a href="related-work.html"><i class="fa fa-check"></i><b>10</b> Related work</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="related-work.html"><a href="related-work.html#graph-based-models"><i class="fa fa-check"></i><b>10.1</b> Graph-based models</a></li>
+<li class="chapter" data-level="10.2" data-path="related-work.html"><a href="related-work.html#higher-order-deep-learning-models"><i class="fa fa-check"></i><b>10.2</b> Higher-order deep learning models</a></li>
+<li class="chapter" data-level="10.3" data-path="related-work.html"><a href="related-work.html#attention-based-models"><i class="fa fa-check"></i><b>10.3</b> Attention-based models</a></li>
+<li class="chapter" data-level="10.4" data-path="related-work.html"><a href="related-work.html#graph-based-pooling"><i class="fa fa-check"></i><b>10.4</b> Graph-based pooling</a></li>
+<li class="chapter" data-level="10.5" data-path="related-work.html"><a href="related-work.html#applied-algebraic-topology"><i class="fa fa-check"></i><b>10.5</b> Applied algebraic topology</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="conclusions.html"><a href="conclusions.html"><i class="fa fa-check"></i><b>11</b> Conclusions</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>A</b> 术语</a></li>
+<li class="chapter" data-level="B" data-path="lifting-maps.html"><a href="lifting-maps.html"><i class="fa fa-check"></i><b>B</b> Lifting maps</a>
+<ul>
+<li class="chapter" data-level="B.1" data-path="lifting-maps.html"><a href="lifting-maps.html#n-hop-cc-of-a-graph"><i class="fa fa-check"></i><b>B.1</b> n-hop CC of a graph</a></li>
+<li class="chapter" data-level="B.2" data-path="lifting-maps.html"><a href="lifting-maps.html#path-based-and-subgraph-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.2</b> Path-based and subgraph-based CC of a graph</a></li>
+<li class="chapter" data-level="B.3" data-path="lifting-maps.html"><a href="lifting-maps.html#loop-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.3</b> Loop-based CC of a graph</a></li>
+<li class="chapter" data-level="B.4" data-path="lifting-maps.html"><a href="lifting-maps.html#coface-cc-of-a-simplicial-complex-or-of-a-cc"><i class="fa fa-check"></i><b>B.4</b> Coface CC of a simplicial complex or of a CC</a></li>
+<li class="chapter" data-level="B.5" data-path="lifting-maps.html"><a href="lifting-maps.html#augmentation-of-ccs-by-higher-rank-cells"><i class="fa fa-check"></i><b>B.5</b> Augmentation of CCs by higher-rank cells</a></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="ccnn-architecture-search-and-topological-quantum-field-theories.html"><a href="ccnn-architecture-search-and-topological-quantum-field-theories.html"><i class="fa fa-check"></i><b>C</b> CCNN architecture search and topological quantum field theories</a></li>
+<li class="chapter" data-level="D" data-path="learning-discrete-exterior-calculus-operators-with-ccanns.html"><a href="learning-discrete-exterior-calculus-operators-with-ccanns.html"><i class="fa fa-check"></i><b>D</b> Learning discrete exterior calculus operators with CCANNs</a></li>
+<li class="chapter" data-level="E" data-path="a-mapper-induced-topology-preserving-cc-pooling-operation.html"><a href="a-mapper-induced-topology-preserving-cc-pooling-operation.html"><i class="fa fa-check"></i><b>E</b> A mapper-induced topology-preserving CC-pooling operation</a></li>
+<li class="chapter" data-level="" data-path="参考文献.html"><a href="参考文献.html"><i class="fa fa-check"></i>参考文献</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">拓扑深度学习：超越图数据</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="related-work" class="section level1 hasAnchor" number="10">
+<h1><span class="header-section-number">第 10 章</span> Related work<a href="related-work.html#related-work" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Topological deep learning (TDL) has recently emerged as a new research frontier that lies at the intersection of several areas, including geometric and topological machine learning, and network science. To demonstrate where TDL fits in the existing literature, we review a broad spectrum of prior works, and categorize them into graph-based models, higher-order deep learning models, graph-based pooling, attention-based models, and applied algebraic topology.</p>
+<div id="graph-based-models" class="section level2 hasAnchor" number="10.1">
+<h2><span class="header-section-number">10.1</span> Graph-based models<a href="related-work.html#graph-based-models" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Graph-based models have been widely used for modeling pairwise interactions (edges) between elements (vertices) of different systems, including social systems (e.g., social network analysis) and biological systems (e.g., protein-protein interactions), see <span class="citation">(<a href="#ref-knoke2019social">Knoke and Yang 2019</a>; <a href="#ref-jha2022prediction">Jha, Saha, and Singh 2022</a>)</span>. Based on their edge or vertex properties, graphs can be classified as unweighted graphs (unweighted edges), weighted graphs (weighted edges), signed graphs (signed edges), undirected or directed graphs (undirected or directed edges), and spatio-temporal graphs (spatio-temporal vertices), as discussed in <span class="citation">(<a href="#ref-goyal2018graph">Goyal and Ferrara 2018</a>; <a href="#ref-wu2020comprehensive">Zonghan Wu et al. 2020</a>)</span>. Each of these graph types can be combined with neural networks to form graph neural networks and model different interactions in various systems <span class="citation">(<a href="#ref-goyal2018graph">Goyal and Ferrara 2018</a>; <a href="#ref-wu2020comprehensive">Zonghan Wu et al. 2020</a>)</span>. For example, unweighted and undirected graph-based models have been used for omic data mapping <span class="citation">(<a href="#ref-amar2014constructing">Amar and Shamir 2014</a>)</span> and mutual friendship detection in social networks <span class="citation">(<a href="#ref-tabassum2018social">Tabassum et al. 2018</a>)</span>; weighted graph-based models have been widely used with systems related to traffic forecasting <span class="citation">(<a href="#ref-halaoui2010smart">Halaoui 2010</a>; <a href="#ref-zhang2018kernel">Q. Zhang et al. 2018</a>)</span> and epidemiological modeling/forecasting <span class="citation">(<a href="#ref-linka2020outbreak">Linka et al. 2020</a>; <a href="#ref-manriquez2021protection">Manrı́quez, Guerrero-Nancuante, and Taramasco 2021</a>)</span>; signed graph-based models are suitable for tasks such as segmentation <span class="citation">(<a href="#ref-bailoni2022gasp">Bailoni et al. 2022</a>)</span> and clustering <span class="citation">(<a href="#ref-kunegis2010spectral">Kunegis et al. 2010</a>; <a href="#ref-gallier2016spectral">Gallier 2016</a>)</span>; spatio-temporal graph-based models can describe systems that are spatio-temporal in nature, such as human activity and different types of motion <span class="citation">(<a href="#ref-yan2018spatial">Yan, Xiong, and Lin 2018</a>; <a href="#ref-bhattacharya2020step">Bhattacharya et al. 2020</a>; <a href="#ref-plizzari2021spatial">Plizzari, Cannici, and Matteucci 2021</a>)</span>.</p>
+<p>As graph-based approaches that utilize single-layer or monolayer graphs cannot model multiple types of relations between vertices in a network <span class="citation">(<a href="#ref-goyal2018graph">Goyal and Ferrara 2018</a>; <a href="#ref-wu2020comprehensive">Zonghan Wu et al. 2020</a>)</span>, multilayer or multiplex networks have been proposed <span class="citation">(<a href="#ref-kivela2014multilayer">Kivelä et al. 2014</a>; <a href="#ref-zhang2020multiplex">W. Zhang et al. 2020</a>; <a href="#ref-chang2022graphrr">Chang et al. 2022</a>)</span>. Similar to monolayer graphs, multiplex networks contain vertices and edges, but the edges exist in separate layers, where each layer represents a specific type of interaction or relation. Multiplex networks have been used in various applications, including multilayer modeling of the human brain <span class="citation">(<a href="#ref-de2017multilayer">De Domenico 2017</a>; <a href="#ref-anand2023hodge">Anand and Chung 2023</a>)</span> and online gaming <span class="citation">(<a href="#ref-chang2022graphrr">Chang et al. 2022</a>)</span>. All these types of networks can only model pairwise relations between vertices, motivating the need for higher-order networks, as discussed in Section <a href="motivation.html#the-utility-of-topology">2.2</a>.</p>
+</div>
+<div id="higher-order-deep-learning-models" class="section level2 hasAnchor" number="10.2">
+<h2><span class="header-section-number">10.2</span> Higher-order deep learning models<a href="related-work.html#higher-order-deep-learning-models" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In recent years, there has been an increasing interest in higher-order networks <span class="citation">(<a href="#ref-mendel1991tutorial">Mendel 1991</a>; <a href="#ref-battiston2020networks">Battiston et al. 2020</a>; <a href="#ref-bick2021higher">Bick et al. 2021</a>)</span> due to the ability of these networks to adequately capture higher-order interactions. Hodge-theoretic approaches, message passing schemes, and skip connections have been developed for higher-order networks in the signal processing and deep learning literature.</p>
+<p>A Hodge-theoretic approach <span class="citation">(<a href="#ref-lim2020hodge">Lim 2020</a>)</span> over simplicial complexes has been introduced by <span class="citation">(<a href="#ref-barbarossa2020topological">Barbarossa and Sardellitti 2020a</a>; <a href="#ref-schaub2021signal">Schaub et al. 2021</a>)</span>. This effort has been extended to hypergraphs by <span class="citation">(<a href="#ref-barbarossa2016introduction">Barbarossa and Tsitsvero 2016</a>; <a href="#ref-schaub2021signal">Schaub et al. 2021</a>)</span> and to cell complexes by <span class="citation">(<a href="#ref-roddenberry2021signal">T. Mitchell Roddenberry, Schaub, and Hajij 2022</a>; <a href="#ref-sardellitti2021topological">Sardellitti, Barbarossa, and Testa 2021</a>)</span>. The work of <span class="citation">(<a href="#ref-roddenberry2019hodgenet">T. Mitchell Roddenberry and Segarra 2019</a>)</span> has defined an edge-based convolutional neural network by exploiting the 1-Hodge Laplacian operator for linear filtering <span class="citation">(<a href="#ref-barbarossa2018learning">Barbarossa, Sardellitti, and Ceci 2018</a>; <a href="#ref-schaub2018denoising">Schaub and Segarra 2018</a>; <a href="#ref-barbarossa2020topological">Barbarossa and Sardellitti 2020a</a>, <a href="#ref-barbarossa2020topologicalmag">2020b</a>; <a href="#ref-schaub2021signal">Schaub et al. 2021</a>)</span>.</p>
+<p>Convolutional operators and message-passing algorithms have been developed for higher-order neural networks. For example, a convolutional operator on hypergraphs has been proposed by <span class="citation">(<a href="#ref-arya2018exploiting">Arya and Worring 2018</a>; <a href="#ref-feng2019hypergraph">Feng et al. 2019</a>; <a href="#ref-jiang2019dynamic">J. Jiang et al. 2019</a>)</span> and has been investigated further by <span class="citation">(<a href="#ref-jiang2019dynamic">J. Jiang et al. 2019</a>; <a href="#ref-gao2020hypergraph">Y. Gao et al. 2020</a>; <a href="#ref-bai2021hypergraph">S. Bai, Zhang, and Torr 2021</a>; <a href="#ref-bai2021multi">J. Bai et al. 2021</a>; <a href="#ref-giusti2022cell">L. Giusti, Battiloro, Testa, et al. 2022</a>; <a href="#ref-wu2022hypergraph">H. Wu and Ng 2022</a>; <a href="#ref-gong2023generative">Gong, Higham, and Zygalakis 2023</a>)</span>. A unifying framework for learning on graphs and hypergraphs has been proposed recently in <span class="citation">(<a href="#ref-huang2021unignn">Jing Huang and Yang 2021</a>)</span>. The authors in <span class="citation">(<a href="#ref-gao2022hgnn">Y. Gao et al. 2022</a>)</span> have introduced the so-called general hypergraph neural networks, which constitute a multi-modal/multi-type data correlation modeling framework. As for message passing on complexes, the work of <span class="citation">(<a href="#ref-hajijcell">Hajij, Istvan, and Zamzmi 2020</a>)</span> has introduced a higher-order message-passing framework that encompasses those proposed by <span class="citation">(<a href="#ref-gilmer2017neural">Gilmer et al. 2017</a>; <a href="#ref-bunch2020simplicial">Bunch et al. 2020</a>; <a href="#ref-ebli2020simplicial">Ebli, Defferrard, and Spreemann 2020</a>; <a href="#ref-hayhoe2022stable">Hayhoe et al. 2022</a>)</span> and has utilized various local neighborhood aggregation schemes. In <span class="citation">(<a href="#ref-mitchell2022topological">E. C. Mitchell et al. 2022</a>)</span>, recurrent simplicial neural networks have been proposed and applied to trajectory prediction. The authors in <span class="citation">(<a href="#ref-calmon2022higher">Calmon, Schaub, and Bianconi 2022</a>)</span> have addressed the challenge of processing signals supported on multiple cell dimensions concurrently, by introducing a coupling multi-signal approach on higher-order networks that utilizes the Dirac operator. Several simplicial and cellular neural networks have been introduced recently, including <span class="citation">(<a href="#ref-burnssimplicial">Burns and Fukai 2023</a>; <a href="#ref-bodnar2021weisfeiler">Bodnar et al. 2021</a>; <a href="#ref-roddenberry2021signal">T. Mitchell Roddenberry, Schaub, and Hajij 2022</a>; <a href="#ref-sardellitti2021topological">Sardellitti, Barbarossa, and Testa 2021</a>; <a href="#ref-sardellitti2022topological">Sardellitti and Barbarossa 2022</a>; <a href="#ref-battiloro2023topological">Battiloro et al. 2023</a>; <a href="#ref-yang2023convolutional">Yang and Isufi 2023</a>)</span>. For more details, the reader is referred to the recent survey of <span class="citation">(<a href="#ref-mathilde2023">Papillon et al. 2023</a>)</span> on TDL.</p>
+<p>A generalization of skip connections <span class="citation">(<a href="#ref-ronneberger2015u">Ronneberger, Fischer, and Brox 2015</a>; <a href="#ref-he2016deep">He et al. 2016</a>)</span> to simplicial complexes has been introduced by <span class="citation">(<a href="#ref-hajij2022high">Hajij, Ramamurthy, et al. 2022</a>)</span>, which allows the training of higher-order deep neural networks. The authors in <span class="citation">(<a href="#ref-morris2019weisfeiler">Morris et al. 2019</a>)</span> have proposed a higher-order graph neural network that takes into account higher-order graph structures at multiple scales. While these methods allow for multi-way hierarchical coupling, the coupling is isotropic and weight differences within a particular multi-way connection can not be learned. These limitations can be alleviated by attention-based models.</p>
+<p>Higher-order models have achieved promising performance in several real-world applications, including link prediction <span class="citation">(<a href="#ref-hajij2022high">Hajij, Ramamurthy, et al. 2022</a>; <a href="#ref-piaggesi2022effective">Piaggesi, Panisson, and Petri 2022</a>; <a href="#ref-chen2021bscnets">Yuzhou Chen, Gel, and Poor 2022</a>)</span>, action recognition <span class="citation">(<a href="#ref-wang2023survey">C. Wang et al. 2023</a>)</span>, visual classification <span class="citation">(<a href="#ref-shi2018hypergraph">Shi et al. 2018</a>)</span>, optimal homology generator detection <span class="citation">(<a href="#ref-keros2021dist2cycle">Keros, Nanda, and Subr 2022</a>)</span>, time series <span class="citation">(<a href="#ref-santoro2023higher">Andrea Santoro et al. 2023</a>)</span>, dynamical systems <span class="citation">(<a href="#ref-majhi2022dynamics">Majhi, Perc, and Ghosh 2022</a>)</span>, spectral clustering <span class="citation">(<a href="#ref-reddy2023clustering">Reddy, Chepuri, and Borgnat 2023</a>)</span>, node classification <span class="citation">(<a href="#ref-hajij2022high">Hajij, Ramamurthy, et al. 2022</a>)</span>, and trajectory prediction <span class="citation">(<a href="#ref-benson2018simplicial">Benson et al. 2018</a>; <a href="#ref-roddenberry2021principled">T. Mitchell Roddenberry, Glaze, and Segarra 2021</a>)</span>.</p>
+</div>
+<div id="attention-based-models" class="section level2 hasAnchor" number="10.3">
+<h2><span class="header-section-number">10.3</span> Attention-based models<a href="related-work.html#attention-based-models" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Real-world relational data is large, unstructured, sparse and noisy. As a result, graph neural networks (GNNs) may learn suboptimal data representations, and therefore may exhibit compromised performance <span class="citation">(<a href="#ref-wu2020comprehensive">Zonghan Wu et al. 2020</a>; <a href="#ref-asif2021graph">Asif et al. 2021</a>; <a href="#ref-dai2021nrgnn">Dai, Aggarwal, and Wang 2021</a>)</span>. To address these issues, various attention mechanisms <span class="citation">(<a href="#ref-chaudhari2021attentive">Chaudhari et al. 2021</a>)</span> have been incorporated in GNNs, which allow to learn neural architectures that detect the most relevant parts of a given graph while ignoring irrelevant parts. Based on the used attention mechanism, existing graph attention approaches can be divided into weight-based attention, similarity-based attention, and attention-guided walk <span class="citation">(<a href="#ref-boaz2019">J. B. Lee et al. 2019</a>)</span>.</p>
+<p>The majority of attention-based mechanisms, with the exception of <span class="citation">(<a href="#ref-bai2021hypergraph">S. Bai, Zhang, and Torr 2021</a>; <a href="#ref-kim2020hypergraph">E.-S. Kim et al. 2020</a>; <a href="#ref-georgiev2022heat">Georgiev, Brockschmidt, and Allamanis 2022</a>; <a href="#ref-giusti2022cell">L. Giusti, Battiloro, Testa, et al. 2022</a>; <a href="#ref-giusti2022simplicial">L. Giusti, Battiloro, Di Lorenzo, et al. 2022</a>; <a href="#ref-goh2022simplicial">Goh, Bodnar, and Lio 2022</a>)</span>, are designed for graphs. For example, the attention model proposed by <span class="citation">(<a href="#ref-goh2022simplicial">Goh, Bodnar, and Lio 2022</a>)</span> is a generalization of the graph attention model of <span class="citation">(<a href="#ref-velickovic2017graph">Veličković et al. 2018</a>)</span>. In <span class="citation">(<a href="#ref-giusti2022simplicial">L. Giusti, Battiloro, Di Lorenzo, et al. 2022</a>)</span>, the authors have utilized a model based on Hodge decomposition, similar to the one suggested in <span class="citation">(<a href="#ref-roddenberry2021principled">T. Mitchell Roddenberry, Glaze, and Segarra 2021</a>)</span>, to introduce an attention model for simplicial complexes. The hypergraph attention models introduced in <span class="citation">(<a href="#ref-kim2020hypergraph">E.-S. Kim et al. 2020</a>; <a href="#ref-bai2021hypergraph">S. Bai, Zhang, and Torr 2021</a>)</span> provide alternative generalizations of the graph attention model of <span class="citation">(<a href="#ref-velickovic2017graph">Veličković et al. 2018</a>)</span>. The aforementioned attention models neither allow nor combine higher-order attention blocks of entities of different dimensions. This limits the space of neural architectures and the scope of applications of existing attention models.</p>
+</div>
+<div id="graph-based-pooling" class="section level2 hasAnchor" number="10.4">
+<h2><span class="header-section-number">10.4</span> Graph-based pooling<a href="related-work.html#graph-based-pooling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Several attempts have been made to emulate the success of image-based pooling layers in the context of graphs. Some of the early work employs popular graph clustering algorithms <span class="citation">(<a href="#ref-kushnir2006fast">Kushnir, Galun, and Brandt 2006</a>; <a href="#ref-dhillon2007weighted">Dhillon, Guan, and Kulis 2007</a>)</span> to achieve graph-based pooling architectures <span class="citation">(<a href="#ref-bruna2013spectral">Bruna et al. 2014</a>)</span>. Coarsening operations have been applied to graphs
+to attain the invariance properties needed in learning tasks <span class="citation">(<a href="#ref-ying2018hierarchical">Ying et al. 2018</a>; <a href="#ref-mesquita2020rethinking">Mesquita, Souza, and Kaski 2020</a>; <a href="#ref-gao2021topology">H. Gao, Liu, and Ji 2021</a>)</span>. The current state-of-the-art graph-based pooling approaches mostly rely on dynamically learning the pooling needed for the learning task <span class="citation">(<a href="#ref-grattarola2022understanding">Grattarola et al. 2022</a>)</span>. This includes spectral methods <span class="citation">(<a href="#ref-ma2019graph">Ma et al. 2019</a>)</span>, clustering methods such as DiffPool <span class="citation">(<a href="#ref-ying2018hierarchical">Ying et al. 2018</a>)</span> and MinCut <span class="citation">(<a href="#ref-bianchi2020spectral">Bianchi, Grattarola, and Alippi 2020</a>)</span>, top-K methods <span class="citation">(<a href="#ref-gao2019graph">H. Gao and Ji 2019</a>; <a href="#ref-lee2019self">J. Lee, Lee, and Kang 2019</a>; <a href="#ref-zhang2021hierarchical">Z. Zhang et al. 2021</a>)</span>, and hierarchical graph pooling <span class="citation">(<a href="#ref-huang2019attpool">Jingjia Huang et al. 2019</a>; <a href="#ref-lee2019self">J. Lee, Lee, and Kang 2019</a>; <a href="#ref-zhang2019hierarchical">Z. Zhang et al. 2019</a>, <a href="#ref-zhang2021hierarchical">2021</a>; <a href="#ref-li2020graph">J. Li et al. 2020</a>; <a href="#ref-pang2021graph">Pang, Zhao, and Li 2021</a>)</span>. Pooling on higher-order networks remains unstudied, with the exception of a general simplicial complex pooling strategy developed by <span class="citation">(<a href="#ref-cinque2022pooling">Cinque, Battiloro, and Di Lorenzo 2022</a>)</span> along the lines of the proposal made by <span class="citation">(<a href="#ref-grattarola2022understanding">Grattarola et al. 2022</a>)</span>.</p>
+</div>
+<div id="applied-algebraic-topology" class="section level2 hasAnchor" number="10.5">
+<h2><span class="header-section-number">10.5</span> Applied algebraic topology<a href="related-work.html#applied-algebraic-topology" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Although algebraic topology <span class="citation">(<a href="#ref-hatcher2005algebraic">Hatcher 2005</a>)</span> is a relatively old field, applications of this field have only recently started to crystallize <span class="citation">(<a href="#ref-carlsson2009topology">G. Carlsson 2009</a>; <a href="#ref-edelsbrunner2010computational">Edelsbrunner and Harer 2010</a>)</span>. Indeed, topological constructions have been found to be natural tools for the formulation of longstanding problems in many fields. For instance, persistent homology <span class="citation">(<a href="#ref-edelsbrunner2010computational">Edelsbrunner and Harer 2010</a>)</span> has been successful at finding solutions to various complex data problems <span class="citation">(<a href="#ref-boyell1963hybrid">Boyell and Ruston 1963</a>; <a href="#ref-kweon1994extracting">Kweon and Kanade 1994</a>; <a href="#ref-bajaj1997contour">Bajaj, Pascucci, and Schikore 1997</a>; <a href="#ref-attene2003shape">Attene, Biasotti, and Spagnuolo 2003</a>; <a href="#ref-carr2004simplifying">Carr, Snoeyink, and Panne 2004</a>; <a href="#ref-LeeChungKang2011">H. Lee et al. 2011b</a>, <a href="#ref-LeeChungKang2011b">2011a</a>, <a href="#ref-LeeKangChung2012">2012a</a>, <a href="#ref-LeeKangChung2012b">2012b</a>; <a href="#ref-DabaghianMemoliFrank2012">Dabaghian et al. 2012</a>; <a href="#ref-nicolau2011topology">Nicolau, Levine, and Carlsson 2011</a>; <a href="#ref-lum2013extracting">Lum et al. 2013</a>; <a href="#ref-giusti2016two">C. Giusti, Ghrist, and Bassett 2016</a>; <a href="#ref-curto2017can">Curto 2017</a>; <a href="#ref-rosen2017using">Rosen et al. 2017</a>)</span>. Recent years have witnessed increased interest in the role of topology in machine learning and data science <span class="citation">(<a href="#ref-hensel2021survey">Hensel, Moor, and Rieck 2021</a>; <a href="#ref-DW22">Dey and Wang 2022b</a>)</span>.
+Topology-based machine learning models have been applied in many areas, including topological signatures of data <span class="citation">(<a href="#ref-biasotti2008describing">Biasotti et al. 2008</a>; <a href="#ref-carlsson2005persistence">G. Carlsson et al. 2005</a>; <a href="#ref-rieck2015persistent">Rieck and Leitte 2015</a>)</span>, neuroscience <span class="citation">(<a href="#ref-LeeChungKang2011">H. Lee et al. 2011b</a>, <a href="#ref-LeeChungKang2011b">2011a</a>, <a href="#ref-LeeKangChung2012">2012a</a>, <a href="#ref-LeeKangChung2012b">2012b</a>; <a href="#ref-DabaghianMemoliFrank2012">Dabaghian et al. 2012</a>; <a href="#ref-giusti2016two">C. Giusti, Ghrist, and Bassett 2016</a>; <a href="#ref-curto2017can">Curto 2017</a>)</span>, bioscience <span class="citation">(<a href="#ref-dewoskin2010applications">DeWoskin et al. 2010</a>; <a href="#ref-nicolau2011topology">Nicolau, Levine, and Carlsson 2011</a>; <a href="#ref-chan2013topology">Chan, Carlsson, and Rabadan 2013</a>; <a href="#ref-taylor2015topological">Taylor et al. 2015</a>; <a href="#ref-topaz2015topological">Topaz, Ziegelmeier, and Halverson 2015</a>; <a href="#ref-lo2016modeling">Lo and Park 2016</a>)</span>, the study of graphs <span class="citation">(<a href="#ref-HorakMaleticRajkovic2009">Horak, Maletić, and Rajković 2009</a>; <a href="#ref-ELuYao2012">Weinan, Jianfeng, and Yuan 2013</a>; <a href="#ref-BampasidouGentimis2014">Bampasidou and Gentimis 2014</a>; <a href="#ref-CarstensHoradam2013">Carstens and Horadam 2013</a>; <a href="#ref-PetriScolamieroDonato2013">Petri et al. 2013a</a>, <a href="#ref-PetriScolamieroDonato2013b">2013b</a>; <a href="#ref-rieck2019persistent">Rieck, Bock, and Borgwardt 2019</a>; <a href="#ref-hajij2020efficient">Hajij and Rosen 2020</a>)</span>, time series forcasting <span class="citation">(<a href="#ref-zeng_topological_2021">Zeng et al. 2021</a>)</span>, Trojan detection <span class="citation">(<a href="#ref-hu_trigger_2022">Hu et al. 2022</a>)</span>, image segmentation <span class="citation">(<a href="#ref-hu_topology-preserving_2019">Hu et al. 2019</a>)</span>, 3D reconstruction <span class="citation">(<a href="#ref-waibel_capturing_2022">Waibel et al. 2022</a>)</span>,
+and time-varying setups <span class="citation">(<a href="#ref-edelsbrunner2004time">Edelsbrunner et al. 2004</a>; <a href="#ref-perea2015sw1pers">Perea et al. 2015</a>; <a href="#ref-maletic2016persistent">Maletić, Zhao, and Rajković 2016</a>; <a href="#ref-rieck_uncovering_2020">Rieck et al. 2020</a>)</span>.</p>
+<p>Topological data analysis (TDA) <span class="citation">(<a href="#ref-carlsson2009topology">G. Carlsson 2009</a>; <a href="#ref-edelsbrunner2010computational">Edelsbrunner and Harer 2010</a>; <a href="#ref-ghrist2014elementary">Ghrist 2014</a>; <a href="#ref-love2020topological">Love et al. 2023b</a>; <a href="#ref-DW22">Dey and Wang 2022b</a>)</span> has emerged as a scientific area that harnesses topological tools to analyze data and develop machine learning algorithms. TDA has found many applications in machine learning, including enhancing existing machine learning models <span class="citation">(<a href="#ref-bentaieb2016topology">BenTaieb and Hamarneh 2016</a>; <a href="#ref-hofer2017deep">Hofer et al. 2017</a>; <a href="#ref-clough2019explicit">Clough et al. 2019</a>; <a href="#ref-bruel2019topology">Gabrielsson et al. 2020</a>; <a href="#ref-wangtopogan">F. Wang et al. 2020</a>; <a href="#ref-leventhal2023exploring">Leventhal et al. 2023</a>)</span>, improving the explainability of deep learning models <span class="citation">(<a href="#ref-carlsson2020topological">G. Carlsson and Gabrielsson 2020</a>; <a href="#ref-elhamdadi2021affectivetda">Elhamdadi, Canavan, and Rosen 2021</a>; <a href="#ref-love2023topological">Love et al. 2023a</a>)</span>, dimensionality reduction <span class="citation">(<a href="#ref-moor2020topological">Moor et al. 2020</a>)</span>, filtration learning <span class="citation">(<a href="#ref-hofer2020graph">Hofer et al. 2020</a>)</span>, and topological layers constructions <span class="citation">(<a href="#ref-kim2020pllay">K. Kim et al. 2020</a>)</span>. A notable research trend has been the vectorization of persistence diagrams. Vector representations of persistence diagrams are constructed in order to be utilized in downstream machine learning tasks. These methods include Betti curves <span class="citation">(<a href="#ref-umeda2017time">Umeda 2017</a>)</span>, persistence landscapes <span class="citation">(<a href="#ref-bubenik2015statistical">Bubenik 2015</a>)</span>, persistence images <span class="citation">(<a href="#ref-adams2017persistence">Adams et al. 2017</a>)</span>, and other vectorization constructions <span class="citation">(<a href="#ref-chen2015statistical">Y.-C. Chen et al. 2015</a>; <a href="#ref-kusano2016persistence">Kusano, Hiraoka, and Fukumizu 2016</a>; <a href="#ref-berry2020functional">Berry et al. 2020</a>)</span>. A unification of these methods has been proposed recently in <span class="citation">(<a href="#ref-carriere_perslay_2020">Carriere et al. 2020</a>)</span>.</p>
+<p>Our work introduces combinatorial complexes (CCs) as a generalized higher-order network on which deep learning models can be defined and studied in a unifying manner. Hence, our work expands TDA by formalizing deep learning notions in topological terms and by realizing constructions in TDA, e.g., mapper <span class="citation">(<a href="#ref-singh2007topological">Singh et al. 2007</a>)</span>, in terms of our TDL framework. The construction of CCs and of combinatorial complex neural networks (CCNNs), which are neural networks defined on CCs, is inspired by classical notions in algebraic topology <span class="citation">(<a href="#ref-hatcher2005algebraic">Hatcher 2005</a>)</span> and in topological quantum field theory <span class="citation">(<a href="#ref-turaev2016quantum">Turaev 2016</a>)</span>, and by recent advances in TDA <span class="citation">(<a href="#ref-collins2004barcode">Collins et al. 2004</a>; <a href="#ref-carlsson2005persistence">G. Carlsson et al. 2005</a>, <a href="#ref-carlsson2008local">2008</a>; <a href="#ref-carlsson2006algebraic">E. Carlsson, Carlsson, and De Silva 2006</a>; <a href="#ref-carlsson2008persistent">G. Carlsson and Mémoli 2008</a>; <a href="#ref-carlsson2009theory">G. Carlsson and Zomorodian 2009</a>; <a href="#ref-carlsson2009topology">G. Carlsson 2009</a>)</span> as applied to machine learning <span class="citation">(<a href="#ref-pun2018persistent">Pun, Xia, and Lee 2018</a>; <a href="#ref-DW22">Dey and Wang 2022b</a>)</span>.</p>
+
+</div>
+</div>
+<h3>参考文献<a href="参考文献.html#参考文献" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-adams2017persistence" class="csl-entry">
+Adams, Henry, Tegan Emerson, Michael Kirby, Rachel Neville, Chris Peterson, Patrick Shipman, Sofya Chepushtanova, Eric Hanson, Francis Motta, and Lori Ziegelmeier. 2017. <span>“Persistence Images: A Stable Vector Representation of Persistent Homology.”</span> <em>Jmlr</em> 18 (1): 218–52.
+</div>
+<div id="ref-amar2014constructing" class="csl-entry">
+Amar, David, and Ron Shamir. 2014. <span>“Constructing Module Maps for Integrated Analysis of Heterogeneous Biological Networks.”</span> <em>Nucleic Acids Research</em> 42 (7): 4208–19.
+</div>
+<div id="ref-anand2023hodge" class="csl-entry">
+Anand, D. V., and Moo K. Chung. 2023. <span>“Hodge <span>L</span>aplacian of Brain Networks.”</span> <em>IEEE Transactions on Medical Imaging</em>.
+</div>
+<div id="ref-arya2018exploiting" class="csl-entry">
+Arya, Devanshu, and Marcel Worring. 2018. <span>“Exploiting Relational Information in Social Networks Using Geometric Deep Learning on Hypergraphs.”</span> In <em>Proceedings of the 2018 <span>ACM</span> on <span>I</span>nternational <span>C</span>onference on <span>M</span>ultimedia <span>R</span>etrieval</em>, 117–25.
+</div>
+<div id="ref-asif2021graph" class="csl-entry">
+Asif, Nurul A., Yeahia Sarker, Ripon K. Chakrabortty, Michael J. Ryan, Md. Hafiz Ahamed, Dip K. Saha, Faisal R. Badal, et al. 2021. <span>“Graph Neural Network: A Comprehensive Review on Non-<span>E</span>uclidean Space.”</span> <em>IEEE Access</em> 9: 60588–606. <a href="https://doi.org/10.1109/ACCESS.2021.3071274">https://doi.org/10.1109/ACCESS.2021.3071274</a>.
+</div>
+<div id="ref-attene2003shape" class="csl-entry">
+Attene, Marco, Silvia Biasotti, and Michela Spagnuolo. 2003. <span>“Shape Understanding by Contour-Driven Retiling.”</span> <em>The Visual Computer</em> 19 (2): 127–38.
+</div>
+<div id="ref-bai2021multi" class="csl-entry">
+Bai, Junjie, Biao Gong, Yining Zhao, Fuqiang Lei, Chenggang Yan, and Yue Gao. 2021. <span>“Multi-Scale Representation Learning on Hypergraph for 3<span>D</span> Shape Retrieval and Recognition.”</span> <em>IEEE Transactions on Image Processing</em> 30: 5327–38.
+</div>
+<div id="ref-bai2021hypergraph" class="csl-entry">
+Bai, Song, Feihu Zhang, and Philip H. S. Torr. 2021. <span>“Hypergraph Convolution and Hypergraph Attention.”</span> <em>Pattern Recognition</em> 110: 107637.
+</div>
+<div id="ref-bailoni2022gasp" class="csl-entry">
+Bailoni, Alberto, Constantin Pape, Nathan Hütsch, Steffen Wolf, Thorsten Beier, Anna Kreshuk, and Fred A Hamprecht. 2022. <span>“<span>GASP</span>, a Generalized Framework for Agglomerative Clustering of Signed Graphs and Its Application to Instance Segmentation.”</span> In <em>Cvpr</em>, 11645–55.
+</div>
+<div id="ref-bajaj1997contour" class="csl-entry">
+Bajaj, Chandrajit L., Valerio Pascucci, and Daniel R. Schikore. 1997. <span>“The Contour Spectrum.”</span> In <em><span class="nocase">Proceedings of the 8th Conference on Visualization ’97</span></em>, 167–ff. IEEE Computer Society Press.
+</div>
+<div id="ref-BampasidouGentimis2014" class="csl-entry">
+Bampasidou, Maria, and Thanos Gentimis. 2014. <span>“Modeling Collaborations with Persistent Homology.”</span> <em>arXiv Preprint arXiv:1403.5346</em> abs/1403.5346.
+</div>
+<div id="ref-barbarossa2020topological" class="csl-entry">
+Barbarossa, Sergio, and Stefania Sardellitti. 2020a. <span>“Topological Signal Processing over Simplicial Complexes.”</span> <em>IEEE Transactions on Signal Processing</em> 68: 2992–3007.
+</div>
+<div id="ref-barbarossa2020topologicalmag" class="csl-entry">
+———. 2020b. <span>“Topological Signal Processing: Making Sense of Data Building on Multiway Relations.”</span> <em>IEEE Signal Processing Magazine</em> 37 (6): 174–83.
+</div>
+<div id="ref-barbarossa2018learning" class="csl-entry">
+Barbarossa, Sergio, Stefania Sardellitti, and Elena Ceci. 2018. <span>“Learning from Signals Defined over Simplicial Complexes.”</span> In <em>2018 IEEE Data Science Workshop (DSW)</em>, 51–55. IEEE.
+</div>
+<div id="ref-barbarossa2016introduction" class="csl-entry">
+Barbarossa, Sergio, and Mikhail Tsitsvero. 2016. <span>“An Introduction to Hypergraph Signal Processing.”</span> In <em>2016 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)</em>, 6425–29. IEEE.
+</div>
+<div id="ref-battiloro2023topological" class="csl-entry">
+Battiloro, Claudio, Stefania Sardellitti, Sergio Barbarossa, and Paolo Di Lorenzo. 2023. <span>“Topological Signal Processing over Weighted Simplicial Complexes.”</span> <em>arXiv Preprint arXiv:2302.08561</em>.
+</div>
+<div id="ref-battiston2020networks" class="csl-entry">
+Battiston, Federico, Giulia Cencetti, Iacopo Iacopini, Vito Latora, Maxime Lucas, Alice Patania, Jean-Gabriel Young, and Giovanni Petri. 2020. <span>“Networks Beyond Pairwise Interactions: Structure and Dynamics.”</span> <em>Physics Reports</em> 874: 1–92.
+</div>
+<div id="ref-benson2018simplicial" class="csl-entry">
+Benson, Austin R., Rediet Abebe, Michael T. Schaub, Ali Jadbabaie, and Jon Kleinberg. 2018. <span>“Simplicial Closure and Higher-Order Link Prediction.”</span> <em>Proceedings of the National Academy of Sciences</em> 115 (48): E11221–30.
+</div>
+<div id="ref-bentaieb2016topology" class="csl-entry">
+BenTaieb, Aicha, and Ghassan Hamarneh. 2016. <span>“Topology Aware Fully Convolutional Networks for Histology Gland Segmentation.”</span> In <em>Medical Image Computing and Computer-Assisted Intervention–MICCAI 2016: 19th International Conference, Athens, Greece, October 17-21, 2016, Proceedings, Part II 19</em>, 460–68. Springer.
+</div>
+<div id="ref-berry2020functional" class="csl-entry">
+Berry, Eric, Yen-Chi Chen, Jessi Cisewski-Kehe, and Brittany Terese Fasy. 2020. <span>“Functional Summaries of Persistence Diagrams.”</span> <em>J. Appl. Comput. Topol.</em> 4 (2): 211–62.
+</div>
+<div id="ref-bhattacharya2020step" class="csl-entry">
+Bhattacharya, Uttaran, Trisha Mittal, Rohan Chandra, Tanmay Randhavane, Aniket Bera, and Dinesh Manocha. 2020. <span>“<span>STEP</span>: Spatial Temporal Graph Convolutional Networks for Emotion Perception from <span>G</span>aits.”</span> <em>Proceedings of the AAAI Conference on Artificial Intelligence</em> 34 (02): 1342–50. <a href="https://doi.org/10.1609/aaai.v34i02.5490">https://doi.org/10.1609/aaai.v34i02.5490</a>.
+</div>
+<div id="ref-bianchi2020spectral" class="csl-entry">
+Bianchi, Filippo Maria, Daniele Grattarola, and Cesare Alippi. 2020. <span>“Spectral Clustering with Graph Neural Networks for Graph Pooling.”</span> In <em>Icml</em>, 874–83. PMLR.
+</div>
+<div id="ref-biasotti2008describing" class="csl-entry">
+Biasotti, Silvia, Leila De Floriani, Bianca Falcidieno, Patrizio Frosini, Daniela Giorgi, Claudia Landi, Laura Papaleo, and Michela Spagnuolo. 2008. <span>“Describing Shapes by Geometrical-Topological Properties of Real Functions.”</span> <em>ACM Computing Surveys (CSUR)</em> 40 (4): 12.
+</div>
+<div id="ref-bick2021higher" class="csl-entry">
+Bick, Christian, Elizabeth Gross, Heather A Harrington, and Michael T Schaub. 2021. <span>“What Are Higher-Order Networks?”</span> <em>arXiv Preprint arXiv:2104.11329</em>.
+</div>
+<div id="ref-bodnar2021weisfeiler" class="csl-entry">
+Bodnar, Cristian, Fabrizio Frasca, Nina Otter, Yuguang Wang, Pietro Lio, Guido F Montufar, and Michael Bronstein. 2021. <span>“Weisfeiler and <span>L</span>ehman Go Cellular: <span>CW</span> Networks.”</span> In <em>Advances in Neural Information Processing Systems</em>.
+</div>
+<div id="ref-boyell1963hybrid" class="csl-entry">
+Boyell, Roger L., and Henry Ruston. 1963. <span>“Hybrid Techniques for Real-Time Radar Simulation.”</span> In <em>Proceedings of the November 12-14, 1963, Fall Joint Computer Conference</em>, 445–58. ACM.
+</div>
+<div id="ref-bruna2013spectral" class="csl-entry">
+Bruna, Joan, Wojciech Zaremba, Arthur Szlam, and Yann LeCun. 2014. <span>“Spectral Networks and Locally Connected Networks on Graphs.”</span> In <em>Proceedings of the 2nd International Conference on Learning Representations</em>, edited by Yoshua Bengio and Yann LeCun. <span>ICLR</span> 2014. Banff, AB, Canada.
+</div>
+<div id="ref-bubenik2015statistical" class="csl-entry">
+Bubenik, Peter. 2015. <span>“Statistical Topological Data Analysis Using Persistence Landscapes.”</span> <em>Jmlr</em> 16 (1): 77–102.
+</div>
+<div id="ref-bunch2020simplicial" class="csl-entry">
+Bunch, Eric, Qian You, Glenn Fung, and Vikas Singh. 2020. <span>“Simplicial 2-Complex Convolutional Neural Nets.”</span> <em>NeurIPS Workshop on Topological Data Analysis and Beyond</em>.
+</div>
+<div id="ref-burnssimplicial" class="csl-entry">
+Burns, Thomas F., and Tomoki Fukai. 2023. <span>“Simplicial <span>H</span>opfield Networks.”</span> In <em>The Eleventh International Conference on Learning Representations</em>.
+</div>
+<div id="ref-calmon2022higher" class="csl-entry">
+Calmon, Lucille, Michael T. Schaub, and Ginestra Bianconi. 2022. <span>“Higher-Order Signal Processing with the <span>D</span>irac Operator.”</span> In <em>Asilomar Conference on Signals, Systems, and Computers</em>.
+</div>
+<div id="ref-carlsson2006algebraic" class="csl-entry">
+Carlsson, Erik, Gunnar Carlsson, and Vin De Silva. 2006. <span>“An Algebraic Topological Method for Feature Identification.”</span> <em>International Journal of Computational Geometry &amp; Applications</em> 16 (04): 291–314.
+</div>
+<div id="ref-carlsson2009topology" class="csl-entry">
+Carlsson, Gunnar. 2009. <span>“Topology and Data.”</span> <em>Bulletin of the American Mathematical Society</em> 46 (2): 255–308.
+</div>
+<div id="ref-carlsson2020topological" class="csl-entry">
+Carlsson, Gunnar, and Rickard Brüel Gabrielsson. 2020. <span>“Topological Approaches to Deep Learning.”</span> In <em>Topological Data Analysis: The Abel Symposium 2018</em>, 119–46. Springer; Springer.
+</div>
+<div id="ref-carlsson2008local" class="csl-entry">
+Carlsson, Gunnar, Tigran Ishkhanov, Vin De Silva, and Afra Zomorodian. 2008. <span>“On the Local Behavior of Spaces of Natural Images.”</span> <em>Ijcv</em> 76 (1): 1–12.
+</div>
+<div id="ref-carlsson2008persistent" class="csl-entry">
+Carlsson, Gunnar, and Facundo Mémoli. 2008. <span>“Persistent Clustering and a Theorem of <span>J. K</span>leinberg.”</span> <em>arXiv Preprint arXiv:0808.2241</em>.
+</div>
+<div id="ref-carlsson2009theory" class="csl-entry">
+Carlsson, Gunnar, and Afra Zomorodian. 2009. <span>“The Theory of Multidimensional Persistence.”</span> <em>Discrete &amp; Computational Geometry</em> 42 (1): 71–93.
+</div>
+<div id="ref-carlsson2005persistence" class="csl-entry">
+Carlsson, Gunnar, Afra Zomorodian, Anne Collins, and Leonidas J Guibas. 2005. <span>“Persistence Barcodes for Shapes.”</span> <em>International Journal of Shape Modeling</em> 11 (02): 149–87.
+</div>
+<div id="ref-carr2004simplifying" class="csl-entry">
+Carr, Hamish, Jack Snoeyink, and Michiel van de Panne. 2004. <span>“Simplifying Flexible Isosurfaces Using Local Geometric Measures.”</span> In <em><span>IEEE</span> Visualization</em>, 497–504. IEEE.
+</div>
+<div id="ref-carriere_perslay_2020" class="csl-entry">
+Carriere, Mathieu, Frederic Chazal, Yuichi Ike, Theo Lacombe, Martin Royer, and Yuhei Umeda. 2020. <span>“<span>PersLay</span>: A Neural Network Layer for Persistence Diagrams and New Graph Topological Signatures.”</span> In <em>Proceedings of the <span>Twenty</span> <span>Third</span> <span>International</span> <span>Conference</span> on <span>Artificial</span> <span>Intelligence</span> and <span>Statistics</span></em>, 2786–96. PMLR.
+</div>
+<div id="ref-CarstensHoradam2013" class="csl-entry">
+Carstens, C. J., and K. J. Horadam. 2013. <span>“Persistent Homology of Collaboration Networks.”</span> <em>Mathematical Problems in Engineering</em> 2013.
+</div>
+<div id="ref-chan2013topology" class="csl-entry">
+Chan, Joseph Minhow, Gunnar Carlsson, and Raul Rabadan. 2013. <span>“Topology of Viral Evolution.”</span> <em>Proceedings of the National Academy of Sciences</em> 110 (46): 18566–71.
+</div>
+<div id="ref-chang2022graphrr" class="csl-entry">
+Chang, Yaomin, Lin Shu, Erxin Du, Chuan Chen, Ziyang Zhang, Zibin Zheng, Yuzhao Huang, and Xingxing Xing. 2022. <span>“Graph<span>RR</span>: A Multiplex Graph Based Reciprocal Friend Recommender System with Applications on Online Gaming Service.”</span> <em>Knowledge-Based Systems</em> 251: 109187.
+</div>
+<div id="ref-chaudhari2021attentive" class="csl-entry">
+Chaudhari, Sneha, Varun Mithal, Gungor Polatkan, and Rohan Ramanath. 2021. <span>“An Attentive Survey of Attention Models.”</span> <em>ACM Transactions on Intelligent Systems and Technology (TIST)</em> 12 (5): 1–32.
+</div>
+<div id="ref-chen2015statistical" class="csl-entry">
+Chen, Yen-Chi, Daren Wang, Alessandro Rinaldo, and Larry Wasserman. 2015. <span>“Statistical Analysis of Persistence Intensity Functions.”</span> <em>arXiv Preprint arXiv:1510.02502</em>.
+</div>
+<div id="ref-chen2021bscnets" class="csl-entry">
+Chen, Yuzhou, Yulia R. Gel, and H. Vincent Poor. 2022. <span>“<span>BS</span>c<span>N</span>ets: Block Simplicial Complex Neural Networks.”</span> <em>Proceedings of the AAAI Conference on Artificial Intelligence</em> 36 (6): 6333–41. <a href="https://doi.org/10.1609/aaai.v36i6.20583">https://doi.org/10.1609/aaai.v36i6.20583</a>.
+</div>
+<div id="ref-cinque2022pooling" class="csl-entry">
+Cinque, Domenico Mattia, Claudio Battiloro, and Paolo Di Lorenzo. 2022. <span>“Pooling Strategies for Simplicial Convolutional Networks.”</span> <em>arXiv Preprint arXiv:2210.05490</em>.
+</div>
+<div id="ref-clough2019explicit" class="csl-entry">
+Clough, James R., Ilkay Oksuz, Nicholas Byrne, Julia A. Schnabel, and Andrew P. King. 2019. <span>“Explicit Topological Priors for Deep-Learning Based Image Segmentation Using Persistent Homology.”</span> In <em>Information Processing in Medical Imaging: 26th International Conference, IPMI 2019, Hong Kong, China, June 2–7, 2019, Proceedings 26</em>, 16–28. Springer.
+</div>
+<div id="ref-collins2004barcode" class="csl-entry">
+Collins, Anne, Afra Zomorodian, Gunnar Carlsson, and Leonidas J Guibas. 2004. <span>“A Barcode Shape Descriptor for Curve Point Cloud Data.”</span> <em>Computers &amp; Graphics</em> 28 (6): 881–94.
+</div>
+<div id="ref-curto2017can" class="csl-entry">
+Curto, Carina. 2017. <span>“What Can Topology Tell Us about the Neural Code?”</span> <em>Bulletin of the American Mathematical Society</em> 54 (1): 63–78.
+</div>
+<div id="ref-DabaghianMemoliFrank2012" class="csl-entry">
+Dabaghian, Y., F. Mémoli, L. Frank, and G. Carlsson. 2012. <span>“A Topological Paradigm for Hippocampal Spatial Map Formation Using Persistent Homology.”</span> <em>PLoS Computational Biology</em> 8 (8): e1002581.
+</div>
+<div id="ref-dai2021nrgnn" class="csl-entry">
+Dai, Enyan, Charu Aggarwal, and Suhang Wang. 2021. <span>“<span>NRGNN</span>: Learning a Label Noise Resistant Graph Neural Network on Sparsely and Noisily Labeled Graphs.”</span> In <em>Proceedings of the 27th ACM SIGKDD Conference on Knowledge Discovery &amp; Data Mining</em>, 227–36.
+</div>
+<div id="ref-de2017multilayer" class="csl-entry">
+De Domenico, Manlio. 2017. <span>“<span class="nocase">Multilayer modeling and analysis of human brain networks</span>.”</span> <em>GigaScience</em> 6 (5). <a href="https://doi.org/10.1093/gigascience/gix004">https://doi.org/10.1093/gigascience/gix004</a>.
+</div>
+<div id="ref-dewoskin2010applications" class="csl-entry">
+DeWoskin, D., J. Climent, I. Cruz-White, M. Vazquez, C. Park, and J. Arsuaga. 2010. <span>“Applications of Computational Homology to the Analysis of Treatment Response in Breast Cancer Patients.”</span> <em>Topology and Its Applications</em> 157 (1): 157–64.
+</div>
+<div id="ref-DW22" class="csl-entry">
+———. 2022b. <em>Computational Topology for Data Analysis</em>. Cambridge University Press.
+</div>
+<div id="ref-dhillon2007weighted" class="csl-entry">
+Dhillon, Inderjit S., Yuqiang Guan, and Brian Kulis. 2007. <span>“Weighted Graph Cuts Without Eigenvectors a Multilevel Approach.”</span> <em>Pami</em> 29 (11): 1944–57.
+</div>
+<div id="ref-ebli2020simplicial" class="csl-entry">
+Ebli, Stefania, Michaël Defferrard, and Gard Spreemann. 2020. <span>“Simplicial Neural Networks.”</span> <em>NeurIPS Workshop on Topological Data Analysis and Beyond</em>.
+</div>
+<div id="ref-edelsbrunner2010computational" class="csl-entry">
+Edelsbrunner, Herbert, and John Harer. 2010. <em>Computational Topology: An Introduction</em>. American Mathematical Soc.
+</div>
+<div id="ref-edelsbrunner2004time" class="csl-entry">
+Edelsbrunner, Herbert, John Harer, Ajith Mascarenhas, and Valerio Pascucci. 2004. <span>“Time-Varying <span>R</span>eeb Graphs for Continuous Space-Time Data.”</span> In <em>Proceedings of the Twentieth Annual Symposium on Computational Geometry</em>, 366–72. ACM.
+</div>
+<div id="ref-elhamdadi2021affectivetda" class="csl-entry">
+Elhamdadi, Hamza, Shaun Canavan, and Paul Rosen. 2021. <span>“Affective<span>TDA</span>: Using Topological Data Analysis to Improve Analysis and Explainability in Affective Computing.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 28 (1): 769–79.
+</div>
+<div id="ref-feng2019hypergraph" class="csl-entry">
+Feng, Yifan, Haoxuan You, Zizhao Zhang, Rongrong Ji, and Yue Gao. 2019. <span>“Hypergraph Neural Networks.”</span> <em>Proceedings of the AAAI Conference on Artificial Intelligence</em> 33 (01): 3558–65.
+</div>
+<div id="ref-bruel2019topology" class="csl-entry">
+Gabrielsson, Rickard Brüel, Bradley J. Nelson, Anjan Dwaraknath, and Primoz Skraba. 2020. <span>“A Topology Layer for Machine Learning.”</span> In <em>Proceedings of the Twenty Third International Conference on Artificial Intelligence and Statistics</em>, edited by Silvia Chiappa and Roberto Calandra, 108:1553–63. #PMLR#. PMLR.
+</div>
+<div id="ref-gallier2016spectral" class="csl-entry">
+Gallier, Jean. 2016. <span>“Spectral Theory of Unsigned and Signed Graphs. Applications to Graph Clustering: A Survey.”</span> <em>arXiv Preprint arXiv:1601.04692</em>.
+</div>
+<div id="ref-gao2019graph" class="csl-entry">
+Gao, Hongyang, and Shuiwang Ji. 2019. <span>“Graph <span>U</span>-<span>N</span>ets.”</span> In <em>Icml</em>, 2083–92. PMLR.
+</div>
+<div id="ref-gao2021topology" class="csl-entry">
+Gao, Hongyang, Yi Liu, and Shuiwang Ji. 2021. <span>“Topology-Aware Graph Pooling Networks.”</span> <em>Pami</em> 43 (12): 4512–18.
+</div>
+<div id="ref-gao2022hgnn" class="csl-entry">
+Gao, Yue, Yifan Feng, Shuyi Ji, and Rongrong Ji. 2022. <span>“<span>HGNN</span>+: General Hypergraph Neural Networks.”</span> <em>IEEE Transactions on Pattern Analysis and Machine Intelligence</em>.
+</div>
+<div id="ref-gao2020hypergraph" class="csl-entry">
+Gao, Yue, Zizhao Zhang, Haojie Lin, Xibin Zhao, Shaoyi Du, and Changqing Zou. 2020. <span>“Hypergraph Learning: Methods and Practices.”</span> <em>IEEE Transactions on Pattern Analysis and Machine Intelligence</em>.
+</div>
+<div id="ref-georgiev2022heat" class="csl-entry">
+Georgiev, Dobrik, Marc Brockschmidt, and Miltiadis Allamanis. 2022. <span>“<span>HEAT</span>: Hyperedge Attention Networks.”</span> <em>Transactions on Machine Learning Research</em>.
+</div>
+<div id="ref-ghrist2014elementary" class="csl-entry">
+Ghrist, Robert W. 2014. <em>Elementary Applied Topology</em>. Vol. 1. Createspace Seattle.
+</div>
+<div id="ref-gilmer2017neural" class="csl-entry">
+Gilmer, Justin, Samuel S Schoenholz, Patrick F Riley, Oriol Vinyals, and George E Dahl. 2017. <span>“Neural Message Passing for Quantum Chemistry.”</span> In <em>International Conference on Machine Learning</em>.
+</div>
+<div id="ref-giusti2016two" class="csl-entry">
+Giusti, Chad, Robert Ghrist, and Danielle S. Bassett. 2016. <span>“Two’s Company, Three (or More) Is a Simplex: Algebraic-Topological Tools for Understanding Higher-Order Structure in Neural Data.”</span> <em>Journal of Computational Neuroscience</em> 41: 1.
+</div>
+<div id="ref-giusti2022simplicial" class="csl-entry">
+Giusti, Lorenzo, Claudio Battiloro, Paolo Di Lorenzo, Stefania Sardellitti, and Sergio Barbarossa. 2022. <span>“Simplicial Attention Networks.”</span> <em>arXiv Preprint arXiv:2203.07485</em>.
+</div>
+<div id="ref-giusti2022cell" class="csl-entry">
+Giusti, Lorenzo, Claudio Battiloro, Lucia Testa, Paolo Di Lorenzo, Stefania Sardellitti, and Sergio Barbarossa. 2022. <span>“Cell Attention Networks.”</span> <em>arXiv Preprint arXiv:2209.08179</em>.
+</div>
+<div id="ref-goh2022simplicial" class="csl-entry">
+Goh, Christopher Wei Jin, Cristian Bodnar, and Pietro Lio. 2022. <span>“Simplicial Attention Networks.”</span> In <em>ICLR 2022 Workshop on Geometrical and Topological Representation Learning</em>.
+</div>
+<div id="ref-gong2023generative" class="csl-entry">
+Gong, Xue, Desmond J. Higham, and Konstantinos Zygalakis. 2023. <span>“Generative Hypergraph Models and Spectral Embedding.”</span> <em>Scientific Reports</em> 13 (1): 540.
+</div>
+<div id="ref-goyal2018graph" class="csl-entry">
+Goyal, Palash, and Emilio Ferrara. 2018. <span>“Graph Embedding Techniques, Applications, and Performance: A Survey.”</span> <em>Knowledge-Based Systems</em> 151: 78–94.
+</div>
+<div id="ref-grattarola2022understanding" class="csl-entry">
+Grattarola, Daniele, Daniele Zambon, Filippo Maria Bianchi, and Cesare Alippi. 2022. <span>“Understanding Pooling in Graph Neural Networks.”</span> <em>IEEE Transactions on Neural Networks and Learning Systems</em>.
+</div>
+<div id="ref-hajijcell" class="csl-entry">
+Hajij, Mustafa, Kyle Istvan, and Ghada Zamzmi. 2020. <span>“Cell Complex Neural Networks.”</span> In <em>NeurIPS 2020 Workshop TDA and Beyond</em>.
+</div>
+<div id="ref-hajij2022high" class="csl-entry">
+Hajij, Mustafa, Karthikeyan Natesan Ramamurthy, Aldo Saenz, and Ghada Zamzmi. 2022. <span>“High Skip Networks: A Higher Order Generalization of Skip Connections.”</span> In <em>ICLR 2022 Workshop on Geometrical and Topological Representation Learning</em>.
+</div>
+<div id="ref-hajij2020efficient" class="csl-entry">
+Hajij, Mustafa, and Paul Rosen. 2020. <span>“An Efficient Data Retrieval Parallel <span>R</span>eeb Graph Algorithm.”</span> <em>Algorithms</em> 13 (10): 258.
+</div>
+<div id="ref-halaoui2010smart" class="csl-entry">
+Halaoui, Hatem F. 2010. <span>“Smart Traffic Online System (<span>STOS</span>): Presenting Road Networks with Time-Weighted Graphs.”</span> In <em>2010 International Conference on Information Society</em>, 349–56. IEEE.
+</div>
+<div id="ref-hatcher2005algebraic" class="csl-entry">
+Hatcher, Allen. 2005. <em>Algebraic Topology</em>. Cambridge University Press.
+</div>
+<div id="ref-hayhoe2022stable" class="csl-entry">
+Hayhoe, Mikhail, Hans Riess, Victor M Preciado, and Alejandro Ribeiro. 2022. <span>“Stable and Transferable Hyper-Graph Neural Networks.”</span> <em>arXiv Preprint arXiv:2211.06513</em>.
+</div>
+<div id="ref-he2016deep" class="csl-entry">
+He, Kaiming, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. 2016. <span>“Deep Residual Learning for Image Recognition.”</span> In <em>2016 <span>IEEE</span> <span>C</span>onference on <span>C</span>omputer <span>V</span>ision and <span>P</span>attern <span>R</span>ecognition (<span>CVPR</span>)</em>, 770–78. <a href="https://doi.org/10.1109/CVPR.2016.90">https://doi.org/10.1109/CVPR.2016.90</a>.
+</div>
+<div id="ref-hensel2021survey" class="csl-entry">
+Hensel, Felix, Michael Moor, and Bastian Rieck. 2021. <span>“A Survey of Topological Machine Learning Methods.”</span> <em>Frontiers in Artificial Intelligence</em> 4: 681108.
+</div>
+<div id="ref-hofer2020graph" class="csl-entry">
+Hofer, Christoph, Florian Graf, Bastian Rieck, Marc Niethammer, and Roland Kwitt. 2020. <span>“Graph Filtration Learning.”</span> In <em>International Conference on Machine Learning</em>, 4314–23. PMLR.
+</div>
+<div id="ref-hofer2017deep" class="csl-entry">
+Hofer, Christoph, Roland Kwitt, Marc Niethammer, and Andreas Uhl. 2017. <span>“Deep Learning with Topological Signatures.”</span> In <em>Neurips</em>, 1634–44.
+</div>
+<div id="ref-HorakMaleticRajkovic2009" class="csl-entry">
+Horak, Danijela, Slobodan Maletić, and Milan Rajković. 2009. <span>“Persistent Homology of Complex Networks.”</span> <em>Journal of Statistical Mechanics: Theory and Experiment</em>, P03034.
+</div>
+<div id="ref-hu_topology-preserving_2019" class="csl-entry">
+Hu, Xiaoling, Fuxin Li, Dimitris Samaras, and Chao Chen. 2019. <span>“Topology-Preserving Deep Image Segmentation.”</span> In <em>Advances in <span>Neural</span> <span>Information</span> <span>Processing</span> <span>Systems</span></em>. Vol. 32. Curran Associates, Inc.
+</div>
+<div id="ref-hu_trigger_2022" class="csl-entry">
+Hu, Xiaoling, Xiao Lin, Michael Cogswell, Yi Yao, Susmit Jha, and Chao Chen. 2022. <span>“Trigger Hunting with a Topological Prior for <span>T</span>rojan Detection.”</span> In <em>International Conference on Learning Representations</em>.
+</div>
+<div id="ref-huang2019attpool" class="csl-entry">
+Huang, Jingjia, Zhangheng Li, Nannan Li, Shan Liu, and Ge Li. 2019. <span>“Att<span>P</span>ool: Towards Hierarchical Feature Representation in Graph Convolutional Networks via Attention Mechanism.”</span> In <em>Iccv</em>, 6480–89.
+</div>
+<div id="ref-huang2021unignn" class="csl-entry">
+Huang, Jing, and Jie Yang. 2021. <span>“Uni<span>GNN</span>: A Unified Framework for Graph and Hypergraph Neural Networks.”</span> In <em>Proceedings of the Thirtieth International Joint Conference on Artificial Intelligence, <span>IJCAI</span></em>.
+</div>
+<div id="ref-jha2022prediction" class="csl-entry">
+Jha, Kanchan, Sriparna Saha, and Hiteshi Singh. 2022. <span>“Prediction of Protein–Protein Interaction Using Graph Neural Networks.”</span> <em>Scientific Reports</em> 12 (1): 1–12.
+</div>
+<div id="ref-jiang2019dynamic" class="csl-entry">
+Jiang, Jianwen, Yuxuan Wei, Yifan Feng, Jingxuan Cao, and Yue Gao. 2019. <span>“Dynamic Hypergraph Neural Networks.”</span> In <em>IJCAI</em>, 2635–41.
+</div>
+<div id="ref-keros2021dist2cycle" class="csl-entry">
+Keros, Alexandros D., Vidit Nanda, and Kartic Subr. 2022. <span>“Dist2Cycle: A Simplicial Neural Network for Homology Localization.”</span> <em>Proceedings of the AAAI Conference on Artificial Intelligence</em> 36 (7): 7133–42. <a href="https://doi.org/10.1609/aaai.v36i7.20673">https://doi.org/10.1609/aaai.v36i7.20673</a>.
+</div>
+<div id="ref-kim2020hypergraph" class="csl-entry">
+Kim, Eun-Sol, Woo Young Kang, Kyoung-Woon On, Yu-Jung Heo, and Byoung-Tak Zhang. 2020. <span>“Hypergraph Attention Networks for Multimodal Learning.”</span> In <em>Cvpr</em>, 14581–90.
+</div>
+<div id="ref-kim2020pllay" class="csl-entry">
+Kim, Kwangho, Jisu Kim, Manzil Zaheer, Joon Kim, Frédéric Chazal, and Larry Wasserman. 2020. <span>“Pllay: Efficient Topological Layer Based on Persistent Landscapes.”</span> <em>Advances in Neural Information Processing Systems</em> 33: 15965–77.
+</div>
+<div id="ref-kivela2014multilayer" class="csl-entry">
+Kivelä, Mikko, Alex Arenas, Marc Barthelemy, James P Gleeson, Yamir Moreno, and Mason A Porter. 2014. <span>“Multilayer Networks.”</span> <em>Journal of Complex Networks</em> 2 (3): 203–71.
+</div>
+<div id="ref-knoke2019social" class="csl-entry">
+Knoke, David, and Song Yang. 2019. <em>Social Network Analysis</em>. SAGE publications.
+</div>
+<div id="ref-kunegis2010spectral" class="csl-entry">
+Kunegis, Jérôme, Stephan Schmidt, Andreas Lommatzsch, Jürgen Lerner, Ernesto W De Luca, and Sahin Albayrak. 2010. <span>“Spectral Analysis of Signed Graphs for Clustering, Prediction and Visualization.”</span> In <em>Proceedings of the 2010 SIAM International Conference on Data Mining</em>, 559–70. SIAM.
+</div>
+<div id="ref-kusano2016persistence" class="csl-entry">
+Kusano, Genki, Yasuaki Hiraoka, and Kenji Fukumizu. 2016. <span>“Persistence Weighted <span>G</span>aussian Kernel for Topological Data Analysis.”</span> In <em>Icml</em>, 2004–13.
+</div>
+<div id="ref-kushnir2006fast" class="csl-entry">
+Kushnir, Dan, Meirav Galun, and Achi Brandt. 2006. <span>“Fast Multiscale Clustering and Manifold Identification.”</span> <em>Pattern Recognition</em> 39 (10): 1876–91.
+</div>
+<div id="ref-kweon1994extracting" class="csl-entry">
+Kweon, In So, and Takeo Kanade. 1994. <span>“Extracting Topographic Terrain Features from Elevation Maps.”</span> <em>CVGIP: Image Understanding</em> 59 (2): 171–82.
+</div>
+<div id="ref-LeeChungKang2011b" class="csl-entry">
+Lee, Hyekyoung, Moo K. Chung, Hyejin Kang, Boong-Nyun Kim, and Dong Soo Lee. 2011a. <span>“Computing the Shape of Brain Networks Using Graph Filtration and Gromov-Hausdorff Metric.”</span> <em>International Conference on Medical Image Computing and Computer Assisted Intervention</em>, 302–9.
+</div>
+<div id="ref-LeeChungKang2011" class="csl-entry">
+Lee, Hyekyoung, Moo K. Chung, Hyejin Kang, Bung-Nyun Kim, and Dong Soo Lee. 2011b. <span>“Discriminative Persistent Homology of Brain Networks.”</span> <em><span>IEEE</span> International Symposium on Biomedical Imaging: From Nano to Macro</em>, 841–44.
+</div>
+<div id="ref-LeeKangChung2012" class="csl-entry">
+Lee, Hyekyoung, Hyejin Kang, Moo K. Chung, Bung-Nyun Kim, and Dong Soo Lee. 2012a. <span>“Persistent Brain Network Homology from the Perspective of Dendrogram.”</span> <em><span>IEEE</span> Transactions on Medical Imaging</em> 31 (12): 2267–77.
+</div>
+<div id="ref-LeeKangChung2012b" class="csl-entry">
+———. 2012b. <span>“Weighted Functional Brain Network Modeling via Network Filtration.”</span> <em>NIPS Workshop on Algebraic Topology and Machine Learning</em>.
+</div>
+<div id="ref-boaz2019" class="csl-entry">
+Lee, John Boaz, Ryan A Rossi, Sungchul Kim, Nesreen K Ahmed, and Eunyee Koh. 2019. <span>“Attention Models in Graphs: A Survey.”</span> <em>ACM Transactions on Knowledge Discovery from Data</em> 13 (6): 1–25.
+</div>
+<div id="ref-lee2019self" class="csl-entry">
+Lee, Junhyun, Inyeop Lee, and Jaewoo Kang. 2019. <span>“Self-Attention Graph Pooling.”</span> In <em>Icml</em>, 3734–43. PMLR.
+</div>
+<div id="ref-leventhal2023exploring" class="csl-entry">
+Leventhal, Samuel, Attila Gyulassy, Mark Heimann, and Valerio Pascucci. 2023. <span>“Exploring Classification of Topological Priors with Machine Learning for Feature Extraction.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em>.
+</div>
+<div id="ref-li2020graph" class="csl-entry">
+Li, Juanhui, Yao Ma, Yiqi Wang, Charu Aggarwal, Chang-Dong Wang, and Jiliang Tang. 2020. <span>“Graph Pooling with Representativeness.”</span> In <em>2020 IEEE International Conference on Data Mining (ICDM)</em>, 302–11. IEEE.
+</div>
+<div id="ref-lim2020hodge" class="csl-entry">
+Lim, Lek-Heng. 2020. <span>“<span>H</span>odge <span>L</span>aplacians on Graphs.”</span> <em><span>SIAM</span> Review</em> 62 (3): 685–715.
+</div>
+<div id="ref-linka2020outbreak" class="csl-entry">
+Linka, Kevin, Mathias Peirlinck, Francisco Sahli Costabal, and Ellen Kuhl. 2020. <span>“Outbreak Dynamics of <span>COVID</span>-19 in <span>E</span>urope and the Effect of Travel Restrictions.”</span> <em>Computer Methods in Biomechanics and Biomedical Engineering</em> 23 (11): 710–17.
+</div>
+<div id="ref-lo2016modeling" class="csl-entry">
+Lo, Derek, and Briton Park. 2016. <span>“Modeling the Spread of the <span>Z</span>ika Virus Using Topological Data Analysis.”</span> <em>arXiv Preprint arXiv:1612.03554</em>.
+</div>
+<div id="ref-love2023topological" class="csl-entry">
+Love, Ephy R., Benjamin Filippenko, Vasileios Maroulas, and Gunnar Carlsson. 2023a. <span>“Topological Convolutional Layers for Deep Learning.”</span> <em>Jmlr</em> 24 (59): 1–35.
+</div>
+<div id="ref-love2020topological" class="csl-entry">
+———. 2023b. <span>“Topological Convolutional Layers for Deep Learning.”</span> <em>Jmlr</em> 24 (59): 1–35.
+</div>
+<div id="ref-lum2013extracting" class="csl-entry">
+Lum, P. Y., G. Singh, A. Lehman, T. Ishkanov, Mikael Vejdemo-Johansson, M. Alagappan, J. Carlsson, and G. Carlsson. 2013. <span>“Extracting Insights from the Shape of Complex Data Using Topology.”</span> <em>Scientific Reports</em> 3: 1236.
+</div>
+<div id="ref-ma2019graph" class="csl-entry">
+Ma, Yao, Suhang Wang, Charu C Aggarwal, and Jiliang Tang. 2019. <span>“Graph Convolutional Networks with Eigenpooling.”</span> In <em>Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery &amp; Data Mining</em>, 723–31.
+</div>
+<div id="ref-majhi2022dynamics" class="csl-entry">
+Majhi, Soumen, Matjaž Perc, and Dibakar Ghosh. 2022. <span>“Dynamics on Higher-Order Networks: A Review.”</span> <em>Journal of the Royal Society Interface</em> 19 (188): 20220043.
+</div>
+<div id="ref-maletic2016persistent" class="csl-entry">
+Maletić, Slobodan, Yi Zhao, and Milan Rajković. 2016. <span>“Persistent Topological Features of Dynamical Systems.”</span> <em>Chaos: An Interdisciplinary Journal of Nonlinear Science</em> 26 (5): 053105.
+</div>
+<div id="ref-manriquez2021protection" class="csl-entry">
+Manrı́quez, Ronald, Camilo Guerrero-Nancuante, and Carla Taramasco. 2021. <span>“Protection Strategy Against an Epidemic Disease on Edge-Weighted Graphs Applied to a <span>COVID</span>-19 Case.”</span> <em>Biology</em> 10 (7): 667.
+</div>
+<div id="ref-mendel1991tutorial" class="csl-entry">
+Mendel, Jerry M. 1991. <span>“Tutorial on Higher-Order Statistics (Spectra) in Signal Processing and System Theory: Theoretical Results and Some Applications.”</span> <em>Proceedings of the IEEE</em> 79 (3): 278–305.
+</div>
+<div id="ref-mesquita2020rethinking" class="csl-entry">
+Mesquita, Diego, Amauri Souza, and Samuel Kaski. 2020. <span>“Rethinking Pooling in Graph Neural Networks.”</span> <em>Neurips</em> 33: 2220–31.
+</div>
+<div id="ref-mitchell2022topological" class="csl-entry">
+Mitchell, Edward C., Brittany Story, David Boothe, Piotr J. Franaszczuk, and Vasileios Maroulas. 2022. <span>“A Topological Deep Learning Framework for Neural Spike Decoding.”</span> <em>arXiv Preprint arXiv:2212.05037</em>.
+</div>
+<div id="ref-moor2020topological" class="csl-entry">
+Moor, Michael, Max Horn, Bastian Rieck, and Karsten Borgwardt. 2020. <span>“Topological Autoencoders.”</span> In <em>International Conference on Machine Learning</em>, 7045–54. PMLR.
+</div>
+<div id="ref-morris2019weisfeiler" class="csl-entry">
+Morris, Christopher, Martin Ritzert, Matthias Fey, William L. Hamilton, Jan Eric Lenssen, Gaurav Rattan, and Martin Grohe. 2019. <span>“Weisfeiler and <span>L</span>eman Go Neural: Higher-Order Graph Neural Networks.”</span> In <em>Proceedings of the AAAI Conference on Artificial Intelligence</em>.
+</div>
+<div id="ref-nicolau2011topology" class="csl-entry">
+Nicolau, Monica, Arnold J. Levine, and Gunnar Carlsson. 2011. <span>“Topology Based Data Analysis Identifies a Subgroup of Breast Cancers with a Unique Mutational Profile and Excellent Survival.”</span> <em>Proceedings of the National Academy of Sciences</em> 108 (17): 7265–70.
+</div>
+<div id="ref-pang2021graph" class="csl-entry">
+Pang, Yunsheng, Yunxiang Zhao, and Dongsheng Li. 2021. <span>“Graph Pooling via Coarsened Graph Infomax.”</span> In <em>Proceedings of the 44th International ACM SIGIR Conference on Research and Development in Information Retrieval</em>, 2177–81.
+</div>
+<div id="ref-mathilde2023" class="csl-entry">
+Papillon, Mathilde, Sophia Sanborn, Mustafa Hajij, and Nina Miolane. 2023. <span>“Architectures of Topological Deep Learning: A Survey on Topological Neural Networks.”</span> <em>arXiv Preprint arXiv:2304.10031</em>.
+</div>
+<div id="ref-perea2015sw1pers" class="csl-entry">
+Perea, Jose A., Anastasia Deckard, Steve B. Haase, and John Harer. 2015. <span>“<span>SW</span>1<span>P</span>er<span>S</span>: Sliding Windows and 1-Persistence Scoring; Discovering Periodicity in Gene Expression Time Series Data.”</span> <em>BMC Bioinformatics</em> 16 (1): 257.
+</div>
+<div id="ref-PetriScolamieroDonato2013" class="csl-entry">
+Petri, Giovanni, Martina Scolamiero, Irene Donato, and Francesco Vaccarino. 2013a. <span>“Networks and Cycles: A Persistent Homology Approach to Complex Networks.”</span> <em>Proceedings European Conference on Complex Systems 2012, Springer Proceedings in Complexity</em>, 93–99.
+</div>
+<div id="ref-PetriScolamieroDonato2013b" class="csl-entry">
+———. 2013b. <span>“Topological Strata of Weighted Complex Networks.”</span> <em>PLoS ONE</em> 8 (6).
+</div>
+<div id="ref-piaggesi2022effective" class="csl-entry">
+Piaggesi, Simone, André Panisson, and Giovanni Petri. 2022. <span>“Effective Higher-Order Link Prediction and Reconstruction from Simplicial Complex Embeddings.”</span> In <em>Learning on Graphs Conference</em>, 55–51. PMLR.
+</div>
+<div id="ref-plizzari2021spatial" class="csl-entry">
+Plizzari, Chiara, Marco Cannici, and Matteo Matteucci. 2021. <span>“Spatial Temporal Transformer Network for Skeleton-Based Action Recognition.”</span> In <em>Icpr</em>, 694–701. Springer.
+</div>
+<div id="ref-pun2018persistent" class="csl-entry">
+Pun, Chi Seng, Kelin Xia, and Si Xian Lee. 2018. <span>“Persistent-Homology-Based Machine Learning and Its Applications–a Survey.”</span> <em>arXiv Preprint arXiv:1811.00252</em>.
+</div>
+<div id="ref-reddy2023clustering" class="csl-entry">
+Reddy, Thummaluru Siddartha, Sundeep Prabhakar Chepuri, and Pierre Borgnat. 2023. <span>“Clustering with Simplicial Complexes.”</span> <em>arXiv Preprint arXiv:2303.07646</em>.
+</div>
+<div id="ref-rieck2019persistent" class="csl-entry">
+Rieck, Bastian, Christian Bock, and Karsten Borgwardt. 2019. <span>“A Persistent <span>W</span>eisfeiler-<span>L</span>ehman Procedure for Graph Classification.”</span> In <em>International Conference on Machine Learning</em>, 5448–58. PMLR.
+</div>
+<div id="ref-rieck2015persistent" class="csl-entry">
+Rieck, Bastian, and Heike Leitte. 2015. <span>“Persistent Homology for the Evaluation of Dimensionality Reduction Schemes.”</span> <em>Computer Graphics Forum</em> 34 (3): 431–40.
+</div>
+<div id="ref-rieck_uncovering_2020" class="csl-entry">
+Rieck, Bastian, Tristan Yates, Christian Bock, Karsten Borgwardt, Guy Wolf, Nick Turk-Browne, and Smita Krishnaswamy. 2020. <span>“Uncovering the Topology of Time-Varying <span class="nocase">fMRI</span> Data Using Cubical Persistence.”</span> In <em>Advances in <span>Neural</span> <span>Information</span> <span>Processing</span> <span>Systems</span> (<span>NeurIPS</span>)</em>, edited by H. Larochelle, M. Ranzato, R. Hadsell, M. F. Balcan, and H. Lin, 33:6900–6912. Curran Associates, Inc.
+</div>
+<div id="ref-roddenberry2019hodgenet" class="csl-entry">
+Roddenberry, T Mitchell, and Santiago Segarra. 2019. <span>“Hodge<span>N</span>et: Graph Neural Networks for Edge Data.”</span> In <em>2019 53rd Asilomar Conference on Signals, Systems, and Computers</em>, 220–24. IEEE.
+</div>
+<div id="ref-roddenberry2021principled" class="csl-entry">
+Roddenberry, T. Mitchell, Nicholas Glaze, and Santiago Segarra. 2021. <span>“Principled Simplicial Neural Networks for Trajectory Prediction.”</span> In <em>International Conference on Machine Learning</em>.
+</div>
+<div id="ref-roddenberry2021signal" class="csl-entry">
+Roddenberry, T. Mitchell, Michael T. Schaub, and Mustafa Hajij. 2022. <span>“Signal Processing on Cell Complexes.”</span> In <em>IEEE International Conference on Acoustics, Speech and Signal Processing</em>.
+</div>
+<div id="ref-ronneberger2015u" class="csl-entry">
+Ronneberger, Olaf, Philipp Fischer, and Thomas Brox. 2015. <span>“U-<span>N</span>et: Convolutional Networks for Biomedical Image Segmentation.”</span> In <em>International Conference on Medical Image Computing and Computer-Assisted Intervention</em>, 234–41. Springer.
+</div>
+<div id="ref-rosen2017using" class="csl-entry">
+Rosen, Paul, Bei Wang, Anil Seth, Betsy Mills, Adam Ginsburg, Julia Kamenetzky, Jeff Kern, and Chris R Johnson. 2017. <span>“Using Contour Trees in the Analysis and Visualization of Radio Astronomy Data Cubes.”</span> <em>arXiv Preprint arXiv:1704.04561</em>, 1–7.
+</div>
+<div id="ref-santoro2023higher" class="csl-entry">
+Santoro, Andrea, Federico Battiston, Giovanni Petri, and Enrico Amico. 2023. <span>“Higher-Order Organization of Multivariate Time Series.”</span> <em>Nature Physics</em>, 1–9.
+</div>
+<div id="ref-sardellitti2022topological" class="csl-entry">
+Sardellitti, Stefania, and Sergio Barbarossa. 2022. <span>“Topological Signal Representation and Processing over Cell Complexes.”</span> <em>arXiv Preprint arXiv:2201.08993</em>.
+</div>
+<div id="ref-sardellitti2021topological" class="csl-entry">
+Sardellitti, Stefania, Sergio Barbarossa, and Lucia Testa. 2021. <span>“Topological Signal Processing over Cell Complexes.”</span> <em>Proceeding IEEE Asilomar Conference. Signals, Systems and Computers</em>.
+</div>
+<div id="ref-schaub2018denoising" class="csl-entry">
+Schaub, Michael T., and Santiago Segarra. 2018. <span>“Flow Smoothing and Denoising: Graph Signal Processing in the Edge-Space.”</span> In <em>2018 IEEE Global Conference on Signal and Information Processing (GlobalSIP)</em>, 735–39.
+</div>
+<div id="ref-schaub2021signal" class="csl-entry">
+Schaub, Michael T., Yu Zhu, Jean-Baptiste Seby, T. Mitchell Roddenberry, and Santiago Segarra. 2021. <span>“Signal Processing on Higher-Order Networks: Livin’on the Edge... And Beyond.”</span> <em>Signal Processing</em> 187: 108149.
+</div>
+<div id="ref-shi2018hypergraph" class="csl-entry">
+Shi, Heyuan, Yubo Zhang, Zizhao Zhang, Nan Ma, Xibin Zhao, Yue Gao, and Jiaguang Sun. 2018. <span>“Hypergraph-Induced Convolutional Networks for Visual Classification.”</span> <em>IEEE Transactions on Neural Networks and Learning Systems</em> 30 (10): 2963–72.
+</div>
+<div id="ref-singh2007topological" class="csl-entry">
+Singh, Gurjeet, Facundo Mémoli, Gunnar E Carlsson, et al. 2007. <span>“Topological Methods for the Analysis of High Dimensional Data Sets and 3d Object Recognition.”</span> <em>PBG@ Eurographics</em> 2: 091–100.
+</div>
+<div id="ref-tabassum2018social" class="csl-entry">
+Tabassum, Shazia, Fabiola SF Pereira, Sofia Fernandes, and João Gama. 2018. <span>“Social Network Analysis: An Overview.”</span> <em>Wiley Interdisciplinary Reviews: Data Mining and Knowledge Discovery</em> 8 (5): e1256.
+</div>
+<div id="ref-taylor2015topological" class="csl-entry">
+Taylor, Dane, Florian Klimm, Heather A Harrington, Miroslav Kramár, Konstantin Mischaikow, Mason A Porter, and Peter J Mucha. 2015. <span>“Topological Data Analysis of Contagion Maps for Examining Spreading Processes on Networks.”</span> <em>Nature Communications</em> 6: 7723.
+</div>
+<div id="ref-topaz2015topological" class="csl-entry">
+Topaz, Chad M, Lori Ziegelmeier, and Tom Halverson. 2015. <span>“Topological Data Analysis of Biological Aggregation Models.”</span> <em>PloS One</em> 10 (5): e0126383.
+</div>
+<div id="ref-turaev2016quantum" class="csl-entry">
+Turaev, Vladimir G. 2016. <em>Quantum Invariants of Knots and 3-Manifolds</em>. Vol. 18. Walter de Gruyter GmbH &amp; Co KG.
+</div>
+<div id="ref-umeda2017time" class="csl-entry">
+Umeda, Yuhei. 2017. <span>“Time Series Classification via Topological Data Analysis.”</span> <em>Information and Media Technologies</em> 12: 228–39.
+</div>
+<div id="ref-velickovic2017graph" class="csl-entry">
+Veličković, Petar, Guillem Cucurull, Arantxa Casanova, Adriana Romero, Pietro Lio, and Yoshua Bengio. 2018. <span>“Graph Attention Networks.”</span> In <em>International Conference on Learning Representations</em>.
+</div>
+<div id="ref-waibel_capturing_2022" class="csl-entry">
+Waibel, Dominik J. E., Scott Atwell, Matthias Meier, Carsten Marr, and Bastian Rieck. 2022. <span>“Capturing <span>Shape</span> <span>Information</span> with <span>Multi</span>-<span>Scale</span> <span>Topological</span> <span>Loss</span> <span>Terms</span> for <span>3D</span> <span>Reconstruction</span>.”</span> In <em>Medical <span>Image</span> <span>Computing</span> and <span>Computer</span> <span>Assisted</span> <span>Intervention</span> – <span>MICCAI</span> 2022</em>, edited by Linwei Wang, Qi Dou, P. Thomas Fletcher, Stefanie Speidel, and Shuo Li, 150–59. Lecture <span>Notes</span> in <span>Computer</span> <span>Science</span>. Cham: Springer Nature Switzerland. <a href="https://doi.org/10.1007/978-3-031-16440-8_15">https://doi.org/10.1007/978-3-031-16440-8_15</a>.
+</div>
+<div id="ref-wang2023survey" class="csl-entry">
+Wang, Cheng, Nan Ma, Zhixuan Wu, Jin Zhang, and Yongqiang Yao. 2023. <span>“Survey of Hypergraph Neural Networks and Its Application to Action Recognition.”</span> In <em>Artificial Intelligence: Second CAAI International Conference, CICAI 2022, Beijing, China, August 27–28, 2022, Revised Selected Papers, Part II</em>, 387–98. Springer.
+</div>
+<div id="ref-wangtopogan" class="csl-entry">
+Wang, Fan, Huidong Liu, Dimitris Samaras, and Chao Chen. 2020. <span>“Topogan: A Topology-Aware Generative Adversarial Network.”</span> In <em>Eccv</em>, 118–36. Springer.
+</div>
+<div id="ref-ELuYao2012" class="csl-entry">
+Weinan, E., Luan Jianfeng, and Yao Yuan. 2013. <span>“The Landscape of Complex Networks: Critical Nodes and a Hierarchical Decomposition.”</span> <em>Methods and Applications of Analysis</em> 20: 383–404.
+</div>
+<div id="ref-wu2022hypergraph" class="csl-entry">
+Wu, Hanrui, and Michael K. Ng. 2022. <span>“Hypergraph Convolution on Nodes-Hyperedges Network for Semi-Supervised Node Classification.”</span> <em>ACM Transactions on Knowledge Discovery from Data (TKDD)</em> 16 (4): 1–19.
+</div>
+<div id="ref-wu2020comprehensive" class="csl-entry">
+Wu, Zonghan, Shirui Pan, Fengwen Chen, Guodong Long, Chengqi Zhang, and S Yu Philip. 2020. <span>“A Comprehensive Survey on Graph Neural Networks.”</span> <em>IEEE Transactions on Neural Networks and Learning Systems</em> 32 (1): 4–24.
+</div>
+<div id="ref-yan2018spatial" class="csl-entry">
+Yan, Sijie, Yuanjun Xiong, and Dahua Lin. 2018. <span>“Spatial Temporal Graph Convolutional Networks for Skeleton-Based Action Recognition.”</span> In <em>Thirty-Second AAAI Conference on Artificial Intelligence</em>.
+</div>
+<div id="ref-yang2023convolutional" class="csl-entry">
+Yang, Maosheng, and Elvin Isufi. 2023. <span>“Convolutional Learning on Simplicial Complexes.”</span> <em>arXiv Preprint arXiv:2301.11163</em>.
+</div>
+<div id="ref-ying2018hierarchical" class="csl-entry">
+Ying, Zhitao, Jiaxuan You, Christopher Morris, Xiang Ren, Will Hamilton, and Jure Leskovec. 2018. <span>“Hierarchical Graph Representation Learning with Differentiable Pooling.”</span> <em>Neurips</em> 31.
+</div>
+<div id="ref-zeng_topological_2021" class="csl-entry">
+Zeng, Sebastian, Florian Graf, Christoph Hofer, and Roland Kwitt. 2021. <span>“Topological Attention for Time Series Forecasting.”</span> In <em>Advances in <span>Neural</span> <span>Information</span> <span>Processing</span> <span>Systems</span></em>, 34:24871–82. Curran Associates, Inc.
+</div>
+<div id="ref-zhang2018kernel" class="csl-entry">
+Zhang, Qi, Qizhao Jin, Jianlong Chang, Shiming Xiang, and Chunhong Pan. 2018. <span>“Kernel-Weighted Graph Convolutional Network: A Deep Learning Approach for Traffic Forecasting.”</span> In <em>2018 24th International Conference on Pattern Recognition (ICPR)</em>, 1018–23. IEEE.
+</div>
+<div id="ref-zhang2020multiplex" class="csl-entry">
+Zhang, Weifeng, Jingwen Mao, Yi Cao, and Congfu Xu. 2020. <span>“Multiplex Graph Neural Networks for Multi-Behavior Recommendation.”</span> In <em>Proceedings of the 29th ACM International Conference on Information &amp; Knowledge Management</em>, 2313–16.
+</div>
+<div id="ref-zhang2021hierarchical" class="csl-entry">
+Zhang, Zhen, Jiajun Bu, Martin Ester, Jianfeng Zhang, Zhao Li, Chengwei Yao, Huifen Dai, Zhi Yu, and Can Wang. 2021. <span>“Hierarchical Multi-View Graph Pooling with Structure Learning.”</span> <em>IEEE Transactions on Knowledge and Data Engineering</em> 35 (1): 545–59.
+</div>
+<div id="ref-zhang2019hierarchical" class="csl-entry">
+Zhang, Zhen, Jiajun Bu, Martin Ester, Jianfeng Zhang, Chengwei Yao, Zhi Yu, and Can Wang. 2019. <span>“Hierarchical Graph Pooling with Structure Learning.”</span> <em>arXiv Preprint arXiv:1911.05954</em>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="implementation-and-numerical-results.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="conclusions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook/js/app.min.js"></script>
+<script src="libs/gitbook/js/clipboard.min.js"></script>
+<script src="libs/gitbook/js/plugin-search.js"></script>
+<script src="libs/gitbook/js/plugin-sharing.js"></script>
+<script src="libs/gitbook/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook/js/jquery.highlight.js"></script>
+<script src="libs/gitbook/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/pyt-team/tdlbook/edit/main/rmd/10-related-work.rmd",
+"text": "编辑"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "none"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

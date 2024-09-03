@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>附录 A 术语 | 拓扑深度学习：超越图数据</title>
+  <meta name="description" content="一本关于拓扑深度学习的书。" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="附录 A 术语 | 拓扑深度学习：超越图数据" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="一本关于拓扑深度学习的书。" />
+  <meta name="github-repo" content="pyt-team/tdlbook" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="附录 A 术语 | 拓扑深度学习：超越图数据" />
+  
+  <meta name="twitter:description" content="一本关于拓扑深度学习的书。" />
+  
+
+<meta name="author" content="Mustafa Hajij, Theodore Papamarkou, Ghada Zamzmi, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Michael T. Schaub" />
+
+
+<meta name="date" content="2024-09-03" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="conclusions.html"/>
+<link rel="next" href="lifting-maps.html"/>
+<script src="libs/jquery/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="css/glossarybox.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">拓扑深度学习</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>贡献者</a></li>
+<li class="chapter" data-level="" data-path="译者.html"><a href="译者.html"><i class="fa fa-check"></i>译者</a></li>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html"><i class="fa fa-check"></i>序言</a>
+<ul>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html#编译"><i class="fa fa-check"></i>编译</a></li>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html#致谢"><i class="fa fa-check"></i>致谢</a></li>
+</ul></li>
+<li class="part"><span><b>第一部分：基础知识</b></span></li>
+<li class="chapter" data-level="1" data-path="引言.html"><a href="引言.html"><i class="fa fa-check"></i><b>1</b> 引言</a></li>
+<li class="chapter" data-level="2" data-path="motivation.html"><a href="motivation.html"><i class="fa fa-check"></i><b>2</b> 研究动机</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="motivation.html"><a href="motivation.html#从拓扑空间数据中建模和学习"><i class="fa fa-check"></i><b>2.1</b> 从拓扑空间数据中建模和学习</a></li>
+<li class="chapter" data-level="2.2" data-path="motivation.html"><a href="motivation.html#the-utility-of-topology"><i class="fa fa-check"></i><b>2.2</b> 拓扑的有用性</a></li>
+<li class="chapter" data-level="2.3" data-path="motivation.html"><a href="motivation.html#深度学习和结构化计算的统一视角"><i class="fa fa-check"></i><b>2.3</b> 深度学习和结构化计算的统一视角</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preliminaries.html"><a href="preliminaries.html"><i class="fa fa-check"></i><b>3</b> 预备知识</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="preliminaries.html"><a href="preliminaries.html#邻域函数和拓扑空间"><i class="fa fa-check"></i><b>3.1</b> 邻域函数和拓扑空间</a></li>
+<li class="chapter" data-level="3.2" data-path="preliminaries.html"><a href="preliminaries.html#bridging-the-gap-among-higher-order-networks"><i class="fa fa-check"></i><b>3.2</b> 填补与高阶网络间的代沟</a></li>
+<li class="chapter" data-level="3.3" data-path="preliminaries.html"><a href="preliminaries.html#hierarchical-structure-and-set-type-relations"><i class="fa fa-check"></i><b>3.3</b> 层次化结构与集合型关系</a></li>
+</ul></li>
+<li class="part"><span><b>第二部分:组合复形</b></span></li>
+<li class="chapter" data-level="4" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html"><i class="fa fa-check"></i><b>4</b> 组合复形</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc-definition"><i class="fa fa-check"></i><b>4.1</b> 组合复形定义</a></li>
+<li class="chapter" data-level="4.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc-homomorphisms-and-sub-ccs"><i class="fa fa-check"></i><b>4.2</b> CC同态和子CCs</a></li>
+<li class="chapter" data-level="4.3" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#motivation-for-ccs"><i class="fa fa-check"></i><b>4.3</b> 引入CCs的动机</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#pooling-operations-on-ccs"><i class="fa fa-check"></i><b>4.3.1</b> CCs上的池化操作</a></li>
+<li class="chapter" data-level="4.3.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#structural-advantages-of-ccs"><i class="fa fa-check"></i><b>4.3.2</b> CCs的结构化优势</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#neighbourhood-functions-on-ccs"><i class="fa fa-check"></i><b>4.4</b> CCs上的邻域函数</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#incidence-in-a-cc"><i class="fa fa-check"></i><b>4.4.1</b> CC中的关联关系（Incidence）</a></li>
+<li class="chapter" data-level="4.4.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc内的邻接关系adjacency"><i class="fa fa-check"></i><b>4.4.2</b> CC内的邻接关系（Adjacency）</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#data-on-ccs"><i class="fa fa-check"></i><b>4.5</b> CCs上的数据</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html"><i class="fa fa-check"></i><b>5</b> 组合复形神经网络（Combinatorial complex neural networks）</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#building-ccnns-tensor-diagrams"><i class="fa fa-check"></i><b>5.1</b> 构建 CCNN：张量图</a></li>
+<li class="chapter" data-level="5.2" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#push-forward-operator-and-merge-node"><i class="fa fa-check"></i><b>5.2</b> 前推操作（Push-forward operator）和聚合节点</a></li>
+<li class="chapter" data-level="5.3" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#the-main-three-tensor-operations"><i class="fa fa-check"></i><b>5.3</b> 三种主要的张量操作</a></li>
+<li class="chapter" data-level="5.4" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#definition-of-combinatorial-complex-convolutional-networks"><i class="fa fa-check"></i><b>5.4</b> 组合复形卷积网络的定义（combinatorial complex convolutional networks）</a></li>
+<li class="chapter" data-level="5.5" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#combinatorial-complex-attention-neural-networks"><i class="fa fa-check"></i><b>5.5</b> 组合复形注意力神经网络</a></li>
+</ul></li>
+<li class="part"><span><b>第三部分：高阶消息传递（Higher-order message passing）</b></span></li>
+<li class="chapter" data-level="6" data-path="message-passing.html"><a href="message-passing.html"><i class="fa fa-check"></i><b>6</b> 消息传递</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="message-passing.html"><a href="message-passing.html#definition-of-higher-order-message-passing"><i class="fa fa-check"></i><b>6.1</b> 高阶消息传递的定义</a></li>
+<li class="chapter" data-level="6.2" data-path="message-passing.html"><a href="message-passing.html#higher-order-message-passing-neural-networks-are-ccnns"><i class="fa fa-check"></i><b>6.2</b> 高阶消息传递神经网络就是CCNNs</a></li>
+<li class="chapter" data-level="6.3" data-path="message-passing.html"><a href="message-passing.html#merge-nodes-and-higher-order-message-passing-a-qualitative-comparison"><i class="fa fa-check"></i><b>6.3</b> 聚合节点和高阶消息传递：量化比较</a></li>
+<li class="chapter" data-level="6.4" data-path="message-passing.html"><a href="message-passing.html#attention-higher-order-message-passing-and-ccanns"><i class="fa fa-check"></i><b>6.4</b> 注意力高阶消息传递和CCANNs</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html"><i class="fa fa-check"></i><b>7</b> 前推、池化和反池化</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#cc-pooling-and-unpooling"><i class="fa fa-check"></i><b>7.1</b> CC池化和反池化</a></li>
+<li class="chapter" data-level="7.2" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#formulating-common-pooling-operations-as-cc-pooling"><i class="fa fa-check"></i><b>7.2</b> 将常见的池化操作表述为 CC-pooling</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#graph-pooling-as-cc-pooling"><i class="fa fa-check"></i><b>7.2.1</b> 用CC-pooling表示图池化操作</a></li>
+<li class="chapter" data-level="7.2.2" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#image-pooling-as-cc-pooling"><i class="fa fa-check"></i><b>7.2.2</b> 图像池化作为CC-pooing</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#pooling-and-unpooling-ccnns"><i class="fa fa-check"></i><b>7.3</b> 池化与反池化CCNNs</a></li>
+<li class="chapter" data-level="7.4" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#mapper-and-the-cc-pooling-operation"><i class="fa fa-check"></i><b>7.4</b> 映射器和CC池化操作</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html"><i class="fa fa-check"></i><b>8</b> CCNNs的Hasse图解释</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#hasse-graph-interpretation-of-ccnns-2"><i class="fa fa-check"></i><b>8.1</b> CCNNs的Hasse图解释</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#ccs-as-hasse-graphs"><i class="fa fa-check"></i><b>8.1.1</b> CCs作为Hasse图</a></li>
+<li class="chapter" data-level="8.1.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs"><i class="fa fa-check"></i><b>8.1.2</b> 增强的Hasse图</a></li>
+<li class="chapter" data-level="8.1.3" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#reducibility-of-ccnns-to-graph-basedmodels"><i class="fa fa-check"></i><b>8.1.3</b> CCNN对图模型的归约能力</a></li>
+<li class="chapter" data-level="8.1.4" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs-and-cc-pooling"><i class="fa fa-check"></i><b>8.1.4</b> 增强Hasse图和CC-pooling</a></li>
+<li class="chapter" data-level="8.1.5" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-diagrams-message-passing-and-mergenodes"><i class="fa fa-check"></i><b>8.1.5</b> 增强Hasse图消息传递和聚合节点</a></li>
+<li class="chapter" data-level="8.1.6" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#higher-order-representation-learning"><i class="fa fa-check"></i><b>8.1.6</b> 高阶表征学习</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#on-the-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2</b> CCNNs的等变性</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#permutation-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2.1</b> CCNNs的置换等变</a></li>
+<li class="chapter" data-level="8.2.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#orientation-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2.2</b> CCNNs的方向等变</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>第四部分：应用，文献和结论</b></span></li>
+<li class="chapter" data-level="9" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html"><i class="fa fa-check"></i><b>9</b> 实现与实验</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#software-toponetx-topoembedx-and-topomodelx"><i class="fa fa-check"></i><b>9.1</b> 软件：TopoNetX, TopoEmbedX, and TopoModelX</a></li>
+<li class="chapter" data-level="9.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#datasets"><i class="fa fa-check"></i><b>9.2</b> 数据集</a></li>
+<li class="chapter" data-level="9.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#shape-analysis-mesh-segmentation-and-classification"><i class="fa fa-check"></i><b>9.3</b> 形状分析：网格分割与分类</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-segmentation"><i class="fa fa-check"></i><b>9.3.1</b> 网格分割</a></li>
+<li class="chapter" data-level="9.3.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-and-point-cloud-classification"><i class="fa fa-check"></i><b>9.3.2</b> Mesh and point cloud classification</a></li>
+<li class="chapter" data-level="9.3.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#graph-classification"><i class="fa fa-check"></i><b>9.3.3</b> Graph classification</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#pooling-with-mapper-on-graphs-and-data-classification"><i class="fa fa-check"></i><b>9.4</b> Pooling with mapper on graphs and data classification</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-and-edge-features"><i class="fa fa-check"></i><b>9.4.1</b> Mesh classification: CC-pooling with input vertex and edge features</a></li>
+<li class="chapter" data-level="9.4.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-features-only"><i class="fa fa-check"></i><b>9.4.2</b> Mesh classification: CC-pooling with input vertex features only</a></li>
+<li class="chapter" data-level="9.4.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#point-cloud-classification-cc-pooling-with-input-vertex-features-only"><i class="fa fa-check"></i><b>9.4.3</b> Point cloud classification: CC-pooling with input vertex features only</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#ablation-studies"><i class="fa fa-check"></i><b>9.5</b> Ablation studies</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="related-work.html"><a href="related-work.html"><i class="fa fa-check"></i><b>10</b> Related work</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="related-work.html"><a href="related-work.html#graph-based-models"><i class="fa fa-check"></i><b>10.1</b> Graph-based models</a></li>
+<li class="chapter" data-level="10.2" data-path="related-work.html"><a href="related-work.html#higher-order-deep-learning-models"><i class="fa fa-check"></i><b>10.2</b> Higher-order deep learning models</a></li>
+<li class="chapter" data-level="10.3" data-path="related-work.html"><a href="related-work.html#attention-based-models"><i class="fa fa-check"></i><b>10.3</b> Attention-based models</a></li>
+<li class="chapter" data-level="10.4" data-path="related-work.html"><a href="related-work.html#graph-based-pooling"><i class="fa fa-check"></i><b>10.4</b> Graph-based pooling</a></li>
+<li class="chapter" data-level="10.5" data-path="related-work.html"><a href="related-work.html#applied-algebraic-topology"><i class="fa fa-check"></i><b>10.5</b> Applied algebraic topology</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="conclusions.html"><a href="conclusions.html"><i class="fa fa-check"></i><b>11</b> Conclusions</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>A</b> 术语</a></li>
+<li class="chapter" data-level="B" data-path="lifting-maps.html"><a href="lifting-maps.html"><i class="fa fa-check"></i><b>B</b> Lifting maps</a>
+<ul>
+<li class="chapter" data-level="B.1" data-path="lifting-maps.html"><a href="lifting-maps.html#n-hop-cc-of-a-graph"><i class="fa fa-check"></i><b>B.1</b> n-hop CC of a graph</a></li>
+<li class="chapter" data-level="B.2" data-path="lifting-maps.html"><a href="lifting-maps.html#path-based-and-subgraph-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.2</b> Path-based and subgraph-based CC of a graph</a></li>
+<li class="chapter" data-level="B.3" data-path="lifting-maps.html"><a href="lifting-maps.html#loop-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.3</b> Loop-based CC of a graph</a></li>
+<li class="chapter" data-level="B.4" data-path="lifting-maps.html"><a href="lifting-maps.html#coface-cc-of-a-simplicial-complex-or-of-a-cc"><i class="fa fa-check"></i><b>B.4</b> Coface CC of a simplicial complex or of a CC</a></li>
+<li class="chapter" data-level="B.5" data-path="lifting-maps.html"><a href="lifting-maps.html#augmentation-of-ccs-by-higher-rank-cells"><i class="fa fa-check"></i><b>B.5</b> Augmentation of CCs by higher-rank cells</a></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="ccnn-architecture-search-and-topological-quantum-field-theories.html"><a href="ccnn-architecture-search-and-topological-quantum-field-theories.html"><i class="fa fa-check"></i><b>C</b> CCNN architecture search and topological quantum field theories</a></li>
+<li class="chapter" data-level="D" data-path="learning-discrete-exterior-calculus-operators-with-ccanns.html"><a href="learning-discrete-exterior-calculus-operators-with-ccanns.html"><i class="fa fa-check"></i><b>D</b> Learning discrete exterior calculus operators with CCANNs</a></li>
+<li class="chapter" data-level="E" data-path="a-mapper-induced-topology-preserving-cc-pooling-operation.html"><a href="a-mapper-induced-topology-preserving-cc-pooling-operation.html"><i class="fa fa-check"></i><b>E</b> A mapper-induced topology-preserving CC-pooling operation</a></li>
+<li class="chapter" data-level="" data-path="参考文献.html"><a href="参考文献.html"><i class="fa fa-check"></i>参考文献</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">拓扑深度学习：超越图数据</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="glossary" class="section level1 hasAnchor" number="12">
+<h1><span class="header-section-number">附录 A</span> 术语<a href="glossary.html#glossary" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>本表列出了本文所涉及的相关概念</p>
+<table>
+<colgroup>
+<col width="36%" />
+<col width="63%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>符号标记</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(S\)</span></td>
+<td>抽象实体的非空有限集</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(P_{S}\)</span></td>
+<td>索引集</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathcal{P}(S)\)</span></td>
+<td>集合<span class="math inline">\(𝑆\)</span>的幂集</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\((S,\mathcal{N})\)</span></td>
+<td>非空集 <span class="math inline">\(S\)</span> 和邻域拓扑 <span class="math inline">\(\mathcal{N}\)</span> 构成的拓扑空间</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathcal{N}_{a}(x)\)</span></td>
+<td>胞腔<span class="math inline">\(x\)</span>的邻接集合</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathcal{N}_{co}(x)\)</span></td>
+<td>胞腔<span class="math inline">\(x\)</span>的共邻集合</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathcal{N}_{\{ G_1,\ldots,G_n\}}(x)\)</span></td>
+<td>由邻域矩阵<span class="math inline">\(\{G_1,\dots,G_n\}\)</span>确定的<span class="math inline">\(x\)</span>的邻居</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathcal{N}_{\searrow}(x)\)</span></td>
+<td>Set of down-incidence of a cell <span class="math inline">\(x\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathcal{N}_{\nearrow}(x)\)</span></td>
+<td>Set of up-incidence of a cell <span class="math inline">\(x\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathcal{N}_{\searrow,k}(x)\)</span></td>
+<td>Set of <span class="math inline">\(k\)</span>-down incidence of a cell <span class="math inline">\(x\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathcal{N}_{\nearrow,k}(x)\)</span></td>
+<td>Set of <span class="math inline">\(k\)</span>-up incidence of a cell <span class="math inline">\(x\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbb{N}\)</span> and <span class="math inline">\(\mathbb{Z}_{\ge 0}\)</span></td>
+<td>Set of positive integers and non-negative integers, respectively</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathcal{G}\)</span></td>
+<td>Graph</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(x^k\)</span></td>
+<td>Cell <span class="math inline">\(x\)</span> of rank <span class="math inline">\(k\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mbox{rk}\)</span></td>
+<td>Rank function</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\((S, \mathcal{X}, \mbox{rk})\)</span></td>
+<td>CC, consisting of a set <span class="math inline">\(S\)</span>, a subset <span class="math inline">\(\mathcal{X}\)</span> of <span class="math inline">\(\mathcal{P}(S)\setminus\{\emptyset\}\)</span>, and a rank function <span class="math inline">\(\mbox{rk}\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\dim (\mathcal{X})\)</span></td>
+<td>Dimension of a CC <span class="math inline">\(\mathcal{X}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\{c_\alpha\}_{\alpha \in I}\)</span></td>
+<td>Partition into subspaces (cells) indexed by an index set <span class="math inline">\(I\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mbox{int}(x)\)</span></td>
+<td>Interior of a cell <span class="math inline">\(x\)</span> in a regular cell complex</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(n_\alpha\in \mathbb{N}\)</span></td>
+<td>Dimension of a cell in a regular cell complex</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(0\)</span>-cells</td>
+<td>Vertices of a CC</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(1\)</span>-cells</td>
+<td>Edges of a CC</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(k\)</span>-cells</td>
+<td>Cells with rank <span class="math inline">\(k\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathcal{X}^{(k)}\)</span></td>
+<td><span class="math inline">\(k\)</span>-skeleton of <span class="math inline">\(\mathcal{X}\)</span>, formed by <span class="math inline">\(i\)</span>-cells in <span class="math inline">\(\mathcal{X}\)</span> with <span class="math inline">\(i\leq k\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathcal{X}^k\)</span></td>
+<td>Set of k-cells of <span class="math inline">\(\mathcal{X}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(|\mathcal{X}^k|\)</span></td>
+<td>Cardinality of <span class="math inline">\(\mathcal{X}^k\)</span>, that is number of <span class="math inline">\(k\)</span>-cells of <span class="math inline">\(\mathcal{X}\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathcal{X}_{n-hop}(G)\)</span></td>
+<td><span class="math inline">\(n\)</span>-hop CC of a graph <span class="math inline">\(G\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathcal{X}_p(G)\)</span></td>
+<td>Path-based CC of a graph <span class="math inline">\(G\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathcal{X}_{loop}(G)\)</span></td>
+<td>Loop-based CC of a graph <span class="math inline">\(G\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathcal{X}_{SC}(\mathcal{Y})\)</span></td>
+<td>Coface CC of a simplicial complex/CC <span class="math inline">\(\mathcal{Y}\)</span></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(B_{r,k}\)</span></td>
+<td>Incidence matrices between <span class="math inline">\(r\)</span>-cells and <span class="math inline">\(k\)</span>-cells</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(A_{r,k}\)</span></td>
+<td>Adjacency matrices among the cells of <span class="math inline">\(\mbox{X}^{r}\)</span> with respect to the cells of <span class="math inline">\(\mbox{X}^{k}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(coA_{r,k}\)</span></td>
+<td>Coadjacency matrices among the cells of <span class="math inline">\(\mbox{X}^{r}\)</span> with respect to the cells of <span class="math inline">\(\mbox{X}^{k}\)</span></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{W}\)</span></td>
+<td>Trainable parameter</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathcal{C}^k(\mathcal{X},\mathbb{R}^d)\)</span></td>
+<td><span class="math inline">\(k\)</span>-cochain space with features in <span class="math inline">\(\mathbb{R}^d\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathcal{C}^k\)</span></td>
+<td><span class="math inline">\(k\)</span>-cochain space with features in some Euclidean space</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{G}= \{G_1,\ldots,G_m\}\)</span></td>
+<td>Set of cochain maps <span class="math inline">\(G_i\)</span> defined on a complex</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathcal{M}_{ \mathbf{G};\mathbf{W}}\)</span></td>
+<td>Merge node</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(G:C^{s}(\mathcal{X})\to C^{t}(\mathcal{X})\)</span></td>
+<td>Cochain map</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\((\mathbf{x}_{i_1},\ldots, \mathbf{x}_{i_m})\)</span></td>
+<td>Vector of cochains</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(att^{l}: C^{s}(\mathcal{X})\to C^{s}(\mathcal{X})\)</span></td>
+<td>Higher-order attention matrix</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathcal{N}_{\mathcal{Y}_0}=\{\mathcal{Y}_1,\ldots,\sigma_{|\mathcal{N}_{\mathcal{Y}_0}|}\}\)</span></td>
+<td>Set of a complex object in the vicinity of <span class="math inline">\(\mathcal{Y}_0\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(a: {\mathcal{Y}_0}\times \mathcal{N}_{\mathcal{Y}_0}\to [0,1]\)</span></td>
+<td>Higher-order attention function</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span></td>
+<td>CCNN or its tensor diagram representation</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathcal{H}_{\mathcal{X}}= (V (\mathcal{H}_{\mathcal{X}}), E(\mathcal{H}_{\mathcal{X}}) )\)</span></td>
+<td>Hasse graph with vertices <span class="math inline">\(V (\mathcal{H}_{\mathcal{X}})\)</span> and edges <span class="math inline">\(E(\mathcal{H}_{\mathcal{X}})\)</span>; see Definition <a href="hasse-graph-interpretation-of-ccnns-1.html#def:hg">8.1</a></td>
+</tr>
+</tbody>
+</table>
+<p>The table below summarizes the paper’s acronyms.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Acronym</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>AGD</td>
+<td>Average geodesic distance</td>
+</tr>
+<tr class="even">
+<td>CC</td>
+<td>Combinatorial complex</td>
+</tr>
+<tr class="odd">
+<td>CCANN</td>
+<td>Combinatorial complex attention neural network</td>
+</tr>
+<tr class="even">
+<td>CCCNN</td>
+<td>Combinatorial complex convolutional neural network</td>
+</tr>
+<tr class="odd">
+<td>CCNN</td>
+<td>Combinatorial complex neural network</td>
+</tr>
+<tr class="even">
+<td>CNN</td>
+<td>Convolutional neural network</td>
+</tr>
+<tr class="odd">
+<td>DEC</td>
+<td>Discrete exterior calculus</td>
+</tr>
+<tr class="even">
+<td>GDL</td>
+<td>Geometric deep learning</td>
+</tr>
+<tr class="odd">
+<td>GNN</td>
+<td>Graph neural network</td>
+</tr>
+<tr class="even">
+<td>MOG</td>
+<td>Mapper on graphs</td>
+</tr>
+<tr class="odd">
+<td>RNN</td>
+<td>Recurrent neural network</td>
+</tr>
+<tr class="even">
+<td>SCoNe</td>
+<td>Simplicial complex network</td>
+</tr>
+<tr class="odd">
+<td>Sub-CC</td>
+<td>sub-combinatorial complex</td>
+</tr>
+<tr class="even">
+<td>TDA</td>
+<td>Topological data analysis</td>
+</tr>
+<tr class="odd">
+<td>TDL</td>
+<td>Topological deep learning</td>
+</tr>
+<tr class="even">
+<td>TQFT</td>
+<td>Topological quantum field theory</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="conclusions.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="lifting-maps.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook/js/app.min.js"></script>
+<script src="libs/gitbook/js/clipboard.min.js"></script>
+<script src="libs/gitbook/js/plugin-search.js"></script>
+<script src="libs/gitbook/js/plugin-sharing.js"></script>
+<script src="libs/gitbook/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook/js/jquery.highlight.js"></script>
+<script src="libs/gitbook/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/pyt-team/tdlbook/edit/main/rmd/80-glossary.rmd",
+"text": "编辑"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "none"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

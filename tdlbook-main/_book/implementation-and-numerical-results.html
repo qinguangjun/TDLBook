@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>第 9 章 实现与实验 | 拓扑深度学习：超越图数据</title>
+  <meta name="description" content="一本关于拓扑深度学习的书。" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="第 9 章 实现与实验 | 拓扑深度学习：超越图数据" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="一本关于拓扑深度学习的书。" />
+  <meta name="github-repo" content="pyt-team/tdlbook" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="第 9 章 实现与实验 | 拓扑深度学习：超越图数据" />
+  
+  <meta name="twitter:description" content="一本关于拓扑深度学习的书。" />
+  
+
+<meta name="author" content="Mustafa Hajij, Theodore Papamarkou, Ghada Zamzmi, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Michael T. Schaub" />
+
+
+<meta name="date" content="2024-09-03" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="hasse-graph-interpretation-of-ccnns-1.html"/>
+<link rel="next" href="related-work.html"/>
+<script src="libs/jquery/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="css/glossarybox.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">拓扑深度学习</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>贡献者</a></li>
+<li class="chapter" data-level="" data-path="译者.html"><a href="译者.html"><i class="fa fa-check"></i>译者</a></li>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html"><i class="fa fa-check"></i>序言</a>
+<ul>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html#编译"><i class="fa fa-check"></i>编译</a></li>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html#致谢"><i class="fa fa-check"></i>致谢</a></li>
+</ul></li>
+<li class="part"><span><b>第一部分：基础知识</b></span></li>
+<li class="chapter" data-level="1" data-path="引言.html"><a href="引言.html"><i class="fa fa-check"></i><b>1</b> 引言</a></li>
+<li class="chapter" data-level="2" data-path="motivation.html"><a href="motivation.html"><i class="fa fa-check"></i><b>2</b> 研究动机</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="motivation.html"><a href="motivation.html#从拓扑空间数据中建模和学习"><i class="fa fa-check"></i><b>2.1</b> 从拓扑空间数据中建模和学习</a></li>
+<li class="chapter" data-level="2.2" data-path="motivation.html"><a href="motivation.html#the-utility-of-topology"><i class="fa fa-check"></i><b>2.2</b> 拓扑的有用性</a></li>
+<li class="chapter" data-level="2.3" data-path="motivation.html"><a href="motivation.html#深度学习和结构化计算的统一视角"><i class="fa fa-check"></i><b>2.3</b> 深度学习和结构化计算的统一视角</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preliminaries.html"><a href="preliminaries.html"><i class="fa fa-check"></i><b>3</b> 预备知识</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="preliminaries.html"><a href="preliminaries.html#邻域函数和拓扑空间"><i class="fa fa-check"></i><b>3.1</b> 邻域函数和拓扑空间</a></li>
+<li class="chapter" data-level="3.2" data-path="preliminaries.html"><a href="preliminaries.html#bridging-the-gap-among-higher-order-networks"><i class="fa fa-check"></i><b>3.2</b> 填补与高阶网络间的代沟</a></li>
+<li class="chapter" data-level="3.3" data-path="preliminaries.html"><a href="preliminaries.html#hierarchical-structure-and-set-type-relations"><i class="fa fa-check"></i><b>3.3</b> 层次化结构与集合型关系</a></li>
+</ul></li>
+<li class="part"><span><b>第二部分:组合复形</b></span></li>
+<li class="chapter" data-level="4" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html"><i class="fa fa-check"></i><b>4</b> 组合复形</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc-definition"><i class="fa fa-check"></i><b>4.1</b> 组合复形定义</a></li>
+<li class="chapter" data-level="4.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc-homomorphisms-and-sub-ccs"><i class="fa fa-check"></i><b>4.2</b> CC同态和子CCs</a></li>
+<li class="chapter" data-level="4.3" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#motivation-for-ccs"><i class="fa fa-check"></i><b>4.3</b> 引入CCs的动机</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#pooling-operations-on-ccs"><i class="fa fa-check"></i><b>4.3.1</b> CCs上的池化操作</a></li>
+<li class="chapter" data-level="4.3.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#structural-advantages-of-ccs"><i class="fa fa-check"></i><b>4.3.2</b> CCs的结构化优势</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#neighbourhood-functions-on-ccs"><i class="fa fa-check"></i><b>4.4</b> CCs上的邻域函数</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#incidence-in-a-cc"><i class="fa fa-check"></i><b>4.4.1</b> CC中的关联关系（Incidence）</a></li>
+<li class="chapter" data-level="4.4.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc内的邻接关系adjacency"><i class="fa fa-check"></i><b>4.4.2</b> CC内的邻接关系（Adjacency）</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#data-on-ccs"><i class="fa fa-check"></i><b>4.5</b> CCs上的数据</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html"><i class="fa fa-check"></i><b>5</b> 组合复形神经网络（Combinatorial complex neural networks）</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#building-ccnns-tensor-diagrams"><i class="fa fa-check"></i><b>5.1</b> 构建 CCNN：张量图</a></li>
+<li class="chapter" data-level="5.2" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#push-forward-operator-and-merge-node"><i class="fa fa-check"></i><b>5.2</b> 前推操作（Push-forward operator）和聚合节点</a></li>
+<li class="chapter" data-level="5.3" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#the-main-three-tensor-operations"><i class="fa fa-check"></i><b>5.3</b> 三种主要的张量操作</a></li>
+<li class="chapter" data-level="5.4" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#definition-of-combinatorial-complex-convolutional-networks"><i class="fa fa-check"></i><b>5.4</b> 组合复形卷积网络的定义（combinatorial complex convolutional networks）</a></li>
+<li class="chapter" data-level="5.5" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#combinatorial-complex-attention-neural-networks"><i class="fa fa-check"></i><b>5.5</b> 组合复形注意力神经网络</a></li>
+</ul></li>
+<li class="part"><span><b>第三部分：高阶消息传递（Higher-order message passing）</b></span></li>
+<li class="chapter" data-level="6" data-path="message-passing.html"><a href="message-passing.html"><i class="fa fa-check"></i><b>6</b> 消息传递</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="message-passing.html"><a href="message-passing.html#definition-of-higher-order-message-passing"><i class="fa fa-check"></i><b>6.1</b> 高阶消息传递的定义</a></li>
+<li class="chapter" data-level="6.2" data-path="message-passing.html"><a href="message-passing.html#higher-order-message-passing-neural-networks-are-ccnns"><i class="fa fa-check"></i><b>6.2</b> 高阶消息传递神经网络就是CCNNs</a></li>
+<li class="chapter" data-level="6.3" data-path="message-passing.html"><a href="message-passing.html#merge-nodes-and-higher-order-message-passing-a-qualitative-comparison"><i class="fa fa-check"></i><b>6.3</b> 聚合节点和高阶消息传递：量化比较</a></li>
+<li class="chapter" data-level="6.4" data-path="message-passing.html"><a href="message-passing.html#attention-higher-order-message-passing-and-ccanns"><i class="fa fa-check"></i><b>6.4</b> 注意力高阶消息传递和CCANNs</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html"><i class="fa fa-check"></i><b>7</b> 前推、池化和反池化</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#cc-pooling-and-unpooling"><i class="fa fa-check"></i><b>7.1</b> CC池化和反池化</a></li>
+<li class="chapter" data-level="7.2" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#formulating-common-pooling-operations-as-cc-pooling"><i class="fa fa-check"></i><b>7.2</b> 将常见的池化操作表述为 CC-pooling</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#graph-pooling-as-cc-pooling"><i class="fa fa-check"></i><b>7.2.1</b> 用CC-pooling表示图池化操作</a></li>
+<li class="chapter" data-level="7.2.2" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#image-pooling-as-cc-pooling"><i class="fa fa-check"></i><b>7.2.2</b> 图像池化作为CC-pooing</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#pooling-and-unpooling-ccnns"><i class="fa fa-check"></i><b>7.3</b> 池化与反池化CCNNs</a></li>
+<li class="chapter" data-level="7.4" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#mapper-and-the-cc-pooling-operation"><i class="fa fa-check"></i><b>7.4</b> 映射器和CC池化操作</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html"><i class="fa fa-check"></i><b>8</b> CCNNs的Hasse图解释</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#hasse-graph-interpretation-of-ccnns-2"><i class="fa fa-check"></i><b>8.1</b> CCNNs的Hasse图解释</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#ccs-as-hasse-graphs"><i class="fa fa-check"></i><b>8.1.1</b> CCs作为Hasse图</a></li>
+<li class="chapter" data-level="8.1.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs"><i class="fa fa-check"></i><b>8.1.2</b> 增强的Hasse图</a></li>
+<li class="chapter" data-level="8.1.3" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#reducibility-of-ccnns-to-graph-basedmodels"><i class="fa fa-check"></i><b>8.1.3</b> CCNN对图模型的归约能力</a></li>
+<li class="chapter" data-level="8.1.4" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs-and-cc-pooling"><i class="fa fa-check"></i><b>8.1.4</b> 增强Hasse图和CC-pooling</a></li>
+<li class="chapter" data-level="8.1.5" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-diagrams-message-passing-and-mergenodes"><i class="fa fa-check"></i><b>8.1.5</b> 增强Hasse图消息传递和聚合节点</a></li>
+<li class="chapter" data-level="8.1.6" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#higher-order-representation-learning"><i class="fa fa-check"></i><b>8.1.6</b> 高阶表征学习</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#on-the-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2</b> CCNNs的等变性</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#permutation-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2.1</b> CCNNs的置换等变</a></li>
+<li class="chapter" data-level="8.2.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#orientation-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2.2</b> CCNNs的方向等变</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>第四部分：应用，文献和结论</b></span></li>
+<li class="chapter" data-level="9" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html"><i class="fa fa-check"></i><b>9</b> 实现与实验</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#software-toponetx-topoembedx-and-topomodelx"><i class="fa fa-check"></i><b>9.1</b> 软件：TopoNetX, TopoEmbedX, and TopoModelX</a></li>
+<li class="chapter" data-level="9.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#datasets"><i class="fa fa-check"></i><b>9.2</b> 数据集</a></li>
+<li class="chapter" data-level="9.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#shape-analysis-mesh-segmentation-and-classification"><i class="fa fa-check"></i><b>9.3</b> 形状分析：网格分割与分类</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-segmentation"><i class="fa fa-check"></i><b>9.3.1</b> 网格分割</a></li>
+<li class="chapter" data-level="9.3.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-and-point-cloud-classification"><i class="fa fa-check"></i><b>9.3.2</b> Mesh and point cloud classification</a></li>
+<li class="chapter" data-level="9.3.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#graph-classification"><i class="fa fa-check"></i><b>9.3.3</b> Graph classification</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#pooling-with-mapper-on-graphs-and-data-classification"><i class="fa fa-check"></i><b>9.4</b> Pooling with mapper on graphs and data classification</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-and-edge-features"><i class="fa fa-check"></i><b>9.4.1</b> Mesh classification: CC-pooling with input vertex and edge features</a></li>
+<li class="chapter" data-level="9.4.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-features-only"><i class="fa fa-check"></i><b>9.4.2</b> Mesh classification: CC-pooling with input vertex features only</a></li>
+<li class="chapter" data-level="9.4.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#point-cloud-classification-cc-pooling-with-input-vertex-features-only"><i class="fa fa-check"></i><b>9.4.3</b> Point cloud classification: CC-pooling with input vertex features only</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#ablation-studies"><i class="fa fa-check"></i><b>9.5</b> Ablation studies</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="related-work.html"><a href="related-work.html"><i class="fa fa-check"></i><b>10</b> Related work</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="related-work.html"><a href="related-work.html#graph-based-models"><i class="fa fa-check"></i><b>10.1</b> Graph-based models</a></li>
+<li class="chapter" data-level="10.2" data-path="related-work.html"><a href="related-work.html#higher-order-deep-learning-models"><i class="fa fa-check"></i><b>10.2</b> Higher-order deep learning models</a></li>
+<li class="chapter" data-level="10.3" data-path="related-work.html"><a href="related-work.html#attention-based-models"><i class="fa fa-check"></i><b>10.3</b> Attention-based models</a></li>
+<li class="chapter" data-level="10.4" data-path="related-work.html"><a href="related-work.html#graph-based-pooling"><i class="fa fa-check"></i><b>10.4</b> Graph-based pooling</a></li>
+<li class="chapter" data-level="10.5" data-path="related-work.html"><a href="related-work.html#applied-algebraic-topology"><i class="fa fa-check"></i><b>10.5</b> Applied algebraic topology</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="conclusions.html"><a href="conclusions.html"><i class="fa fa-check"></i><b>11</b> Conclusions</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>A</b> 术语</a></li>
+<li class="chapter" data-level="B" data-path="lifting-maps.html"><a href="lifting-maps.html"><i class="fa fa-check"></i><b>B</b> Lifting maps</a>
+<ul>
+<li class="chapter" data-level="B.1" data-path="lifting-maps.html"><a href="lifting-maps.html#n-hop-cc-of-a-graph"><i class="fa fa-check"></i><b>B.1</b> n-hop CC of a graph</a></li>
+<li class="chapter" data-level="B.2" data-path="lifting-maps.html"><a href="lifting-maps.html#path-based-and-subgraph-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.2</b> Path-based and subgraph-based CC of a graph</a></li>
+<li class="chapter" data-level="B.3" data-path="lifting-maps.html"><a href="lifting-maps.html#loop-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.3</b> Loop-based CC of a graph</a></li>
+<li class="chapter" data-level="B.4" data-path="lifting-maps.html"><a href="lifting-maps.html#coface-cc-of-a-simplicial-complex-or-of-a-cc"><i class="fa fa-check"></i><b>B.4</b> Coface CC of a simplicial complex or of a CC</a></li>
+<li class="chapter" data-level="B.5" data-path="lifting-maps.html"><a href="lifting-maps.html#augmentation-of-ccs-by-higher-rank-cells"><i class="fa fa-check"></i><b>B.5</b> Augmentation of CCs by higher-rank cells</a></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="ccnn-architecture-search-and-topological-quantum-field-theories.html"><a href="ccnn-architecture-search-and-topological-quantum-field-theories.html"><i class="fa fa-check"></i><b>C</b> CCNN architecture search and topological quantum field theories</a></li>
+<li class="chapter" data-level="D" data-path="learning-discrete-exterior-calculus-operators-with-ccanns.html"><a href="learning-discrete-exterior-calculus-operators-with-ccanns.html"><i class="fa fa-check"></i><b>D</b> Learning discrete exterior calculus operators with CCANNs</a></li>
+<li class="chapter" data-level="E" data-path="a-mapper-induced-topology-preserving-cc-pooling-operation.html"><a href="a-mapper-induced-topology-preserving-cc-pooling-operation.html"><i class="fa fa-check"></i><b>E</b> A mapper-induced topology-preserving CC-pooling operation</a></li>
+<li class="chapter" data-level="" data-path="参考文献.html"><a href="参考文献.html"><i class="fa fa-check"></i>参考文献</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">拓扑深度学习：超越图数据</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="implementation-and-numerical-results" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">第 9 章</span> 实现与实验<a href="implementation-and-numerical-results.html#implementation-and-numerical-results" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>所提出的 CCNNs 可用于为不同的学习任务构建不同的神经网络架构。在本节中，我们将通过评估 CCNNs 在形状分析和图形学习任务中的预测性能来证明其通用性和有效性。在几何处理实验中，我们将 CCNNs 与最先进的方法进行了比较，这些方法针对特定任务进行了高度设计和训练。此外，我们还对几何数据处理中常用的各种数据模式（即点云和三维网格）进行了实验。我们还对图形数据进行了实验。在实验中，我们调整了三个主要部分：CCNN 架构的选择、学习率和数据增强中的副本数量。我们为每项学习任务选择的 CCNN 架构进行了论证。我们在 PyTorch 中实现了我们的流程，并在使用 Microsoft Windows 后端的单 GPU NVIDIA GeForce RTX 3060 Ti 上运行了实验。</p>
+<div id="software-toponetx-topoembedx-and-topomodelx" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> 软件：TopoNetX, TopoEmbedX, and TopoModelX<a href="implementation-and-numerical-results.html#software-toponetx-topoembedx-and-topomodelx" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>我们所有的软件开发和实验分析都是使用 Python 进行的。我们也开发了三个 Python 软件包，并用它们来运行我们的实验:</p>
+<ul>
+<li><p><a href="https://github.com/pyt-team/TopoNetX">TopoNetX</a>，支持构建多种拓扑结构，包括胞腔复形、单纯复形和组合复形类。这些类分别提供了计算胞腔复形、单纯复形和组合复形上的边界算子（ boundary operators）、霍奇拉普拉斯（Hodge Laplacians）和高阶邻接算子的方法；</p></li>
+<li><p><a href="https://github.com/pyt-team/TopoEmbedX">TopoEmbedX</a> ，支持对胞腔复形、单纯复形和组合复形的高阶关系进行表征学习（representation learning ）；</p></li>
+<li><p><a href="https://github.com/pyt-team/TopoModelX">TopoModelX</a>， 支持计算定义在这些拓扑域上的深度学习模型。</p></li>
+</ul>
+<p>除了所实现的软件包，我们还使用了 PyTorch <span class="citation">(<a href="#ref-paszke2017automatic">Paszke et al. 2017</a>)</span> 来训练本节中报告的神经网络。此外，我们还利用 Scikit-learn <span class="citation">(<a href="#ref-scikit-learn">Pedregosa et al. 2011</a>)</span> 计算了 1-Hodge Laplacians的特征向量。点云的法向量是使用点云工具包（Point Cloud Utils package）<span class="citation">(<a href="#ref-point-cloud-utils">Williams 2022</a>)</span>计算的。最后，在软件包的开发和计算过程中，我们使用了 NetworkX <span class="citation">(<a href="#ref-hagberg2008exploring">Hagberg, Swart, and S Chult 2008</a>)</span> 和 HyperNetX <span class="citation">(<a href="#ref-joslyn2021hypernetwork">Joslyn et al. 2021</a>)</span>。</p>
+</div>
+<div id="datasets" class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> 数据集<a href="implementation-and-numerical-results.html#datasets" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>在CCNNs的评估实验中，我们使用了四种数据集：Human Body, COSEG, SHREC11, 以及一个用于图分类的标准数据集 <span class="citation">(<a href="#ref-bianchi2020mincutpool">Bianchi, Gallicchio, and Micheli 2022</a>)</span>。数据集的摘要如下：</p>
+<p><strong>人体分割数据集，Human Body segmentation dataset</strong>. 文献<span class="citation">(<a href="#ref-atzmon2018point">Atzmon, Maron, and Lipman 2018</a>)</span> 中提出的原始人体分割数据集包含相对较大的网格，网格顶点最多可达 12000 个。该数据集中提供的分割标签是按面(per-face)设置的，分割准确率被定义为正确分类的面数与整个数据集中面总数的比率。在本文项工作中，我们使用了 <span class="citation">(<a href="#ref-hanocka2019meshcnn">Hanocka et al. 2019</a>)</span> 提供的原始人体数据集的简化版本，其中网格的节点数少于 1,000 个，分割标签被重新映射到边上。我们在第 <a href="implementation-and-numerical-results.html#mesh-segmentation">9.3.1</a>节的形状分析（例如，网格分割）任务中使用了这个简化版的人体数据集。</p>
+<p><strong>COSEG分割数据集，COSEG segmentation dataset</strong>. 原始 COSEG 数据集<span class="citation">(<a href="#ref-wang2012active">Y. Wang et al. 2012</a>)</span>包含 11 组带有基准真值（ground-true）分割的形状。在本文工作中，我们使用了原始 COSEG 数据集的一个子集，其中包含相对较大的外星人、花瓶和椅子集。这三个数据集分别包含 200、300 和 400 个形状。我们使用这个自定义的 COSEG 数据集子集来完成第 <a href="implementation-and-numerical-results.html#mesh-segmentation">9.3.1</a>节中的形状分析（例如，网格分割）任务。</p>
+<p><strong>SHREC11分类数据集，SHREC11 classification dataset</strong>. SHREC 2011 <span class="citation">(<a href="#ref-lian2011shape">Lian et al. 2011</a>)</span>, 简写为SHREC11, 是一个大型数据集，其中包含来自 30 个类别的 600 个非刚性变形形状（水密三角形网格，watertight triangel meshes<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a>），每个类别包含相同数量的物体。这些类别包括手、灯、女人、男人、火烈鸟和兔子。该数据集分为训练集和测试集，分别包含 480 个和 120 个形状。我们使用 SHREC11 数据集来完成 <a href="implementation-and-numerical-results.html#mesh-and-point-cloud-classification">9.3.2</a> 和 <a href="implementation-and-numerical-results.html#pooling-with-mapper-on-graphs-and-data-classification">9.4</a>章节中的形状分析任务。</p>
+<blockquote>
+<p>译者注：水密（watertight）网格通常描述由一个封闭曲面组成的网格，水密网格不包含孔洞并且内部定义明确</p>
+</blockquote>
+<p><strong>图分类基准数据集</strong>. 该数据集包含属于三个不同类别的图 <span class="citation">(<a href="#ref-bianchi2020mincutpool">Bianchi, Gallicchio, and Micheli 2022</a>)</span>。对于每个图，每个顶点（0-cochain）上的特征向量都是大小为 5 的独热向量，它存储了图上顶点的相对位置。该数据集分为简易版和困难版，简易版包含高度连接的图，而困难版包含稀疏的图。我们在第 <a href="implementation-and-numerical-results.html#graph-classification">9.3.3</a>节的图分类任务中使用了这个数据集。</p>
+</div>
+<div id="shape-analysis-mesh-segmentation-and-classification" class="section level2 hasAnchor" number="9.3">
+<h2><span class="header-section-number">9.3</span> 形状分析：网格分割与分类<a href="implementation-and-numerical-results.html#shape-analysis-mesh-segmentation-and-classification" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>用于形状分析实验（网格分割和分类）的 CC 结构是由网格的三角剖分简单诱导出来的。具体来说，0-、1-和 2-cells分别是网格的顶点、边和面。用于 CCNN 的矩阵是 <span class="math inline">\(B_{0,1},~B_{0,2}\)</span>、它们的转置矩阵以及（共）邻接矩阵 <span class="math inline">\(A_{1,1}\)</span>、<span class="math inline">\(coA_{1,1}\)</span> 和 <span class="math inline">\(coA_{2,1}\)</span>。</p>
+<p>CCNN 将共链向量作为输入特征。对于形状分析任务，我们考虑直接从底层网格的顶点坐标建立特征的共链，我们也注意到还有其他选择（例如 文献<span class="citation">(<a href="#ref-mejia2017spectral">Mejia, Ruiz-Salguero, and Cadavid 2017</a>)</span> 中基于光谱的共链）也可以包括在内。我们的形状分析任务有三个输入共链：顶点共链、边共链和面共链，每个顶点共链有两个输入特征：与顶点相关的位置和法向量（normal vector）。与<span class="citation">(<a href="#ref-hanocka2019meshcnn">Hanocka et al. 2019</a>)</span>类似，每个边共链由五个特征组成：每个面的边长、二面角（dihedral angle）、两个内角和两个边长比。最后，每个输入面共链由三个输入特征组成：面面积、面法线和三个面角度。</p>
+<div id="mesh-segmentation" class="section level3 hasAnchor" number="9.3.1">
+<h3><span class="header-section-number">9.3.1</span> 网格分割<a href="implementation-and-numerical-results.html#mesh-segmentation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>对于人体数据集 <span class="citation">(<a href="#ref-maron2017convolutional">Maron et al. 2017</a>)</span>，我们构建了一个 CCNN，它能产生一个边类。架构的张量图如图<a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(a)所示。对于 COSEG 数据集<span class="citation">(<a href="#ref-wang2012active">Y. Wang et al. 2012</a>)</span>，我们构建了一个 CCNN，结合我们提出的定义在顶点、边和面上的特征向量来学习最终的面类。如图 <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(b)所示，该架构使用关联矩阵以及（共）邻接矩阵来构建信号流。具体来说，张量图显示了三个非平方注意块（non-squared attention-blocks）和三个平方注意块（squared attention blocks）。如图 <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(b)所示，模型的深度选择为2。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:mesh-net"></span>
+<img src="figures/experiment.png" alt="The tensor diagrams of the CCNNs used in our experiments. (a): The CCNNs used in the mesh segmentation tasks. In particular, $\mbox{CCNN}_{HB}$ and $\mbox{CCNN}_{COSEG}$ are the architectures used on the Human Body dataset [@atzmon2018point] and on the COSEG dataset [@wang2012active], respectively. (b): The mesh classification CCNN used on the SHREC11 dataset [@lian2011shape]. (c): The graph classification CCNN used on the dataset provided in [@bianchi2020mincutpool]. (d): The mesh/point cloud classification CCNNs used in conjunction with the MOG algorithm on the SHREC11 dataset."  />
+<p class="caption">
+图 9.1: The tensor diagrams of the CCNNs used in our experiments. (a): The CCNNs used in the mesh segmentation tasks. In particular, <span class="math inline">\(\mbox{CCNN}_{HB}\)</span> and <span class="math inline">\(\mbox{CCNN}_{COSEG}\)</span> are the architectures used on the Human Body dataset <span class="citation">(<a href="#ref-atzmon2018point">Atzmon, Maron, and Lipman 2018</a>)</span> and on the COSEG dataset <span class="citation">(<a href="#ref-wang2012active">Y. Wang et al. 2012</a>)</span>, respectively. (b): The mesh classification CCNN used on the SHREC11 dataset <span class="citation">(<a href="#ref-lian2011shape">Lian et al. 2011</a>)</span>. (c): The graph classification CCNN used on the dataset provided in <span class="citation">(<a href="#ref-bianchi2020mincutpool">Bianchi, Gallicchio, and Micheli 2022</a>)</span>. (d): The mesh/point cloud classification CCNNs used in conjunction with the MOG algorithm on the SHREC11 dataset.
+</p>
+</div>
+<p>Note that the architectures chosen for the COSEG and for the Human Body datasets have the same number and types of building blocks; compare Figures <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(a) and (b). We use a random 85%-15% train-test split. For both of these architectures, a softmax activation is applied to the output tensor. All our segmentation models are trained for 600 epochs using a learning rate of 0.0001 and the standard cross-entropy loss. These results are consistent across Human Body and Shape COSEG datasets.</p>
+<p>We test the proposed CCNNs on mesh segmentation using the Human Body <span class="citation">(<a href="#ref-maron2017convolutional">Maron et al. 2017</a>)</span> and the Shape COSEG (vase, chair, and alien) <span class="citation">(<a href="#ref-wang2012active">Y. Wang et al. 2012</a>)</span> datasets. For each mesh in these datasets, the utilized CC structure is the one induced by the triangulation of the meshes, although other variations in the CC structure yield comparable results. Further, three <span class="math inline">\(k\)</span>-cochains are constructed for <span class="math inline">\(0\leq k \leq 2\)</span> and are utilized in CCNN training. As shown in Table <a href="implementation-and-numerical-results.html#tab:shape-xp">9.1</a>, CCNNs outperform three neural networks tailored to mesh analysis (HodgeNet <span class="citation">(<a href="#ref-smirnov2021hodgenet">Smirnov and Solomon 2021</a>)</span>, PD-MeshNet <span class="citation">(<a href="#ref-milano2020primal">Milano et al. 2020</a>)</span> and MeshCCN <span class="citation">(<a href="#ref-hanocka2019meshcnn">Hanocka et al. 2019</a>)</span>) on two out of four datasets, and are among the best two neural networks on all four datasets.</p>
+<table>
+<caption><span id="tab:shape-xp">表 9.1: </span>Predictive accuracy on test sets related to shape analysis, namely on Human Body and COSEG (vase, chair, alien) datasets. The results reported here are based on the <span class="math inline">\(\mbox{CCNN}_{COSEG}\)</span> and <span class="math inline">\(\mbox{CCNN}_{HB}\)</span> architectures. In particular, the result for <span class="math inline">\(\mbox{CCNN}_{HB}\)</span> is reported in the first column, whereas the results for <span class="math inline">\(\mbox{CCNN}_{COSEG}\)</span> are reported in the second, third and forth columns.</caption>
+<thead>
+<tr class="header">
+<th align="left">Method</th>
+<th align="center">Human Body</th>
+<th align="center">COSEG vase</th>
+<th align="center">COSEG chair</th>
+<th align="center">COSEG alien</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HodgeNet</td>
+<td align="center">85.03</td>
+<td align="center">90.30</td>
+<td align="center">95.68</td>
+<td align="center">96.03</td>
+</tr>
+<tr class="even">
+<td align="left">PD-MeshNet</td>
+<td align="center">85.61</td>
+<td align="center">95.36</td>
+<td align="center">97.23</td>
+<td align="center">98.18</td>
+</tr>
+<tr class="odd">
+<td align="left">MeshCNN</td>
+<td align="center">85.39</td>
+<td align="center">92.36</td>
+<td align="center">92.99</td>
+<td align="center">96.26</td>
+</tr>
+<tr class="even">
+<td align="left">CCNN</td>
+<td align="center">87.30</td>
+<td align="center">93.40</td>
+<td align="center">98.30</td>
+<td align="center">93.70</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Architecture of <span class="math inline">\(\mbox{CCNN}_{COSEG}\)</span> and <span class="math inline">\(\mbox{CCNN}_{HB}\)</span></strong>. In <span class="math inline">\(\mbox{CCNN}_{COSEG}\)</span>, as shown in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(a), we choose a CCNN pooling architecture as given in Definition <a href="push-forward-pooling-and-unpooling.html#def:general-pooling-hoan">7.5</a>, which pushes signals from vertices, edges and faces, and aggregates their information towards the final face prediction class. We choose <span class="math inline">\(\mbox{CCNN}_{HB}\)</span> similarly, except that the predicted signal is an edge class. The reason for this choice is that the Human Body dataset <span class="citation">(<a href="#ref-atzmon2018point">Atzmon, Maron, and Lipman 2018</a>)</span> encodes the segmentation information on edges.</p>
+</div>
+<div id="mesh-and-point-cloud-classification" class="section level3 hasAnchor" number="9.3.2">
+<h3><span class="header-section-number">9.3.2</span> Mesh and point cloud classification<a href="implementation-and-numerical-results.html#mesh-and-point-cloud-classification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We evaluate our method on mesh classification using the SHREC11 dataset <span class="citation">(<a href="#ref-lian2011shape">Lian et al. 2011</a>)</span> based on the same cochains and CC structure used in the segmentation experiment of Section <a href="implementation-and-numerical-results.html#mesh-segmentation">9.3.1</a>. The CCNN architecture for our mesh classification task, denoted by <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span>, is demonstrated in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(b). The final layer of <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span>, depicted as a grey node in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(b), is a simple pooling operation that sums all embeddings of the CC after mapping them to the same Euclidean space. The <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span> is trained for 40 epochs with both tanh and identity activation functions using a learning rate of 0.005 and the standard cross-entropy loss. We use anisotropic scaling and random rotations for data augmentation. Each mesh is augmented 30 times, is centered around the vertex center of the mass, and is rescaled to fit inside the unit cube.</p>
+<p>The <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span> with identity activations and <span class="math inline">\(\tanh\)</span> activations achieve predictive accuracies of 96.67% and 99.17%, respectively. Table <a href="implementation-and-numerical-results.html#tab:shrec">9.2</a> shows that CCNNs outperform two neural networks tailored to mesh analysis (HodgeNet and MeshCCN), being the second best model behind PD-MeshNet in mesh and point cloud classification. It is worth mentioning that the mesh classification CCNN requires a significantly lower number of epochs to train (40 epochs) as compared to the mesh segmentation CCNNs (600 epochs).</p>
+<table>
+<caption><span id="tab:shrec">表 9.2: </span>Predictive accuracy on the SHREC11 test dataset. The left and right column report the mesh and point cloud classification results, respectively. The CCNN for mesh classification is <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span>, while the CCNN for point cloud classification is <span class="math inline">\(\mbox{CCNN}_{MOG2}\)</span>.</caption>
+<thead>
+<tr class="header">
+<th align="left">Method</th>
+<th align="center">Mesh</th>
+<th align="center">Point cloud</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HodgeNet</td>
+<td align="center">99.10</td>
+<td align="center">94.70</td>
+</tr>
+<tr class="even">
+<td align="left">PD-MeshNet</td>
+<td align="center">99.70</td>
+<td align="center">99.10</td>
+</tr>
+<tr class="odd">
+<td align="left">MeshCNN</td>
+<td align="center">98.60</td>
+<td align="center">91.00</td>
+</tr>
+<tr class="even">
+<td align="left">CCNN</td>
+<td align="center">99.17</td>
+<td align="center">95.20</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Architecture of <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span></strong>. The <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span> has two layers and is chosen as a pooling CCNN in the sense of Definition <a href="push-forward-pooling-and-unpooling.html#def:general-pooling-hoan">7.5</a>, similar to <span class="math inline">\(\mbox{CCNN}_{COSEG}\)</span> and <span class="math inline">\(\mbox{CCNN}_{HB}\)</span>. The main difference is that the final layer of <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span>, represented by the grey point in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(b), is a global pooling function that sums all embeddings of all dimensions (zero, one and two) of the underlying CC after mapping them to the same Euclidean space.</p>
+</div>
+<div id="graph-classification" class="section level3 hasAnchor" number="9.3.3">
+<h3><span class="header-section-number">9.3.3</span> Graph classification<a href="implementation-and-numerical-results.html#graph-classification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For the graph classification task, we use the graph classification benchmark provided in <span class="citation">(<a href="#ref-bianchi2020mincutpool">Bianchi, Gallicchio, and Micheli 2022</a>)</span>; the dataset consists of graphs with three different labels. For each graph, the feature vector on each vertex (the 0-cochain) is a one-hot vector of size five, and it stores the relative position of the vertex on the graph. To construct the CC structure, we use the 2-clique complex of the input graph. We then proceed to build the CCNN for graph classification, denoted by <span class="math inline">\(\mbox{CCNN}_{Graph}\)</span>, which is visualized in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(c). The matrices used for the construction of <span class="math inline">\(\mbox{CCNN}_{Graph}\)</span> are <span class="math inline">\(B_{0,1},~B_{1,2},~B_{0,2}\)</span>, their transpose matrices, and the (co)adjacency matrices <span class="math inline">\(A_{0,1},A_{1,1},~coA_{2,1}\)</span>. The cochains of <span class="math inline">\(\mbox{CCNN}_{Graph}\)</span> are constructed as follows. For each graph in the dataset, we set the 0-cochain to be the one-hot vector of size 5 provided by the dataset. This one-hot vector stores the relative position of the vertex on the graph. We also construct the 1-cochain and 2-cochain on the 2-clique complex of the graph by considering the coordinate-wise max value of the one-hot vectors attached to the vertices of each cell. The input to <span class="math inline">\(\mbox{CCNN}_{graoh}\)</span> consists of the 0-cochain provided as a part of the dataset as well as the constructed 1 and 2-cochains. The grey node in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(c) indicates a simple mean pooling operation. We train this network with a learning rate of 0.005 and no data augmentation.</p>
+<p>Table <a href="implementation-and-numerical-results.html#tab:wrap-tab">9.3</a> reports the results on the <em>easy</em> and the <em>hard</em> versions of the datasets<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a>, and compares them to six state-of-the-art GNNs. As shown in Table <a href="implementation-and-numerical-results.html#tab:wrap-tab">9.3</a>, CCNNs outperform all six GNNs on the hard dataset, and five of the GNNs on the easy dataset. The proposed CCNN outperforms MinCutPool on the hard dataset, while it attains comparable performance to MinCutPool on the easy dataset.</p>
+<table>
+<caption><span id="tab:wrap-tab">表 9.3: </span>Predictive accuracy on the test set of <span class="citation">(<a href="#ref-bianchi2020mincutpool">Bianchi, Gallicchio, and Micheli 2022</a>)</span> related to graph classification. All results are reported using the <span class="math inline">\(\mbox{CCNN}_{Graph}\)</span> architecture.</caption>
+<colgroup>
+<col width="11%" />
+<col width="13%" />
+<col width="10%" />
+<col width="14%" />
+<col width="10%" />
+<col width="11%" />
+<col width="17%" />
+<col width="10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Dataset</th>
+<th align="center">Graclus</th>
+<th align="center">NDP</th>
+<th align="center">DiffPool</th>
+<th align="center">Top-K</th>
+<th align="left">SAGPool</th>
+<th align="center">MinCutPool</th>
+<th align="center">CCNN</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Easy</td>
+<td align="center">97.81</td>
+<td align="center">97.93</td>
+<td align="center">98.64</td>
+<td align="center">82.47</td>
+<td align="left">84.23</td>
+<td align="center">99.02</td>
+<td align="center">98.90</td>
+</tr>
+<tr class="even">
+<td align="left">Hard</td>
+<td align="center">69.08</td>
+<td align="center">72.67</td>
+<td align="center">69.98</td>
+<td align="center">42.80</td>
+<td align="left">37.71</td>
+<td align="center">73.80</td>
+<td align="center">75.59</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Architecture of <span class="math inline">\(\mbox{CCNN}_{Graph}\)</span></strong>. In the <span class="math inline">\(\mbox{CCNN}_{Graph}\)</span> displayed in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(c) we choose a CCNN pooling architecture as given in Definition <a href="push-forward-pooling-and-unpooling.html#def:general-pooling-hoan">7.5</a> that pushes signals from vertices, edges and faces, and aggregate their information towards the higher-order cells before making making the final prediction. For the dataset of <span class="citation">(<a href="#ref-bianchi2020mincutpool">Bianchi, Gallicchio, and Micheli 2022</a>)</span>, we experiment with two architectures; the first one is identical to the <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span> shown in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(b), and the second one is the <span class="math inline">\(\mbox{CCNN}_{Graph}\)</span> shown in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(c). We report the results for <span class="math inline">\(\mbox{CCNN}_{Graph}\)</span>, as it provides superior performance. Note that when this neural network is conducted on an underlying simplicial complex, the neighborhood matrices <span class="math inline">\(B_{0,1}\)</span> and <span class="math inline">\(B_{1,3}\)</span> are typically not considered, hence the CC-structure equipped with these additional incidence matrices improves the generalization performance of the <span class="math inline">\(\mbox{CCNN}_{Graph}\)</span>.</p>
+</div>
+</div>
+<div id="pooling-with-mapper-on-graphs-and-data-classification" class="section level2 hasAnchor" number="9.4">
+<h2><span class="header-section-number">9.4</span> Pooling with mapper on graphs and data classification<a href="implementation-and-numerical-results.html#pooling-with-mapper-on-graphs-and-data-classification" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We perform experiments to measure the effectiveness of the MOG pooling strategy discussed in Section <a href="push-forward-pooling-and-unpooling.html#mapper-and-the-cc-pooling-operation">7.4</a>. Recall that the MOG algorithm requires two pieces of input: the 1-skeleton of a CC <span class="math inline">\(\mathcal{X}\)</span>, and a scalar function on the vertices of <span class="math inline">\(\mathcal{X}\)</span>. Our choice for the input scalar function is the average geodesic distance (AGD) <span class="citation">(<a href="#ref-KimLipmanChen2010">V. G. Kim et al. 2010</a>)</span>, which is suitable for shape detection as it is invariant to reflection and rotation. For two entities <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> on a graph, the geodesic distance between <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span>, denoted by <span class="math inline">\(d(v,u)\)</span>, is computed using Dijkstra’s shortest path algorithm. The AGD is given by the following equation:
+<span class="math display" id="eq:agd">\[\begin{equation}
+AGD(v)=\frac{1}{|V|}\sum_{u\in V}d(v,u).
+\tag{9.1}
+\end{equation}\]</span></p>
+<p>From Equation <a href="implementation-and-numerical-results.html#eq:agd">(9.1)</a>, it is immediate that the vertices near the center of the graph are likely to have low function values, while points on the periphery are likely to have high values. This observation has been utilized to study graph symmetry <span class="citation">(<a href="#ref-KimLipmanChen2010">V. G. Kim et al. 2010</a>)</span>, and it provides a justification for selecting the AGD for the MOG pooling strategy. Figure <a href="implementation-and-numerical-results.html#fig:pooling-examples">9.2</a> presents a few examples of applying the MOG pooling strategy using AGD on the SHREC11 dataset.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:pooling-examples"></span>
+<img src="figures/pooling_examples.png" alt="Examples of applying the MOG algorithm on the SHREC11 dataset [@lian2011shape]. In each figure, we show the original mesh graph on the left and the mapper graph on the right. The scalar function chosen for the MOG algorithm is the average geodesic distance (AGD). We observe that the pooled mapper graph has similar overall shape to the original graphs."  />
+<p class="caption">
+图 9.2: Examples of applying the MOG algorithm on the SHREC11 dataset <span class="citation">(<a href="#ref-lian2011shape">Lian et al. 2011</a>)</span>. In each figure, we show the original mesh graph on the left and the mapper graph on the right. The scalar function chosen for the MOG algorithm is the average geodesic distance (AGD). We observe that the pooled mapper graph has similar overall shape to the original graphs.
+</p>
+</div>
+<p>In order to demonstrate the effectiveness of our MOG pooling approach, we conduct three experiments on the SHREC11 dataset: mesh classification based on CC-pooling with input vertex and edge features (Section <a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-and-edge-features">9.4.1</a>), mesh classification based on CC-pooling with input vertex features only (Section <a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-features-only">9.4.2</a>), and point cloud classification based on CC-pooling with input vertex features only (Section <a href="implementation-and-numerical-results.html#point-cloud-classification-cc-pooling-with-input-vertex-features-only">9.4.3</a>). The experiments in Sections <a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-and-edge-features">9.4.1</a> and <a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-features-only">9.4.2</a> utilize the mesh structure in the SHREC11 dataset, whereas the experiment in Section <a href="implementation-and-numerical-results.html#point-cloud-classification-cc-pooling-with-input-vertex-features-only">9.4.3</a> utilizes its own point cloud version. In particular, we choose two simple CCNN architectures shown in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(d), denoted by <span class="math inline">\(\mbox{CCNN}_{MOG1}\)</span> and <span class="math inline">\(\mbox{CCNN}_{MOG2}\)</span>, as opposed to the more complicated architecture of <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span> in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(b). The main difference between <span class="math inline">\(\mbox{CCNN}_{MOG1}\)</span> and <span class="math inline">\(\mbox{CCNN}_{MOG2}\)</span> is the choice of the input feature vectors as described next.</p>
+<div id="mesh-classification-cc-pooling-with-input-vertex-and-edge-features" class="section level3 hasAnchor" number="9.4.1">
+<h3><span class="header-section-number">9.4.1</span> Mesh classification: CC-pooling with input vertex and edge features<a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-and-edge-features" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In this experiment, we consider the vertex feature vector to be the position concatenated with the normal vectors for each vertex in the underlying mesh. For the edge features, we compute the first ten eigenvectors of the 1-Hodge Laplacian <span class="citation">(<a href="#ref-dodziuk1976finite">Dodziuk 1976</a>; <a href="#ref-eckmann1944harmonische">Eckmann 1944</a>)</span> and attach a 10-dimensional feature vector to the edges of the underlying mesh. The CC that we consider here is 3-dimensional, as it consists of the triangular mesh (vertices, edges and faces) and of 3-cells. The 3-cells are obtained using the MOG algorithm, and are used for augmenting each mesh. We calculate the 3-cells via the MOG algorithm using the AGD scalar function as input. We conduct this experiment using the CCNN defined via the tensor diagram <span class="math inline">\(\mbox{CCNN}_{MOG1}\)</span> given in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(d). During training, we augment each mesh with ten additional meshes, with each of these additional meshes being obtained by a random rotation as well as 0.1% noise perturbation to the vertex positions. We train <span class="math inline">\(\mbox{CCNN}_{MOG1}\)</span> for 100 epochs using a learning rate of 0.0002 and the standard cross-entropy loss, and obtain an accuracy of 98.1%. While the accuracy of <span class="math inline">\(\mbox{CCNN}_{MOG1}\)</span> is lower than the one we report for <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span> (99.17%) in Table <a href="implementation-and-numerical-results.html#tab:shrec">9.2</a>, we note that <span class="math inline">\(\mbox{CCNN}_{MOG1}\)</span> requires a significantly smaller number of replications for mesh augmentation to achieve a similar accuracy (<span class="math inline">\(\mbox{CCNN}_{MOG1}\)</span> requires 10, whereas <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span> required 30 replications).</p>
+<p><strong>Architecture of <span class="math inline">\(\mbox{CCNN}_{MOG1}\)</span></strong>. The tensor diagram <span class="math inline">\(\mbox{CCNN}_{MOG1}\)</span> of Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(d) corresponds to a pooling CCNN. In particular, <span class="math inline">\(\mbox{CCNN}_{MOG1}\)</span> pushes forward the signal towards two different higher-order cells: the faces of the mesh as well as the 3-cells obtained from the MOG algorithm.</p>
+</div>
+<div id="mesh-classification-cc-pooling-with-input-vertex-features-only" class="section level3 hasAnchor" number="9.4.2">
+<h3><span class="header-section-number">9.4.2</span> Mesh classification: CC-pooling with input vertex features only<a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-features-only" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In this experiment, we consider the position and the normal vectors of the input vertices. The CC structure that we consider is the underlying graph structure obtained from each mesh; i.e., we only use the vertices and the edges, and ignore the faces. We augment this structure by 2-cells obtained via the MOG algorithm using the AGD scalar function as input. We choose the network architecture to be relatively simpler than <span class="math inline">\(\mbox{CCNN}_{MOG1}\)</span>, and report it in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(d) as <span class="math inline">\(\mbox{CCNN}_{MOG2}\)</span>. During training we augment each mesh with 10 additional meshes, with each of these additional meshes being obtained by a random rotation as well as 0.05% noise perturbation to the vertex positions. We train <span class="math inline">\(\mbox{CCNN}_{MOG2}\)</span> for 100 epochs using a learning rate of 0.0003 and the standard cross-entropy loss, and obtain an accuracy of 97.1%.</p>
+<p><strong>Architecture of <span class="math inline">\(\mbox{CCNN}_{MOG2}\)</span> for mesh classification</strong>. The tensor diagram <span class="math inline">\(\mbox{CCNN}_{MOG2}\)</span> of Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(d) corresponds to a pooling CCNN. In particular, <span class="math inline">\(\mbox{CCNN}_{MOG2}\)</span> pushes forward the signal towards a single 2-cell obtained from the MOG algorithm. Observe that the overall architecture of <span class="math inline">\(\mbox{CCNN}_{MOG2}\)</span> is similar in principle to AlexNet <span class="citation">(<a href="#ref-krizhevsky2017imagenet">Krizhevsky, Sutskever, and Hinton 2017</a>)</span>, where convolutional layers are followed by pooling layers.</p>
+</div>
+<div id="point-cloud-classification-cc-pooling-with-input-vertex-features-only" class="section level3 hasAnchor" number="9.4.3">
+<h3><span class="header-section-number">9.4.3</span> Point cloud classification: CC-pooling with input vertex features only<a href="implementation-and-numerical-results.html#point-cloud-classification-cc-pooling-with-input-vertex-features-only" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In this experiment, we consider point cloud classification on the SHREC11 dataset. The setup is similar in principle to the one studied in Section <a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-features-only">9.4.2</a> where we consider only the features supported on the vertices of the point cloud as input. Specifically, for each mesh in the SHREC11 dataset, we sample 1,000 points from the surface of the mesh. Additionally, we estimate the normal vectors of the resulting point clouds using the Point Cloud Utils package <span class="citation">(<a href="#ref-point-cloud-utils">Williams 2022</a>)</span>. To build the CC structure, we first consider the <span class="math inline">\(k\)</span>-nearest neighborhood graph obtained from each point cloud using <span class="math inline">\(k=7\)</span>. We then augment this graph by 2-cells obtained via the MOG algorithm using the AGD scalar function as input. We train the <span class="math inline">\(\mbox{CCNN}_{MOG2}\)</span> shown in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(d). During training, we augment each point cloud with 12 additional instances, each one of these instances being obtained by random rotation. We train <span class="math inline">\(\mbox{CCNN}_{MOG2}\)</span> for 100 epochs using a learning rate of 0.0003 and the standard cross-entropy loss, and obtain an accuracy of 95.2% (see Table <a href="implementation-and-numerical-results.html#tab:shrec">9.2</a>).</p>
+</div>
+</div>
+<div id="ablation-studies" class="section level2 hasAnchor" number="9.5">
+<h2><span class="header-section-number">9.5</span> Ablation studies<a href="implementation-and-numerical-results.html#ablation-studies" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this section, we perform two ablation studies. The first ablation study reveals that pooling strategies in CCNNs have a crucial effect on predictive performance. The second ablation study demonstrates that CCNNs have better predictive capacity than GNNs; the advantage of CCNNs arises from their topological pooling operations and from their ability to learn from topological features.</p>
+<p><strong>Pooling strategies in CCNNs</strong>. To evaluate the impact of the choice of pooling strategy on predictive performance, we experiment with two pooling strategies using the SHREC11 classification dataset. The first pooling strategy is the MOG algorithm described in Section <a href="implementation-and-numerical-results.html#pooling-with-mapper-on-graphs-and-data-classification">9.4</a>; the results of this pooling strategy based on <span class="math inline">\(\mbox{CCNN}_{MOG2}\)</span> are discussed in Section <a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-features-only">9.4.2</a> (97.1%). The second pooling strategy is briefly described as follows. For each mesh, we consider the 2-dimensional CC obtained by considering each 1-hop neighborhood to be the 1-cells in the CC and each 2-hop neighborhood to be the 2-cells in the CC. We train <span class="math inline">\(\mbox{CCNN}_{MOG2}\)</span>, and obtain an accuracy of 89.2%, which is lower than 97.1%. These experiments suggest that the choice of pooling strategy has a crucial effect on predictive performance.</p>
+<p><strong>Comparing CCNNs to GNNs in terms of predictive performance</strong>. Observe that <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span> has topological features of dimension one and two as inputs. On the other hand, <span class="math inline">\(\mbox{CCNN}_{MOG2}\)</span> has only vertex features as input, but it learns the higher-order cell latent features by using the push-forward operation that pushes the signal from 0-cells to the 2-cells obtained from the MOG algorithm. In both cases, using a higher-order structure is essential for improving predictive performance, even though two different strategies towards exploiting the higher-order structures are utilized. To support our claim, we run an experiment in which we replace the pooling layer in <span class="math inline">\(\mbox{CCNN}_{MOG2}\)</span> by the cochain operator induced by <span class="math inline">\(A_{0,1}\)</span>, effectively rendering the neural network as a GNN. In this setting, using the same setup as in experiment <a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-features-only">9.4.2</a>, we obtain an accuracy of 84.56%. This experiment reveals the performance advantages of employing higher-order structures, either by utilizing the input topological features supported on higher-order cells or via pooling strategies that augment higher-order cells.</p>
+
+</div>
+</div>
+<h3>参考文献<a href="参考文献.html#参考文献" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-atzmon2018point" class="csl-entry">
+Atzmon, Matan, Haggai Maron, and Yaron Lipman. 2018. <span>“Point Convolutional Neural Networks by Extension Operators.”</span> <em>ACM Transactions on Graphics</em> 37 (4).
+</div>
+<div id="ref-bianchi2020mincutpool" class="csl-entry">
+Bianchi, Filippo Maria, Claudio Gallicchio, and Alessio Micheli. 2022. <span>“Pyramidal Reservoir Graph Neural Network.”</span> <em>Neurocomputing</em> 470: 389–404.
+</div>
+<div id="ref-dodziuk1976finite" class="csl-entry">
+Dodziuk, Jozef. 1976. <span>“Finite-Difference Approach to the <span>H</span>odge Theory of Harmonic Forms.”</span> <em>American Journal of Mathematics</em> 98 (1): 79–104.
+</div>
+<div id="ref-eckmann1944harmonische" class="csl-entry">
+Eckmann, Beno. 1944. <span>“Harmonische Funktionen Und Randwertaufgaben in Einem Komplex.”</span> <em>Commentarii Mathematici Helvetici</em> 17 (1): 240–55.
+</div>
+<div id="ref-hagberg2008exploring" class="csl-entry">
+Hagberg, Aric, Pieter Swart, and Daniel S Chult. 2008. <span>“Exploring Network Structure, Dynamics, and Function Using <span>N</span>etwork<span>X</span>.”</span> Los Alamos National Lab (LANL), Los Alamos, NM (United States).
+</div>
+<div id="ref-hanocka2019meshcnn" class="csl-entry">
+Hanocka, Rana, Amir Hertz, Noa Fish, Raja Giryes, Shachar Fleishman, and Daniel Cohen-Or. 2019. <span>“Mesh<span>CNN</span>: A Network with an Edge.”</span> <em>ACM Transactions on Graphics</em> 38 (4): 1–12.
+</div>
+<div id="ref-joslyn2021hypernetwork" class="csl-entry">
+Joslyn, Cliff A, Sinan G Aksoy, Tiffany J Callahan, Lawrence E Hunter, Brett Jefferson, Brenda Praggastis, Emilie Purvine, and Ignacio J Tripodi. 2021. <span>“Hypernetwork Science: From Multidimensional Networks to Computational Topology.”</span> In <em>Unifying Themes in Complex Systems x: Proceedings of the Tenth International Conference on Complex Systems</em>, 377–92. Springer.
+</div>
+<div id="ref-KimLipmanChen2010" class="csl-entry">
+Kim, Vladimir G, Yaron Lipman, Xiaobai Chen, and Thomas Funkhouser. 2010. <span>“Möbius Transformations for Global Intrinsic Symmetry Analysis.”</span> <em>Computer Graphics Forum</em> 29 (5): 1689–1700.
+</div>
+<div id="ref-krizhevsky2017imagenet" class="csl-entry">
+Krizhevsky, Alex, Ilya Sutskever, and Geoffrey E Hinton. 2017. <span>“Imagenet Classification with Deep Convolutional Neural Networks.”</span> <em>Communications of the ACM</em> 60 (6): 84–90.
+</div>
+<div id="ref-lian2011shape" class="csl-entry">
+Lian, Z., A. Godil, B. Bustos, M Daoudi, J. Hermans, S. Kawamura, Y. Kurita, G. Lavoua, P. Dp Suetens, et al. 2011. <span>“Shape Retrieval on Non-Rigid 3<span>D</span> Watertight Meshes.”</span> In <em>Eurographics Workshop on 3d Object Retrieval (3DOR)</em>. Citeseer.
+</div>
+<div id="ref-maron2017convolutional" class="csl-entry">
+Maron, Haggai, Meirav Galun, Noam Aigerman, Miri Trope, Nadav Dym, Ersin Yumer, Vladimir G Kim, and Yaron Lipman. 2017. <span>“Convolutional Neural Networks on Surfaces via Seamless Toric Covers.”</span> <em>ACM Transactions on Graphics</em> 36 (4): 71–71.
+</div>
+<div id="ref-mejia2017spectral" class="csl-entry">
+Mejia, Daniel, Oscar Ruiz-Salguero, and Carlos A. Cadavid. 2017. <span>“Spectral-Based Mesh Segmentation.”</span> <em>International Journal on Interactive Design and Manufacturing</em> 11 (3): 503–14.
+</div>
+<div id="ref-milano2020primal" class="csl-entry">
+Milano, Francesco, Antonio Loquercio, Antoni Rosinol, Davide Scaramuzza, and Luca Carlone. 2020. <span>“Primal-Dual Mesh Convolutional Neural Networks.”</span> <em>Conference on Neural Information Processing Systems</em> 33: 952–63.
+</div>
+<div id="ref-paszke2017automatic" class="csl-entry">
+Paszke, Adam, Sam Gross, Soumith Chintala, Gregory Chanan, Edward Yang, Zachary DeVito, Zeming Lin, Alban Desmaison, Luca Antiga, and Adam Lerer. 2017. <span>“Automatic Differentiation in <span>P</span>y<span>T</span>orch.”</span> In <em>NIPS Workshop</em>.
+</div>
+<div id="ref-scikit-learn" class="csl-entry">
+Pedregosa, F., G. Varoquaux, A. Gramfort, V. Michel, B. Thirion, O. Grisel, M. Blondel, et al. 2011. <span>“Scikit-Learn: Machine Learning in <span>P</span>ython.”</span> <em>Jmlr</em> 12: 2825–30.
+</div>
+<div id="ref-smirnov2021hodgenet" class="csl-entry">
+Smirnov, Dmitriy, and Justin Solomon. 2021. <span>“Hodge<span>N</span>et: Learning Spectral Geometry on Triangle Meshes.”</span> <em>ACM Transactions on Graphics</em> 40 (4): 1–11.
+</div>
+<div id="ref-wang2012active" class="csl-entry">
+Wang, Yunhai, Shmulik Asafi, Oliver Van Kaick, Hao Zhang, Daniel Cohen-Or, and Baoquan Chen. 2012. <span>“Active Co-Analysis of a Set of Shapes.”</span> <em>ACM Transactions on Graphics</em> 31 (6): 1–10.
+</div>
+<div id="ref-point-cloud-utils" class="csl-entry">
+Williams, Francis. 2022. <span>“Point <span>C</span>loud <span>U</span>tils.”</span>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="8">
+<li id="fn8"><p>水密（watertight）网格通常描述由一个封闭曲面组成的网格，水密网格不包含孔洞并且内部定义明确<a href="implementation-and-numerical-results.html#fnref8" class="footnote-back">↩︎</a></p></li>
+<li id="fn9"><p>The difficulty in these datasets is controlled by the compactness degree of the graph clusters; clusters in the ‘easy’ data have more in-between cluster connections, while clusters in the `hard’ data are more isolated <span class="citation">(<a href="#ref-bianchi2020mincutpool">Bianchi, Gallicchio, and Micheli 2022</a>)</span>.<a href="implementation-and-numerical-results.html#fnref9" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="hasse-graph-interpretation-of-ccnns-1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="related-work.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook/js/app.min.js"></script>
+<script src="libs/gitbook/js/clipboard.min.js"></script>
+<script src="libs/gitbook/js/plugin-search.js"></script>
+<script src="libs/gitbook/js/plugin-sharing.js"></script>
+<script src="libs/gitbook/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook/js/jquery.highlight.js"></script>
+<script src="libs/gitbook/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/pyt-team/tdlbook/edit/main/rmd/09-implementation-and-numerical-experiments.rmd",
+"text": "编辑"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "none"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

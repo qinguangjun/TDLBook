@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>第 7 章 前推、池化和反池化 | 拓扑深度学习：超越图数据</title>
+  <meta name="description" content="一本关于拓扑深度学习的书。" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="第 7 章 前推、池化和反池化 | 拓扑深度学习：超越图数据" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="一本关于拓扑深度学习的书。" />
+  <meta name="github-repo" content="pyt-team/tdlbook" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="第 7 章 前推、池化和反池化 | 拓扑深度学习：超越图数据" />
+  
+  <meta name="twitter:description" content="一本关于拓扑深度学习的书。" />
+  
+
+<meta name="author" content="Mustafa Hajij, Theodore Papamarkou, Ghada Zamzmi, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Michael T. Schaub" />
+
+
+<meta name="date" content="2024-09-03" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="message-passing.html"/>
+<link rel="next" href="hasse-graph-interpretation-of-ccnns-1.html"/>
+<script src="libs/jquery/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="css/glossarybox.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">拓扑深度学习</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>贡献者</a></li>
+<li class="chapter" data-level="" data-path="译者.html"><a href="译者.html"><i class="fa fa-check"></i>译者</a></li>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html"><i class="fa fa-check"></i>序言</a>
+<ul>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html#编译"><i class="fa fa-check"></i>编译</a></li>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html#致谢"><i class="fa fa-check"></i>致谢</a></li>
+</ul></li>
+<li class="part"><span><b>第一部分：基础知识</b></span></li>
+<li class="chapter" data-level="1" data-path="引言.html"><a href="引言.html"><i class="fa fa-check"></i><b>1</b> 引言</a></li>
+<li class="chapter" data-level="2" data-path="motivation.html"><a href="motivation.html"><i class="fa fa-check"></i><b>2</b> 研究动机</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="motivation.html"><a href="motivation.html#从拓扑空间数据中建模和学习"><i class="fa fa-check"></i><b>2.1</b> 从拓扑空间数据中建模和学习</a></li>
+<li class="chapter" data-level="2.2" data-path="motivation.html"><a href="motivation.html#the-utility-of-topology"><i class="fa fa-check"></i><b>2.2</b> 拓扑的有用性</a></li>
+<li class="chapter" data-level="2.3" data-path="motivation.html"><a href="motivation.html#深度学习和结构化计算的统一视角"><i class="fa fa-check"></i><b>2.3</b> 深度学习和结构化计算的统一视角</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preliminaries.html"><a href="preliminaries.html"><i class="fa fa-check"></i><b>3</b> 预备知识</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="preliminaries.html"><a href="preliminaries.html#邻域函数和拓扑空间"><i class="fa fa-check"></i><b>3.1</b> 邻域函数和拓扑空间</a></li>
+<li class="chapter" data-level="3.2" data-path="preliminaries.html"><a href="preliminaries.html#bridging-the-gap-among-higher-order-networks"><i class="fa fa-check"></i><b>3.2</b> 填补与高阶网络间的代沟</a></li>
+<li class="chapter" data-level="3.3" data-path="preliminaries.html"><a href="preliminaries.html#hierarchical-structure-and-set-type-relations"><i class="fa fa-check"></i><b>3.3</b> 层次化结构与集合型关系</a></li>
+</ul></li>
+<li class="part"><span><b>第二部分:组合复形</b></span></li>
+<li class="chapter" data-level="4" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html"><i class="fa fa-check"></i><b>4</b> 组合复形</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc-definition"><i class="fa fa-check"></i><b>4.1</b> 组合复形定义</a></li>
+<li class="chapter" data-level="4.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc-homomorphisms-and-sub-ccs"><i class="fa fa-check"></i><b>4.2</b> CC同态和子CCs</a></li>
+<li class="chapter" data-level="4.3" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#motivation-for-ccs"><i class="fa fa-check"></i><b>4.3</b> 引入CCs的动机</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#pooling-operations-on-ccs"><i class="fa fa-check"></i><b>4.3.1</b> CCs上的池化操作</a></li>
+<li class="chapter" data-level="4.3.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#structural-advantages-of-ccs"><i class="fa fa-check"></i><b>4.3.2</b> CCs的结构化优势</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#neighbourhood-functions-on-ccs"><i class="fa fa-check"></i><b>4.4</b> CCs上的邻域函数</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#incidence-in-a-cc"><i class="fa fa-check"></i><b>4.4.1</b> CC中的关联关系（Incidence）</a></li>
+<li class="chapter" data-level="4.4.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc内的邻接关系adjacency"><i class="fa fa-check"></i><b>4.4.2</b> CC内的邻接关系（Adjacency）</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#data-on-ccs"><i class="fa fa-check"></i><b>4.5</b> CCs上的数据</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html"><i class="fa fa-check"></i><b>5</b> 组合复形神经网络（Combinatorial complex neural networks）</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#building-ccnns-tensor-diagrams"><i class="fa fa-check"></i><b>5.1</b> 构建 CCNN：张量图</a></li>
+<li class="chapter" data-level="5.2" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#push-forward-operator-and-merge-node"><i class="fa fa-check"></i><b>5.2</b> 前推操作（Push-forward operator）和聚合节点</a></li>
+<li class="chapter" data-level="5.3" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#the-main-three-tensor-operations"><i class="fa fa-check"></i><b>5.3</b> 三种主要的张量操作</a></li>
+<li class="chapter" data-level="5.4" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#definition-of-combinatorial-complex-convolutional-networks"><i class="fa fa-check"></i><b>5.4</b> 组合复形卷积网络的定义（combinatorial complex convolutional networks）</a></li>
+<li class="chapter" data-level="5.5" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#combinatorial-complex-attention-neural-networks"><i class="fa fa-check"></i><b>5.5</b> 组合复形注意力神经网络</a></li>
+</ul></li>
+<li class="part"><span><b>第三部分：高阶消息传递（Higher-order message passing）</b></span></li>
+<li class="chapter" data-level="6" data-path="message-passing.html"><a href="message-passing.html"><i class="fa fa-check"></i><b>6</b> 消息传递</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="message-passing.html"><a href="message-passing.html#definition-of-higher-order-message-passing"><i class="fa fa-check"></i><b>6.1</b> 高阶消息传递的定义</a></li>
+<li class="chapter" data-level="6.2" data-path="message-passing.html"><a href="message-passing.html#higher-order-message-passing-neural-networks-are-ccnns"><i class="fa fa-check"></i><b>6.2</b> 高阶消息传递神经网络就是CCNNs</a></li>
+<li class="chapter" data-level="6.3" data-path="message-passing.html"><a href="message-passing.html#merge-nodes-and-higher-order-message-passing-a-qualitative-comparison"><i class="fa fa-check"></i><b>6.3</b> 聚合节点和高阶消息传递：量化比较</a></li>
+<li class="chapter" data-level="6.4" data-path="message-passing.html"><a href="message-passing.html#attention-higher-order-message-passing-and-ccanns"><i class="fa fa-check"></i><b>6.4</b> 注意力高阶消息传递和CCANNs</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html"><i class="fa fa-check"></i><b>7</b> 前推、池化和反池化</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#cc-pooling-and-unpooling"><i class="fa fa-check"></i><b>7.1</b> CC池化和反池化</a></li>
+<li class="chapter" data-level="7.2" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#formulating-common-pooling-operations-as-cc-pooling"><i class="fa fa-check"></i><b>7.2</b> 将常见的池化操作表述为 CC-pooling</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#graph-pooling-as-cc-pooling"><i class="fa fa-check"></i><b>7.2.1</b> 用CC-pooling表示图池化操作</a></li>
+<li class="chapter" data-level="7.2.2" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#image-pooling-as-cc-pooling"><i class="fa fa-check"></i><b>7.2.2</b> 图像池化作为CC-pooing</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#pooling-and-unpooling-ccnns"><i class="fa fa-check"></i><b>7.3</b> 池化与反池化CCNNs</a></li>
+<li class="chapter" data-level="7.4" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#mapper-and-the-cc-pooling-operation"><i class="fa fa-check"></i><b>7.4</b> 映射器和CC池化操作</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html"><i class="fa fa-check"></i><b>8</b> CCNNs的Hasse图解释</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#hasse-graph-interpretation-of-ccnns-2"><i class="fa fa-check"></i><b>8.1</b> CCNNs的Hasse图解释</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#ccs-as-hasse-graphs"><i class="fa fa-check"></i><b>8.1.1</b> CCs作为Hasse图</a></li>
+<li class="chapter" data-level="8.1.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs"><i class="fa fa-check"></i><b>8.1.2</b> 增强的Hasse图</a></li>
+<li class="chapter" data-level="8.1.3" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#reducibility-of-ccnns-to-graph-basedmodels"><i class="fa fa-check"></i><b>8.1.3</b> CCNN对图模型的归约能力</a></li>
+<li class="chapter" data-level="8.1.4" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs-and-cc-pooling"><i class="fa fa-check"></i><b>8.1.4</b> 增强Hasse图和CC-pooling</a></li>
+<li class="chapter" data-level="8.1.5" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-diagrams-message-passing-and-mergenodes"><i class="fa fa-check"></i><b>8.1.5</b> 增强Hasse图消息传递和聚合节点</a></li>
+<li class="chapter" data-level="8.1.6" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#higher-order-representation-learning"><i class="fa fa-check"></i><b>8.1.6</b> 高阶表征学习</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#on-the-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2</b> CCNNs的等变性</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#permutation-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2.1</b> CCNNs的置换等变</a></li>
+<li class="chapter" data-level="8.2.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#orientation-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2.2</b> CCNNs的方向等变</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>第四部分：应用，文献和结论</b></span></li>
+<li class="chapter" data-level="9" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html"><i class="fa fa-check"></i><b>9</b> 实现与实验</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#software-toponetx-topoembedx-and-topomodelx"><i class="fa fa-check"></i><b>9.1</b> 软件：TopoNetX, TopoEmbedX, and TopoModelX</a></li>
+<li class="chapter" data-level="9.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#datasets"><i class="fa fa-check"></i><b>9.2</b> 数据集</a></li>
+<li class="chapter" data-level="9.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#shape-analysis-mesh-segmentation-and-classification"><i class="fa fa-check"></i><b>9.3</b> 形状分析：网格分割与分类</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-segmentation"><i class="fa fa-check"></i><b>9.3.1</b> 网格分割</a></li>
+<li class="chapter" data-level="9.3.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-and-point-cloud-classification"><i class="fa fa-check"></i><b>9.3.2</b> Mesh and point cloud classification</a></li>
+<li class="chapter" data-level="9.3.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#graph-classification"><i class="fa fa-check"></i><b>9.3.3</b> Graph classification</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#pooling-with-mapper-on-graphs-and-data-classification"><i class="fa fa-check"></i><b>9.4</b> Pooling with mapper on graphs and data classification</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-and-edge-features"><i class="fa fa-check"></i><b>9.4.1</b> Mesh classification: CC-pooling with input vertex and edge features</a></li>
+<li class="chapter" data-level="9.4.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-features-only"><i class="fa fa-check"></i><b>9.4.2</b> Mesh classification: CC-pooling with input vertex features only</a></li>
+<li class="chapter" data-level="9.4.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#point-cloud-classification-cc-pooling-with-input-vertex-features-only"><i class="fa fa-check"></i><b>9.4.3</b> Point cloud classification: CC-pooling with input vertex features only</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#ablation-studies"><i class="fa fa-check"></i><b>9.5</b> Ablation studies</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="related-work.html"><a href="related-work.html"><i class="fa fa-check"></i><b>10</b> Related work</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="related-work.html"><a href="related-work.html#graph-based-models"><i class="fa fa-check"></i><b>10.1</b> Graph-based models</a></li>
+<li class="chapter" data-level="10.2" data-path="related-work.html"><a href="related-work.html#higher-order-deep-learning-models"><i class="fa fa-check"></i><b>10.2</b> Higher-order deep learning models</a></li>
+<li class="chapter" data-level="10.3" data-path="related-work.html"><a href="related-work.html#attention-based-models"><i class="fa fa-check"></i><b>10.3</b> Attention-based models</a></li>
+<li class="chapter" data-level="10.4" data-path="related-work.html"><a href="related-work.html#graph-based-pooling"><i class="fa fa-check"></i><b>10.4</b> Graph-based pooling</a></li>
+<li class="chapter" data-level="10.5" data-path="related-work.html"><a href="related-work.html#applied-algebraic-topology"><i class="fa fa-check"></i><b>10.5</b> Applied algebraic topology</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="conclusions.html"><a href="conclusions.html"><i class="fa fa-check"></i><b>11</b> Conclusions</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>A</b> 术语</a></li>
+<li class="chapter" data-level="B" data-path="lifting-maps.html"><a href="lifting-maps.html"><i class="fa fa-check"></i><b>B</b> Lifting maps</a>
+<ul>
+<li class="chapter" data-level="B.1" data-path="lifting-maps.html"><a href="lifting-maps.html#n-hop-cc-of-a-graph"><i class="fa fa-check"></i><b>B.1</b> n-hop CC of a graph</a></li>
+<li class="chapter" data-level="B.2" data-path="lifting-maps.html"><a href="lifting-maps.html#path-based-and-subgraph-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.2</b> Path-based and subgraph-based CC of a graph</a></li>
+<li class="chapter" data-level="B.3" data-path="lifting-maps.html"><a href="lifting-maps.html#loop-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.3</b> Loop-based CC of a graph</a></li>
+<li class="chapter" data-level="B.4" data-path="lifting-maps.html"><a href="lifting-maps.html#coface-cc-of-a-simplicial-complex-or-of-a-cc"><i class="fa fa-check"></i><b>B.4</b> Coface CC of a simplicial complex or of a CC</a></li>
+<li class="chapter" data-level="B.5" data-path="lifting-maps.html"><a href="lifting-maps.html#augmentation-of-ccs-by-higher-rank-cells"><i class="fa fa-check"></i><b>B.5</b> Augmentation of CCs by higher-rank cells</a></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="ccnn-architecture-search-and-topological-quantum-field-theories.html"><a href="ccnn-architecture-search-and-topological-quantum-field-theories.html"><i class="fa fa-check"></i><b>C</b> CCNN architecture search and topological quantum field theories</a></li>
+<li class="chapter" data-level="D" data-path="learning-discrete-exterior-calculus-operators-with-ccanns.html"><a href="learning-discrete-exterior-calculus-operators-with-ccanns.html"><i class="fa fa-check"></i><b>D</b> Learning discrete exterior calculus operators with CCANNs</a></li>
+<li class="chapter" data-level="E" data-path="a-mapper-induced-topology-preserving-cc-pooling-operation.html"><a href="a-mapper-induced-topology-preserving-cc-pooling-operation.html"><i class="fa fa-check"></i><b>E</b> A mapper-induced topology-preserving CC-pooling operation</a></li>
+<li class="chapter" data-level="" data-path="参考文献.html"><a href="参考文献.html"><i class="fa fa-check"></i>参考文献</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">拓扑深度学习：超越图数据</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="push-forward-pooling-and-unpooling" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">第 7 章</span> 前推、池化和反池化<a href="push-forward-pooling-and-unpooling.html#push-forward-pooling-and-unpooling" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>本节将展示如何利用定义<a href="combinatorial-complex-neural-networks.html#def:pushing-exact-definition">5.3</a>的前推操作来实现对CCc的（反）池化操作，随后接着介绍CCNNs的（反）池化操作。此外，本节还展示了基于 CC 的池化如何为基于图像和图的池化提供统一框架，以及 CC s上的保形池化(shape-preserving pooling)与图上的映射器是如何相关的。</p>
+<p>特别是，我们建立了另一个统一的数学原理：作为消息传递的池化，可以从根本上由前推操作（push-forward）构建而成。因此，前推操作构成了主要的基本构件，所有高阶计算都可以从中实现。这种实现方式非常重要，因为它为在复形上建立统一的深度学习应用编程接口（API）奠定了数学基础，该接口将池化和基于消息传递的计算结合为单一操作。事实上，在我们贡献的 Python 软件包之一 <a href="https://github.com/pyt-team/TopoModelX">TopoModelX</a>中，高阶消息传递和池化/反池化操作就是作为一个单一函数在各种拓扑域中实现的。</p>
+<div id="cc-pooling-and-unpooling" class="section level2 hasAnchor" number="7.1">
+<h2><span class="header-section-number">7.1</span> CC池化和反池化<a href="push-forward-pooling-and-unpooling.html#cc-pooling-and-unpooling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>我们定义了一种基于 CC 的池化操作，它扩展了基于图像和基于图的池化操作的主要特点。 具体来说，我们建立了一种池化操作，可以 “下采样（downscales）”CC <span class="math inline">\(\mbox{X}\)</span> 上支持的信号大小。 To 为此，我们利用CCs自然的层次性，将池化操作定义为由共链映射 <span class="math inline">\(G\colon\mathcal{C}^{i}(\mathcal{X})\to \mathcal{C}^{j}(\mathcal{X})\)</span> 引导的前推操作，该共链映射将<span class="math inline">\(i\)</span>-cochain推向<span class="math inline">\(j\)</span>-cochain。为了得到一个有用的池化操作，这需要缩减其输入 <span class="math inline">\(i\)</span>-cochain 的大小，我们施加了 <span class="math inline">\(j&gt;i\)</span> 的约束。定义 <a href="push-forward-pooling-and-unpooling.html#def:pooling-exact-definition">7.1</a>实现了我们对 CC 池化的设想。图 <a href="push-forward-pooling-and-unpooling.html#fig:pooling-hoans">7.1</a>形象地展示了定义<a href="push-forward-pooling-and-unpooling.html#def:pooling-exact-definition">7.1</a>背后的直觉。尤其是，图<a href="push-forward-pooling-and-unpooling.html#fig:pooling-hoans">7.1</a>展示了在三维 CC 上支持的共链上连续应用池操化作的例子。</p>
+<div class="definition">
+<p><span id="def:pooling-exact-definition" class="definition"><strong>定义 7.1  (CC池化操作，CC-pooling operation) </strong></span>令 <span class="math inline">\(\mbox{X}\)</span>是一个CC，<span class="math inline">\(G\colon\mathcal{C}^{i}( \mbox{X})\to \mathcal{C}^{j}( \mbox{X})\)</span>是共链映射，则如果 <span class="math inline">\(j&gt;i\)</span>，那么<span class="math inline">\(G\)</span>引导的前推操作被称为<em>CC池化操作</em>。</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:pooling-hoans"></span>
+<img src="figures/pooling.png" alt="连续CC（反）池化操作的示例. CC 池化操作利用了底层 CC 的分层结构，通过将低阶共链推向高阶胞腔来粗化低阶共链，从而提高对某些结构扭曲的不变性能力。图中粉色、蓝色和绿色胞腔分别有秩1、2、3，图（a）是维度为3的CC $\mbox{X}$。在$\mbox{X}$上，我们将考察三个共链操作: $B_{0,1} \colon\mathcal{C}^1\to\mathcal{C}^0$, $B_{1,2} \colon\mathcal{C}^2\to \mathcal{C}^1$ 和 $B_{2,3}\colon\mathcal{C}^3\to\mathcal{C}^2$。 对于图（b）、（c）、（d）中的顶行，假定首先给定0-cochain $\mathbf{H}_0$；而对于这三幅图的底部行，则假定首先给定3-cochain$\mathbf{H}_3$。例如，在图（b）的顶部行，输入0-cochain $\mathbf{H}_0$ 通过函数$\mathcal{F}_{B_{0,1}^T}\colon\mathcal{C}^0\to \mathcal{C}^1$前推到1-cochain $\mathbf{H}_1$。$B_{0,1}^T$诱导的前推操作就是CC-pooling操作，因为该操作发送0-cochain到了高阶共链。在图（b）的底部行，$B_{0,1}$诱导的前推操作 $\mathcal{F}_{B_{0,1}}\colon \mathcal{C}^1\to \mathcal{C}^0$则是反池化操作，因为该操作发送 $1$-cochain 到了 $0$-cochain。图 (c) 和 (d)和图（b）类似，这些图就说明了$B_{1,2}^T$和$B_{2,3}^T$ (顶部)诱导的池化操作, 以及$B_{1,2}$ 和 $B_{2,3}$诱导的反池化操作。"  />
+<p class="caption">
+图 7.1: 连续CC（反）池化操作的示例. CC 池化操作利用了底层 CC 的分层结构，通过将低阶共链推向高阶胞腔来粗化低阶共链，从而提高对某些结构扭曲的不变性能力。图中粉色、蓝色和绿色胞腔分别有秩1、2、3，图（a）是维度为3的CC <span class="math inline">\(\mbox{X}\)</span>。在<span class="math inline">\(\mbox{X}\)</span>上，我们将考察三个共链操作: <span class="math inline">\(B_{0,1} \colon\mathcal{C}^1\to\mathcal{C}^0\)</span>, <span class="math inline">\(B_{1,2} \colon\mathcal{C}^2\to \mathcal{C}^1\)</span> 和 <span class="math inline">\(B_{2,3}\colon\mathcal{C}^3\to\mathcal{C}^2\)</span>。 对于图（b）、（c）、（d）中的顶行，假定首先给定0-cochain <span class="math inline">\(\mathbf{H}_0\)</span>；而对于这三幅图的底部行，则假定首先给定3-cochain<span class="math inline">\(\mathbf{H}_3\)</span>。例如，在图（b）的顶部行，输入0-cochain <span class="math inline">\(\mathbf{H}_0\)</span> 通过函数<span class="math inline">\(\mathcal{F}_{B_{0,1}^T}\colon\mathcal{C}^0\to \mathcal{C}^1\)</span>前推到1-cochain <span class="math inline">\(\mathbf{H}_1\)</span>。<span class="math inline">\(B_{0,1}^T\)</span>诱导的前推操作就是CC-pooling操作，因为该操作发送0-cochain到了高阶共链。在图（b）的底部行，<span class="math inline">\(B_{0,1}\)</span>诱导的前推操作 <span class="math inline">\(\mathcal{F}_{B_{0,1}}\colon \mathcal{C}^1\to \mathcal{C}^0\)</span>则是反池化操作，因为该操作发送 <span class="math inline">\(1\)</span>-cochain 到了 <span class="math inline">\(0\)</span>-cochain。图 (c) 和 (d)和图（b）类似，这些图就说明了<span class="math inline">\(B_{1,2}^T\)</span>和<span class="math inline">\(B_{2,3}^T\)</span> (顶部)诱导的池化操作, 以及<span class="math inline">\(B_{1,2}\)</span> 和 <span class="math inline">\(B_{2,3}\)</span>诱导的反池化操作。
+</p>
+</div>
+<p>在定义<a href="push-forward-pooling-and-unpooling.html#def:unpooling-exact-definition">7.2</a>中，我们引入了CCs上的反池化操作来将共链前推到低秩共链，图<a href="push-forward-pooling-and-unpooling.html#fig:pooling-hoans">7.1</a>给出了CCs上的反池化操作示例。</p>
+<div class="definition">
+<p><span id="def:unpooling-exact-definition" class="definition"><strong>定义 7.2  (CC-unpooling操作，CC-unpooling operation) </strong></span>令<span class="math inline">\(\mbox{X}\)</span>是CC，<span class="math inline">\(G\colon\mathcal{C}^i( \mbox{X})\to \mathcal{C}^j( \mbox{X})\)</span>是共链映射。如果<span class="math inline">\(j&lt;i\)</span>，那么称<span class="math inline">\(G\)</span> 诱导的前推操为<em>CC反池化操作（CC-unpooling operation）</em>。</p>
+</div>
+</div>
+<div id="formulating-common-pooling-operations-as-cc-pooling" class="section level2 hasAnchor" number="7.2">
+<h2><span class="header-section-number">7.2</span> 将常见的池化操作表述为 CC-pooling<a href="push-forward-pooling-and-unpooling.html#formulating-common-pooling-operations-as-cc-pooling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>在本节中，我们将用 CC 池化来表述常见的池化操作。特别是，我们将证明图形和图像池可以被视为 CC 池化。</p>
+<div id="graph-pooling-as-cc-pooling" class="section level3 hasAnchor" number="7.2.1">
+<h3><span class="header-section-number">7.2.1</span> 用CC-pooling表示图池化操作<a href="push-forward-pooling-and-unpooling.html#graph-pooling-as-cc-pooling" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>在此，我们将简要说明CC-pooing操作（参见定义<a href="push-forward-pooling-and-unpooling.html#def:pooling-exact-definition">7.1</a>）和基于图的池化算法是一致的。令<span class="math inline">\(\mathbf{H}_0\)</span>定义在图<span class="math inline">\(\mathcal{G}\)</span>的顶点和边上的共链，<span class="math inline">\(\mathbf{H}^{\prime}_0\)</span>是定义在<span class="math inline">\(\mathcal{G}\)</span>的粗粒度版本<span class="math inline">\(\mathcal{G}^{\prime }\)</span>上的共链。在这种情况下，<span class="math inline">\(\mathbf{H}^{\prime}_0\)</span>就是<span class="math inline">\(\mathbf{H}_0\)</span>的粗粒度版，元组 <span class="math inline">\((\mathcal{G},\mathbf{H}_0)\)</span>上支持的图池化函数是<span class="math inline">\(\mathcal{POOL} \colon (\mathcal{G},\mathbf{H}_0) \to (\mathcal{G}^{\prime},\mathbf{H}^{\prime}_0)\)</span>，该函数发送<span class="math inline">\(\mathcal{G}\)</span>中的每个顶点到<span class="math inline">\(\mathcal{G}^{\prime}\)</span>中的每一个顶点，这对应于<span class="math inline">\(\mathcal{G}\)</span>上顶点的聚类操作。接下来，将正式阐述怎么用CC-pooling来实现<span class="math inline">\(\mathcal{POOL}\)</span>函数。</p>
+<div class="proposition">
+<p><span id="prp:pool" class="proposition"><strong>命题 7.1  (CC-pooling的角色) </strong></span>函数<span class="math inline">\(\mathcal{POOL}\)</span>可用CC-pooling操作实现。</p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-10" class="proof"><em>证明</em>. </span>图<span class="math inline">\(\mathcal{G}^{\prime}\)</span>中的每个顶点都可表示原图<span class="math inline">\(\mathcal{G}\)</span>中的一个顶点聚类。 利用这些聚类的成员元素，我们能够通过一个 2-cells 胞腔集合来扩展 <span class="math inline">\(\mathcal{G}\)</span> 以构建 CC，这样得到的每个胞腔都对应于 <span class="math inline">\(\mathcal{G}^{\prime}\)</span> 的一个超节点。我们用 <span class="math inline">\(\mathcal{X}_{\mathcal{G}}\)</span> 来表示由此产生的 CC 结构，它由 2-cells 胞腔增强的 <span class="math inline">\(\mathcal{G}\)</span> 组成。因此，任何定义在<span class="math inline">\(\mathcal{G}^{\prime}\)</span>上的0-cochain <span class="math inline">\(\mathbf{H}^{\prime}_0\)</span>都能写作2-cochain <span class="math inline">\(\mathbf{H}_2 \in \mathcal{C}^2(\mathcal{X}_{\mathcal{G}})\)</span>。在原图 <span class="math inline">\(\mathcal{G}\)</span>的顶点和池化图<span class="math inline">\(\mathcal{G}^{\prime}\)</span>的顶点，或其等价描述形式CC <span class="math inline">\(\mathcal{X}_{\mathcal{G}}\)</span>的顶点间的关系，都可以通过关联矩阵<span class="math inline">\(B_{0,2}^T\)</span>来描述。因此，为了学习信号<span class="math inline">\(\mathbf{H}_2\)</span>可以用映射<span class="math inline">\(B_{0,2}^T \colon \mathcal{C}^{2} (\mathcal{X}_{\mathcal{G}}) \to \mathcal{C}^{0}(\mathcal{X}_{\mathcal{G}})\)</span>来实现，该操作把共链<span class="math inline">\(\mathbf{H}_0\)</span> 推向 <span class="math inline">\(\mathbf{H}_2\)</span>。</p>
+</div>
+<p>定义<span class="math inline">\(\mathcal{X}_{\mathcal{G}}\)</span>中的2-cells可以用 <em>图映射（mapper on graphs）</em>工具 <span class="citation">(<a href="#ref-hajij2018mog">Hajij, Wang, and Rosen 2018</a>)</span>来实现, 它是一个TDA分类工，更详细的构造方法参见章节<a href="push-forward-pooling-and-unpooling.html#mapper-and-the-cc-pooling-operation">7.4</a>。</p>
+</div>
+<div id="image-pooling-as-cc-pooling" class="section level3 hasAnchor" number="7.2.2">
+<h3><span class="header-section-number">7.2.2</span> 图像池化作为CC-pooing<a href="push-forward-pooling-and-unpooling.html#image-pooling-as-cc-pooling" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>由于图像可以实现为网格图(lattice graphs)，因此存储在图像网格(image grid)上的信号可以实现为与图像相对应的网格图的 0-cochain，参见图<a href="push-forward-pooling-and-unpooling.html#fig:image-pooling">7.2</a>(a–b)。在此，我们将阐明 CC-pooling（定义<a href="push-forward-pooling-and-unpooling.html#def:pooling-exact-definition">7.1</a>）与已知的图像池化的定义是一致的。事实上，可以用2-cells来增强<a href="push-forward-pooling-and-unpooling.html#fig:image-pooling">7.2</a>(b)中的网格图，正如图 <a href="push-forward-pooling-and-unpooling.html#fig:image-pooling">7.2</a>(c)所示，以便执行图像池化操作。通常，这些胞腔都有规则的窗口大小。在图<a href="push-forward-pooling-and-unpooling.html#fig:image-pooling">7.2</a>(c)中，我们选择的池化窗口大小，或者说是 2-cell的大小，是 <span class="math inline">\(2\times 2\)</span>，池化步长为 1。 这种情况下的图像池化操作可以通过共链映射<span class="math inline">\(B_{0,2}^T \colon\mathcal{C}^0 \to \mathcal{C}^2\)</span>诱导的CC-pooling来实现，如图 <a href="push-forward-pooling-and-unpooling.html#fig:image-pooling">7.2</a>(d).所示。我们在下面的命题中正式正式阐述这一点。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:image-pooling"></span>
+<img src="figures/image_pooling.png" alt="用CC-pooling实现图像池化。 (a): 尺寸为$3\times3$的图像。 (b): 与图（a）对应的网格图。(c): 2-cells增强的网格图。选择 (c) 中的那些特定胞腔，相当于选择图像池化窗口大小为$2\times 2$ ，池化步长为 1。 (d): 执行图像池化计算等价于执行由共链映射$B_{0,2}^T \colon\mathcal{C}^0 \to \mathcal{C}^2$诱导的CC-pooling操作，该共链映射前推图像信号（$\mathcal{X}^2$支持的$0$-cochain）到$\mathcal{X}^2$支持的信号。"  />
+<p class="caption">
+图 7.2: 用CC-pooling实现图像池化。 (a): 尺寸为<span class="math inline">\(3\times3\)</span>的图像。 (b): 与图（a）对应的网格图。(c): 2-cells增强的网格图。选择 (c) 中的那些特定胞腔，相当于选择图像池化窗口大小为<span class="math inline">\(2\times 2\)</span> ，池化步长为 1。 (d): 执行图像池化计算等价于执行由共链映射<span class="math inline">\(B_{0,2}^T \colon\mathcal{C}^0 \to \mathcal{C}^2\)</span>诱导的CC-pooling操作，该共链映射前推图像信号（<span class="math inline">\(\mathcal{X}^2\)</span>支持的<span class="math inline">\(0\)</span>-cochain）到<span class="math inline">\(\mathcal{X}^2\)</span>支持的信号。
+</p>
+</div>
+<div class="proposition">
+<p><span id="prp:image-pool" class="proposition"><strong>命题 7.2  (图像池化的实现) </strong></span>图像池化操作可以通过从底层图像域到二维 CC 的前推操作来实现，该二维 CC是通过适当的二维胞腔对图像进行增强而得到的，图像池化计算就在该二维胞腔中进行。</p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-11" class="proof"><em>证明</em>. </span>从图像池化的定义中可以直接得出结论。</p>
+</div>
+</div>
+</div>
+<div id="pooling-and-unpooling-ccnns" class="section level2 hasAnchor" number="7.3">
+<h2><span class="header-section-number">7.3</span> 池化与反池化CCNNs<a href="push-forward-pooling-and-unpooling.html#pooling-and-unpooling-ccnns" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>定义<a href="push-forward-pooling-and-unpooling.html#def:pooling-exact-definition">7.1</a>中的池化操作仅考虑了CCNN的张量图仅有单一边的特殊情况，在下文中，我们将通过确定 CCNN 作为池化 CCNN 的定义属性来概括池化概念。为此，我们从张量图高度为 1 的 CCNN 开始讲解。</p>
+<div class="definition">
+<p><span id="def:height-1-pooling" class="definition"><strong>定义 7.3  (高度为1的CCNN池化，Pooling CCNN of height one) </strong></span>对于高度为1的张量图<span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span>表示的CCNN，令<span class="math inline">\(\mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m}\)</span>是CCNN的域，令<span class="math inline">\(\mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \cdots \times \mathcal{C}^{j_n}\)</span>是CCNN的共域（codomain），令<span class="math inline">\(i_{min}=min(i_1,\ldots,i_m)\)</span>和<span class="math inline">\(j_{min}=min(j_1,\ldots,j_n)\)</span>。如果满足如下条件，则说CCNN是<em>高度为1的池化CCNN</em>:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(i_{min}&lt; j_{min}\)</span>, 且</li>
+<li>张量图<span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span> 对于某个<span class="math inline">\(k\geq j_{min}\)</span>，有共链操作<span class="math inline">\(G\colon \mathcal{C}^{i_{min}} \to \mathcal{C}^{k}\)</span>标记的边。</li>
+</ol>
+</div>
+<p>直观地说，如果一个高度为1的张量图所代表的 CCNN 将其最低秩的信号推送给较高等级的胞腔，那么它就是高度为1的池化 CCNN。请注意，读出操作可以作为高度为1的池化 CCNN 来实现，见图 <a href="push-forward-pooling-and-unpooling.html#fig:readout">7.3</a>中的说明。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:readout"></span>
+<img src="figures/read_out.png" alt="池化操作示例。在这个例子中，展示了一个维度为3的CC。秩为 3 的胞腔（绿色表示）在 CC中的所有胞腔中秩最高。(a): 高度为 1 的池化 CCNN 会将一个共链向量$(\mathbf{H}_0,\mathbf{H}_1)$ 池化为一个 2-cochain $\mathbf{H}_2$ 。 (b):读出操作可以作为高度为 1 的池化 CCNN来实现，方法是由一个秩数高于CC中所有其他胞腔的单个（绿色）胞腔封装整个CC，并将低秩胞腔的所有信号池化（读出）到封装（绿色）胞腔。"  />
+<p class="caption">
+图 7.3: 池化操作示例。在这个例子中，展示了一个维度为3的CC。秩为 3 的胞腔（绿色表示）在 CC中的所有胞腔中秩最高。(a): 高度为 1 的池化 CCNN 会将一个共链向量<span class="math inline">\((\mathbf{H}_0,\mathbf{H}_1)\)</span> 池化为一个 2-cochain <span class="math inline">\(\mathbf{H}_2\)</span> 。 (b):读出操作可以作为高度为 1 的池化 CCNN来实现，方法是由一个秩数高于CC中所有其他胞腔的单个（绿色）胞腔封装整个CC，并将低秩胞腔的所有信号池化（读出）到封装（绿色）胞腔。
+</p>
+</div>
+<p>CCNN 可能不会在每一层都执行池化操作，它可能会保持最低秩信号的维度。在给出池化 CCNN 的一般性定义之前，我们首先定义高度为1的最低秩保持 （rank-preserving ）CCNN。</p>
+<div class="definition">
+<p><span id="def:lowest-rank" class="definition"><strong>定义 7.4  (高度为1的最低秩保持CCNN，Lowest rank-preserving CCNN of height one) </strong></span>对于由高度为1的张量图表示的CCNN，令 <span class="math inline">\(\mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m}\)</span>是CCNN的域，令 <span class="math inline">\(\mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \cdots \times \mathcal{C}^{j_n}\)</span> 是CCNN的共域，令 <span class="math inline">\(i_{min}=min(i_1,\ldots,i_m)\)</span> 且<span class="math inline">\(j_{min}=min(j_1,\ldots,i_n)\)</span>。如果 <span class="math inline">\(i_{min}= j_{min}\)</span>，那么就说CCNN高度为1的最低秩保持CCNN。</p>
+</div>
+<p>每个 CCNN 都是由高度为1的张量图表示的 CCNN 组成的。因此，正如定义 <a href="push-forward-pooling-and-unpooling.html#def:general-pooling-hoan">7.5</a>所阐述的，池化 CCNN 可以用高度为1的张量图来表征。</p>
+<div class="definition">
+<p><span id="def:general-pooling-hoan" class="definition"><strong>定义 7.5  (池化CCNN，Pooling CCNN) </strong></span>令 <span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span>是CCNN的张量图表示， 则可将CCNN分解作
+<span class="math display">\[\begin{equation*}
+\mbox{CCNN}_{\mathbf{G};\mathbf{W}}=
+\mbox{CCNN}_{\mathbf{G}_N;\mathbf{W}_N} \circ \cdots \circ \mbox{CCNN}_{\mathbf{G}_1;\mathbf{W}_1},
+\end{equation*}\]</span>
+其中， <span class="math inline">\(\mbox{CCNN}_{\mathbf{G}_i;\mathbf{W}_i},i=1,\ldots,N\)</span>, 是高度为1的张量图，表示了CCNN的第<span class="math inline">\(i\)</span>-th层，并且 <span class="math inline">\(\mathbf{G}_i \subseteq \mathbf{G}\)</span>。称 <span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span>表示的CCNN是<em>池化 CCNN</em>，如果：</p>
+<ol style="list-style-type: decimal">
+<li>每个 <span class="math inline">\(\mbox{CCNN}_{\mathbf{G}_i;\mathbf{W}_i}\)</span> 都是高度为1的池化CCNN，或者是高度为1的最低秩保持CCNN，且</li>
+<li>在CCNN的层 <span class="math inline">\(\mbox{CCNN}_{\mathbf{G}_i;\mathbf{W}_i}\)</span>中至少有一个是高度为1的池化CCNN。
+\end{enumerate}</li>
+</ol>
+</div>
+<p>直观地说，池化CCNN 是一种 CCNN，其张量图形成了一个 “阶梯”，将信号推送到每一层的高秩胞腔。图 <a href="combinatorial-complex-neural-networks.html#fig:tensor">5.4</a>(d) 给出了一个高度为二的池化 CCNN 的例子。</p>
+<p>高度为1的反池化CCNN的定义类似高度为1的池化CCNN(参见定义<a href="push-forward-pooling-and-unpooling.html#def:height-1-pooling">7.3</a>)，唯一的不同是不等式<span class="math inline">\(i_{min}&lt;j_{min}\)</span> 变成了 <span class="math inline">\(i_{min}&gt;j_{min}\)</span>。除此之外，反池化 CCNN (参见定义<a href="push-forward-pooling-and-unpooling.html#def:general-unpooling-hoan">7.6</a>) 的定义都类似于池化CCNN (定义<a href="push-forward-pooling-and-unpooling.html#def:general-pooling-hoan">7.5</a>)。</p>
+<div class="definition">
+<p><span id="def:general-unpooling-hoan" class="definition"><strong>定义 7.6  (反池化CCNN，Unpooling CCNN) </strong></span>令 <span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span>是CCNN的张量图表示，那么可解耦CCNN为
+<span class="math display">\[\begin{equation*}
+\mbox{CCNN}_{\mathbf{G};\mathbf{W}}=
+\mbox{CCNN}_{\mathbf{G}_N;\mathbf{W}_N} \circ \cdots \circ \mbox{CCNN}_{\mathbf{G}_1;\mathbf{W}_1},
+\end{equation*}\]</span>
+其中，<span class="math inline">\(\mbox{CCNN}_{\mathbf{G}_i;\mathbf{W}_i},i=1,\ldots,N\)</span>, 是表征CCNN第<span class="math inline">\(i\)</span>-th层的高度为1的张量图，并且 <span class="math inline">\(\mathbf{G}_i \subseteq \mathbf{G}\)</span>，则称<span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span>表征的CCNN是反池化CCNN，如果：</p>
+<ol style="list-style-type: decimal">
+<li>每个<span class="math inline">\(\mbox{CCNN}_{\mathbf{G}_i;\mathbf{W}_i}\)</span> 都要么是高度为1的反池化CCNN，要么是高度为1的最低秩保持CCNN，且</li>
+<li>在CCNN的层 <span class="math inline">\(\mbox{CCNN}_{\mathbf{G}_i;\mathbf{W}_i}\)</span>中至少有一个是高度为1的反池化CCNN。</li>
+</ol>
+</div>
+</div>
+<div id="mapper-and-the-cc-pooling-operation" class="section level2 hasAnchor" number="7.4">
+<h2><span class="header-section-number">7.4</span> 映射器和CC池化操作<a href="push-forward-pooling-and-unpooling.html#mapper-and-the-cc-pooling-operation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>在实际使用时，在高阶域上构建有用的 CC 池化操作取决于输入 CC 中的高秩胞腔。 与基于图像的模型类似，CC-池化操作可在高阶网络的末端依次应用，以提供输入域的汇总表示，参见图<a href="push-forward-pooling-and-unpooling.html#fig:pooling-hoans">7.1</a>。 输入的 CC 中可能并没有这样的分层摘要，例如, 如果 <span class="math inline">\(\mathcal{X}\)</span>是图，那么一个CC-pooling操作，正如定义<a href="push-forward-pooling-and-unpooling.html#def:pooling-exact-definition">7.1</a>中给出的那样, 可能仅仅是前推输入的节点信号到边信号，而并不总是能提供输入信号的简明摘要。</p>
+<p>在这种情况下，我们可以用一组维度为 <span class="math inline">\(\dim(\mathcal{X})+1\)</span> 的新胞腔来<em>增强输入 CC</em> <span class="math inline">\(\mathcal{X}\)</span> ，以使得新胞腔近似于输入 CC <span class="math inline">\(\mathcal{X}\)</span> 的形状。图<a href="push-forward-pooling-and-unpooling.html#fig:graph-tda">7.4</a> 给出了一个增强图 <span class="math inline">\(\mathcal{X}\)</span>的示例，它是一个维度为1的CC，其新胞腔的维度为2，新胞腔根据文献<span class="citation">(<a href="#ref-dey2016multiscale">Dey, Mémoli, and Wang 2016</a>; <a href="#ref-singh2007topological">Singh et al. 2007</a>; <a href="#ref-hajij2018mog">Hajij, Wang, and Rosen 2018</a>)</span><a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>中的方法使用<em>图mapper(mapper on graph, MOG)</em>来构造。通过 MOG 构造方法得到的增强高秩胞腔概要了底层图的形状特征，这是一种理想的池化特征（例如在形状分析中）。关于 MOG 构建的拓扑保持（ topology-preserving） CC 池化操作的详情，请参阅附录 <a href="a-mapper-induced-topology-preserving-cc-pooling-operation.html#a-mapper-induced-topology-preserving-cc-pooling-operation">E</a> 。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:graph-tda"></span>
+<img src="figures/graph_tda.png" alt="构造CC$\mathcal{X}$上形状保持（shape-preserving）的池化操作示例。在此，我们将演示 $\mathcal{X}$ 是图的情况。构建方法使用*图mapper（mapper on graphs，MOG）*[@singh2007topological; @hajij2018mog]，它是一种图骨架化算法，可用于为 $\mathcal{X}$ 增添秩为 2 的拓扑保持胞腔（topology-preserving）。（a）输入图$\mathcal{X}$是维度为1的CC。（b）MOG算法的输入需要三个参数：图$\mathcal{X}$，特征保持标量函数$g\colon\mathcal{X}^0\to [a,b]$，范围$[a,b]$的覆盖（cover）$\mathcal{U}$（覆盖闭区间$[a,b]$的开集的集合）。标量函数$g$用于将范围 $[a,b]$ 上的覆盖 $\mathcal{U}$ 拉回到 $\mathcal{X}$ 上的覆盖, 图 (b) 中节点的颜色表示 $g$ 的标量值。图（b）中，$\mathcal{X}$被分裂为四段，每段都对应于$\mathcal{U}$的一个覆盖元素。（c）图中显示了拉回的覆盖元素的连接组件，每个相连的分量都被一个蓝色胞腔所包围，每个蓝色胞腔也都被视为秩为 2 的单元。蓝色胞腔用来增强$\mathcal{X}$，以形成维度2的CC，增强后的$\mathcal{X}$由原$\mathcal{X}$上的0-cells、1-cells，以及增强的2-cells来组成实现。增强的CC用$\mathcal{X}_{g,\mathcal{U}}$来标记。(d): MOG 算法构建了一个图，其节点是覆盖 $\mathcal{U}$的回拉过程中每个覆盖元素所包含的连通成分，边由这些连通成分组成。换句话说，MOG 生成的图概要了通过 MOG 算法添加的秩为 2的增强胞腔之间的连接情况。图（d）中给出的MOG生成图的邻接矩阵等价于$\mathcal{X}_{g,\mathcal{U}}$的胞腔$A_{2,2}$的邻接矩阵。当且仅当 $\mathcal{X}$ 中存在的 2-cells胞腔相交于一个节点时（后者发生的前提是当且仅当 MOG生成的图的节点之间存在一条边时），它们才是 2 相邻（adjacent）的 。给定CC结构，共链映射$B_{0,2}^T\colon\mathcal{C}^0(X_{g,\mathcal{U}})\to \mathcal{C}^2(X_{g,\mathcal{U}})$可用于诱导形状保持的操作。此外，$\mathcal{X}$顶点集上支持的信号 $\mathbf{H}_0$可以被前推和池化为增强2-cells上支持的信号$\mathbf{H}_2$。这里给出的图受了文献 [@hajij2018mog]的启发。"  />
+<p class="caption">
+图 7.4: 构造CC<span class="math inline">\(\mathcal{X}\)</span>上形状保持（shape-preserving）的池化操作示例。在此，我们将演示 <span class="math inline">\(\mathcal{X}\)</span> 是图的情况。构建方法使用<em>图mapper（mapper on graphs，MOG）</em><span class="citation">(<a href="#ref-singh2007topological">Singh et al. 2007</a>; <a href="#ref-hajij2018mog">Hajij, Wang, and Rosen 2018</a>)</span>，它是一种图骨架化算法，可用于为 <span class="math inline">\(\mathcal{X}\)</span> 增添秩为 2 的拓扑保持胞腔（topology-preserving）。（a）输入图<span class="math inline">\(\mathcal{X}\)</span>是维度为1的CC。（b）MOG算法的输入需要三个参数：图<span class="math inline">\(\mathcal{X}\)</span>，特征保持标量函数<span class="math inline">\(g\colon\mathcal{X}^0\to [a,b]\)</span>，范围<span class="math inline">\([a,b]\)</span>的覆盖（cover）<span class="math inline">\(\mathcal{U}\)</span>（覆盖闭区间<span class="math inline">\([a,b]\)</span>的开集的集合）。标量函数<span class="math inline">\(g\)</span>用于将范围 <span class="math inline">\([a,b]\)</span> 上的覆盖 <span class="math inline">\(\mathcal{U}\)</span> 拉回到 <span class="math inline">\(\mathcal{X}\)</span> 上的覆盖, 图 (b) 中节点的颜色表示 <span class="math inline">\(g\)</span> 的标量值。图（b）中，<span class="math inline">\(\mathcal{X}\)</span>被分裂为四段，每段都对应于<span class="math inline">\(\mathcal{U}\)</span>的一个覆盖元素。（c）图中显示了拉回的覆盖元素的连接组件，每个相连的分量都被一个蓝色胞腔所包围，每个蓝色胞腔也都被视为秩为 2 的单元。蓝色胞腔用来增强<span class="math inline">\(\mathcal{X}\)</span>，以形成维度2的CC，增强后的<span class="math inline">\(\mathcal{X}\)</span>由原<span class="math inline">\(\mathcal{X}\)</span>上的0-cells、1-cells，以及增强的2-cells来组成实现。增强的CC用<span class="math inline">\(\mathcal{X}_{g,\mathcal{U}}\)</span>来标记。(d): MOG 算法构建了一个图，其节点是覆盖 <span class="math inline">\(\mathcal{U}\)</span>的回拉过程中每个覆盖元素所包含的连通成分，边由这些连通成分组成。换句话说，MOG 生成的图概要了通过 MOG 算法添加的秩为 2的增强胞腔之间的连接情况。图（d）中给出的MOG生成图的邻接矩阵等价于<span class="math inline">\(\mathcal{X}_{g,\mathcal{U}}\)</span>的胞腔<span class="math inline">\(A_{2,2}\)</span>的邻接矩阵。当且仅当 <span class="math inline">\(\mathcal{X}\)</span> 中存在的 2-cells胞腔相交于一个节点时（后者发生的前提是当且仅当 MOG生成的图的节点之间存在一条边时），它们才是 2 相邻（adjacent）的 。给定CC结构，共链映射<span class="math inline">\(B_{0,2}^T\colon\mathcal{C}^0(X_{g,\mathcal{U}})\to \mathcal{C}^2(X_{g,\mathcal{U}})\)</span>可用于诱导形状保持的操作。此外，<span class="math inline">\(\mathcal{X}\)</span>顶点集上支持的信号 <span class="math inline">\(\mathbf{H}_0\)</span>可以被前推和池化为增强2-cells上支持的信号<span class="math inline">\(\mathbf{H}_2\)</span>。这里给出的图受了文献 <span class="citation">(<a href="#ref-hajij2018mog">Hajij, Wang, and Rosen 2018</a>)</span>的启发。
+</p>
+</div>
+
+</div>
+</div>
+<h3>参考文献<a href="参考文献.html#参考文献" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-dey2016multiscale" class="csl-entry">
+Dey, Tamal K., Facundo Mémoli, and Yusu Wang. 2016. <span>“Multiscale Mapper: Topological Summarization via Codomain Covers.”</span> In <em>Proceedings of the Twenty-Seventh Annual ACM-SIAM Symposium on Discrete Algorithms</em>, 997–1013. SIAM.
+</div>
+<div id="ref-hajij2018mog" class="csl-entry">
+Hajij, Mustafa, Bei Wang, and Paul Rosen. 2018. <span>“<span>MOG</span>: Mapper on Graphs for Relationship Preserving Clustering.”</span> <em>arXiv Preprint arXiv:1804.11242</em>.
+</div>
+<div id="ref-singh2007topological" class="csl-entry">
+Singh, Gurjeet, Facundo Mémoli, Gunnar E Carlsson, et al. 2007. <span>“Topological Methods for the Analysis of High Dimensional Data Sets and 3d Object Recognition.”</span> <em>PBG@ Eurographics</em> 2: 091–100.
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="6">
+<li id="fn6"><p>使用mapper算法来图骨架化（graph skeletonization）的方法<span class="citation">(<a href="#ref-singh2007topological">Singh et al. 2007</a>)</span>已经在文献<span class="citation">(<a href="#ref-dey2016multiscale">Dey, Mémoli, and Wang 2016</a>)</span>中研究过，我们的实现和讨论依赖于文献<span class="citation">(<a href="#ref-hajij2018mog">Hajij, Wang, and Rosen 2018</a>)</span>中提到的概念。<a href="push-forward-pooling-and-unpooling.html#fnref6" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="message-passing.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="hasse-graph-interpretation-of-ccnns-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook/js/app.min.js"></script>
+<script src="libs/gitbook/js/clipboard.min.js"></script>
+<script src="libs/gitbook/js/plugin-search.js"></script>
+<script src="libs/gitbook/js/plugin-sharing.js"></script>
+<script src="libs/gitbook/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook/js/jquery.highlight.js"></script>
+<script src="libs/gitbook/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/pyt-team/tdlbook/edit/main/rmd/07-push-forward-and-pooling.rmd",
+"text": "编辑"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "none"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

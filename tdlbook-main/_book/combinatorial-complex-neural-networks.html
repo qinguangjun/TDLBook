@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>第 5 章 组合复形神经网络（Combinatorial complex neural networks） | 拓扑深度学习：超越图数据</title>
+  <meta name="description" content="一本关于拓扑深度学习的书。" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="第 5 章 组合复形神经网络（Combinatorial complex neural networks） | 拓扑深度学习：超越图数据" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="一本关于拓扑深度学习的书。" />
+  <meta name="github-repo" content="pyt-team/tdlbook" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="第 5 章 组合复形神经网络（Combinatorial complex neural networks） | 拓扑深度学习：超越图数据" />
+  
+  <meta name="twitter:description" content="一本关于拓扑深度学习的书。" />
+  
+
+<meta name="author" content="Mustafa Hajij, Theodore Papamarkou, Ghada Zamzmi, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Michael T. Schaub" />
+
+
+<meta name="date" content="2024-09-03" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="combinatorial-complexes.html"/>
+<link rel="next" href="message-passing.html"/>
+<script src="libs/jquery/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="css/glossarybox.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">拓扑深度学习</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>贡献者</a></li>
+<li class="chapter" data-level="" data-path="译者.html"><a href="译者.html"><i class="fa fa-check"></i>译者</a></li>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html"><i class="fa fa-check"></i>序言</a>
+<ul>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html#编译"><i class="fa fa-check"></i>编译</a></li>
+<li class="chapter" data-level="" data-path="序言.html"><a href="序言.html#致谢"><i class="fa fa-check"></i>致谢</a></li>
+</ul></li>
+<li class="part"><span><b>第一部分：基础知识</b></span></li>
+<li class="chapter" data-level="1" data-path="引言.html"><a href="引言.html"><i class="fa fa-check"></i><b>1</b> 引言</a></li>
+<li class="chapter" data-level="2" data-path="motivation.html"><a href="motivation.html"><i class="fa fa-check"></i><b>2</b> 研究动机</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="motivation.html"><a href="motivation.html#从拓扑空间数据中建模和学习"><i class="fa fa-check"></i><b>2.1</b> 从拓扑空间数据中建模和学习</a></li>
+<li class="chapter" data-level="2.2" data-path="motivation.html"><a href="motivation.html#the-utility-of-topology"><i class="fa fa-check"></i><b>2.2</b> 拓扑的有用性</a></li>
+<li class="chapter" data-level="2.3" data-path="motivation.html"><a href="motivation.html#深度学习和结构化计算的统一视角"><i class="fa fa-check"></i><b>2.3</b> 深度学习和结构化计算的统一视角</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preliminaries.html"><a href="preliminaries.html"><i class="fa fa-check"></i><b>3</b> 预备知识</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="preliminaries.html"><a href="preliminaries.html#邻域函数和拓扑空间"><i class="fa fa-check"></i><b>3.1</b> 邻域函数和拓扑空间</a></li>
+<li class="chapter" data-level="3.2" data-path="preliminaries.html"><a href="preliminaries.html#bridging-the-gap-among-higher-order-networks"><i class="fa fa-check"></i><b>3.2</b> 填补与高阶网络间的代沟</a></li>
+<li class="chapter" data-level="3.3" data-path="preliminaries.html"><a href="preliminaries.html#hierarchical-structure-and-set-type-relations"><i class="fa fa-check"></i><b>3.3</b> 层次化结构与集合型关系</a></li>
+</ul></li>
+<li class="part"><span><b>第二部分:组合复形</b></span></li>
+<li class="chapter" data-level="4" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html"><i class="fa fa-check"></i><b>4</b> 组合复形</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc-definition"><i class="fa fa-check"></i><b>4.1</b> 组合复形定义</a></li>
+<li class="chapter" data-level="4.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc-homomorphisms-and-sub-ccs"><i class="fa fa-check"></i><b>4.2</b> CC同态和子CCs</a></li>
+<li class="chapter" data-level="4.3" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#motivation-for-ccs"><i class="fa fa-check"></i><b>4.3</b> 引入CCs的动机</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#pooling-operations-on-ccs"><i class="fa fa-check"></i><b>4.3.1</b> CCs上的池化操作</a></li>
+<li class="chapter" data-level="4.3.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#structural-advantages-of-ccs"><i class="fa fa-check"></i><b>4.3.2</b> CCs的结构化优势</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#neighbourhood-functions-on-ccs"><i class="fa fa-check"></i><b>4.4</b> CCs上的邻域函数</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#incidence-in-a-cc"><i class="fa fa-check"></i><b>4.4.1</b> CC中的关联关系（Incidence）</a></li>
+<li class="chapter" data-level="4.4.2" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#cc内的邻接关系adjacency"><i class="fa fa-check"></i><b>4.4.2</b> CC内的邻接关系（Adjacency）</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="combinatorial-complexes.html"><a href="combinatorial-complexes.html#data-on-ccs"><i class="fa fa-check"></i><b>4.5</b> CCs上的数据</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html"><i class="fa fa-check"></i><b>5</b> 组合复形神经网络（Combinatorial complex neural networks）</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#building-ccnns-tensor-diagrams"><i class="fa fa-check"></i><b>5.1</b> 构建 CCNN：张量图</a></li>
+<li class="chapter" data-level="5.2" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#push-forward-operator-and-merge-node"><i class="fa fa-check"></i><b>5.2</b> 前推操作（Push-forward operator）和聚合节点</a></li>
+<li class="chapter" data-level="5.3" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#the-main-three-tensor-operations"><i class="fa fa-check"></i><b>5.3</b> 三种主要的张量操作</a></li>
+<li class="chapter" data-level="5.4" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#definition-of-combinatorial-complex-convolutional-networks"><i class="fa fa-check"></i><b>5.4</b> 组合复形卷积网络的定义（combinatorial complex convolutional networks）</a></li>
+<li class="chapter" data-level="5.5" data-path="combinatorial-complex-neural-networks.html"><a href="combinatorial-complex-neural-networks.html#combinatorial-complex-attention-neural-networks"><i class="fa fa-check"></i><b>5.5</b> 组合复形注意力神经网络</a></li>
+</ul></li>
+<li class="part"><span><b>第三部分：高阶消息传递（Higher-order message passing）</b></span></li>
+<li class="chapter" data-level="6" data-path="message-passing.html"><a href="message-passing.html"><i class="fa fa-check"></i><b>6</b> 消息传递</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="message-passing.html"><a href="message-passing.html#definition-of-higher-order-message-passing"><i class="fa fa-check"></i><b>6.1</b> 高阶消息传递的定义</a></li>
+<li class="chapter" data-level="6.2" data-path="message-passing.html"><a href="message-passing.html#higher-order-message-passing-neural-networks-are-ccnns"><i class="fa fa-check"></i><b>6.2</b> 高阶消息传递神经网络就是CCNNs</a></li>
+<li class="chapter" data-level="6.3" data-path="message-passing.html"><a href="message-passing.html#merge-nodes-and-higher-order-message-passing-a-qualitative-comparison"><i class="fa fa-check"></i><b>6.3</b> 聚合节点和高阶消息传递：量化比较</a></li>
+<li class="chapter" data-level="6.4" data-path="message-passing.html"><a href="message-passing.html#attention-higher-order-message-passing-and-ccanns"><i class="fa fa-check"></i><b>6.4</b> 注意力高阶消息传递和CCANNs</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html"><i class="fa fa-check"></i><b>7</b> 前推、池化和反池化</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#cc-pooling-and-unpooling"><i class="fa fa-check"></i><b>7.1</b> CC池化和反池化</a></li>
+<li class="chapter" data-level="7.2" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#formulating-common-pooling-operations-as-cc-pooling"><i class="fa fa-check"></i><b>7.2</b> 将常见的池化操作表述为 CC-pooling</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#graph-pooling-as-cc-pooling"><i class="fa fa-check"></i><b>7.2.1</b> 用CC-pooling表示图池化操作</a></li>
+<li class="chapter" data-level="7.2.2" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#image-pooling-as-cc-pooling"><i class="fa fa-check"></i><b>7.2.2</b> 图像池化作为CC-pooing</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#pooling-and-unpooling-ccnns"><i class="fa fa-check"></i><b>7.3</b> 池化与反池化CCNNs</a></li>
+<li class="chapter" data-level="7.4" data-path="push-forward-pooling-and-unpooling.html"><a href="push-forward-pooling-and-unpooling.html#mapper-and-the-cc-pooling-operation"><i class="fa fa-check"></i><b>7.4</b> 映射器和CC池化操作</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html"><i class="fa fa-check"></i><b>8</b> CCNNs的Hasse图解释</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#hasse-graph-interpretation-of-ccnns-2"><i class="fa fa-check"></i><b>8.1</b> CCNNs的Hasse图解释</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#ccs-as-hasse-graphs"><i class="fa fa-check"></i><b>8.1.1</b> CCs作为Hasse图</a></li>
+<li class="chapter" data-level="8.1.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs"><i class="fa fa-check"></i><b>8.1.2</b> 增强的Hasse图</a></li>
+<li class="chapter" data-level="8.1.3" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#reducibility-of-ccnns-to-graph-basedmodels"><i class="fa fa-check"></i><b>8.1.3</b> CCNN对图模型的归约能力</a></li>
+<li class="chapter" data-level="8.1.4" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-graphs-and-cc-pooling"><i class="fa fa-check"></i><b>8.1.4</b> 增强Hasse图和CC-pooling</a></li>
+<li class="chapter" data-level="8.1.5" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#augmented-hasse-diagrams-message-passing-and-mergenodes"><i class="fa fa-check"></i><b>8.1.5</b> 增强Hasse图消息传递和聚合节点</a></li>
+<li class="chapter" data-level="8.1.6" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#higher-order-representation-learning"><i class="fa fa-check"></i><b>8.1.6</b> 高阶表征学习</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#on-the-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2</b> CCNNs的等变性</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#permutation-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2.1</b> CCNNs的置换等变</a></li>
+<li class="chapter" data-level="8.2.2" data-path="hasse-graph-interpretation-of-ccnns-1.html"><a href="hasse-graph-interpretation-of-ccnns-1.html#orientation-equivariance-of-ccnns"><i class="fa fa-check"></i><b>8.2.2</b> CCNNs的方向等变</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>第四部分：应用，文献和结论</b></span></li>
+<li class="chapter" data-level="9" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html"><i class="fa fa-check"></i><b>9</b> 实现与实验</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#software-toponetx-topoembedx-and-topomodelx"><i class="fa fa-check"></i><b>9.1</b> 软件：TopoNetX, TopoEmbedX, and TopoModelX</a></li>
+<li class="chapter" data-level="9.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#datasets"><i class="fa fa-check"></i><b>9.2</b> 数据集</a></li>
+<li class="chapter" data-level="9.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#shape-analysis-mesh-segmentation-and-classification"><i class="fa fa-check"></i><b>9.3</b> 形状分析：网格分割与分类</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-segmentation"><i class="fa fa-check"></i><b>9.3.1</b> 网格分割</a></li>
+<li class="chapter" data-level="9.3.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-and-point-cloud-classification"><i class="fa fa-check"></i><b>9.3.2</b> Mesh and point cloud classification</a></li>
+<li class="chapter" data-level="9.3.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#graph-classification"><i class="fa fa-check"></i><b>9.3.3</b> Graph classification</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#pooling-with-mapper-on-graphs-and-data-classification"><i class="fa fa-check"></i><b>9.4</b> Pooling with mapper on graphs and data classification</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-and-edge-features"><i class="fa fa-check"></i><b>9.4.1</b> Mesh classification: CC-pooling with input vertex and edge features</a></li>
+<li class="chapter" data-level="9.4.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-classification-cc-pooling-with-input-vertex-features-only"><i class="fa fa-check"></i><b>9.4.2</b> Mesh classification: CC-pooling with input vertex features only</a></li>
+<li class="chapter" data-level="9.4.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#point-cloud-classification-cc-pooling-with-input-vertex-features-only"><i class="fa fa-check"></i><b>9.4.3</b> Point cloud classification: CC-pooling with input vertex features only</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#ablation-studies"><i class="fa fa-check"></i><b>9.5</b> Ablation studies</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="related-work.html"><a href="related-work.html"><i class="fa fa-check"></i><b>10</b> Related work</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="related-work.html"><a href="related-work.html#graph-based-models"><i class="fa fa-check"></i><b>10.1</b> Graph-based models</a></li>
+<li class="chapter" data-level="10.2" data-path="related-work.html"><a href="related-work.html#higher-order-deep-learning-models"><i class="fa fa-check"></i><b>10.2</b> Higher-order deep learning models</a></li>
+<li class="chapter" data-level="10.3" data-path="related-work.html"><a href="related-work.html#attention-based-models"><i class="fa fa-check"></i><b>10.3</b> Attention-based models</a></li>
+<li class="chapter" data-level="10.4" data-path="related-work.html"><a href="related-work.html#graph-based-pooling"><i class="fa fa-check"></i><b>10.4</b> Graph-based pooling</a></li>
+<li class="chapter" data-level="10.5" data-path="related-work.html"><a href="related-work.html#applied-algebraic-topology"><i class="fa fa-check"></i><b>10.5</b> Applied algebraic topology</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="conclusions.html"><a href="conclusions.html"><i class="fa fa-check"></i><b>11</b> Conclusions</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>A</b> 术语</a></li>
+<li class="chapter" data-level="B" data-path="lifting-maps.html"><a href="lifting-maps.html"><i class="fa fa-check"></i><b>B</b> Lifting maps</a>
+<ul>
+<li class="chapter" data-level="B.1" data-path="lifting-maps.html"><a href="lifting-maps.html#n-hop-cc-of-a-graph"><i class="fa fa-check"></i><b>B.1</b> n-hop CC of a graph</a></li>
+<li class="chapter" data-level="B.2" data-path="lifting-maps.html"><a href="lifting-maps.html#path-based-and-subgraph-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.2</b> Path-based and subgraph-based CC of a graph</a></li>
+<li class="chapter" data-level="B.3" data-path="lifting-maps.html"><a href="lifting-maps.html#loop-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.3</b> Loop-based CC of a graph</a></li>
+<li class="chapter" data-level="B.4" data-path="lifting-maps.html"><a href="lifting-maps.html#coface-cc-of-a-simplicial-complex-or-of-a-cc"><i class="fa fa-check"></i><b>B.4</b> Coface CC of a simplicial complex or of a CC</a></li>
+<li class="chapter" data-level="B.5" data-path="lifting-maps.html"><a href="lifting-maps.html#augmentation-of-ccs-by-higher-rank-cells"><i class="fa fa-check"></i><b>B.5</b> Augmentation of CCs by higher-rank cells</a></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="ccnn-architecture-search-and-topological-quantum-field-theories.html"><a href="ccnn-architecture-search-and-topological-quantum-field-theories.html"><i class="fa fa-check"></i><b>C</b> CCNN architecture search and topological quantum field theories</a></li>
+<li class="chapter" data-level="D" data-path="learning-discrete-exterior-calculus-operators-with-ccanns.html"><a href="learning-discrete-exterior-calculus-operators-with-ccanns.html"><i class="fa fa-check"></i><b>D</b> Learning discrete exterior calculus operators with CCANNs</a></li>
+<li class="chapter" data-level="E" data-path="a-mapper-induced-topology-preserving-cc-pooling-operation.html"><a href="a-mapper-induced-topology-preserving-cc-pooling-operation.html"><i class="fa fa-check"></i><b>E</b> A mapper-induced topology-preserving CC-pooling operation</a></li>
+<li class="chapter" data-level="" data-path="参考文献.html"><a href="参考文献.html"><i class="fa fa-check"></i>参考文献</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">拓扑深度学习：超越图数据</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="combinatorial-complex-neural-networks" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">第 5 章</span> 组合复形神经网络（Combinatorial complex neural networks）<a href="combinatorial-complex-neural-networks.html#combinatorial-complex-neural-networks" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>CCs建模的灵活性使得可以研究和分析多种基于CC构建的神经网络架构，基于 CC 的神经网络可以利用所有邻域矩阵或其中的一个子集，从而考察 CC 中各个胞腔之间的多向交互作用，以解决学习任务。在本节中，我们将通过制定基于 CC 的 TDL 模型的一般原则来介绍 TDL 的蓝图。我们将利用我们的 TDL 蓝图框架来研究当前的方法，并为设计新型模型提供指导。</p>
+<p>TDL中的学习任务可以粗略分成三类：胞腔分类、复形分类、胞腔预测，参见图<a href="combinatorial-complex-neural-networks.html#fig:tdl-tasks">5.1</a>。我们在章节<a href="implementation-and-numerical-results.html#implementation-and-numerical-results">9</a>的实验提供了关于胞腔和复分类的示例，三类学习任务的具体细节如下：</p>
+<ul>
+<li><em>胞腔分类（Cell classification）</em>：预测胞腔复形中每个胞腔。为了做到这一点，我们可以利用 TDL分类器，将目标胞腔的拓扑邻域及其相关特征考虑在内。胞腔分类的一个例子是三角形网格分割（triangular mesh segmentation），其中的任务是预测给定网格中每个面或边的类别。</li>
+<li><em>复形分类（Complex classification）</em>: 预测整个复形。为了实现这一目标，我们可以使用高阶胞腔将复形的拓扑结构还原成一个常见的表示形式，例如池化方法，然后在得到的平面向量（flat vector）上学习 TDL 分类器。复形分类的一个例子是对每个输入网格进行类别预测。</li>
+<li><em>胞腔预测（Cell prediction）</em>: 预测胞腔复形中胞腔-胞腔相互作用的特征，在某些情况下，预测胞腔复形中是否存在某个胞腔。这可以通过利用胞腔的拓扑结构和相关特征来实现。一个相关的例子是预测超图的超边中实体之间的联系。</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:tdl-tasks"></span>
+<img src="figures/tasks.png" alt="拓扑空间上的学习可以粗略地分为三类任务 (1) *胞腔分类（Cell classification）*: 预测胞腔复形中单个胞腔。 这种任务的一个例子是网格分割，拓扑神经网络会为输入网格中的每个面输出一个分割标签。 (2) *复形分类（Complex classification）*: 预测整个复形，涉及到将拓扑结构还原为一种通用的表示方法。输入网格的类别预测就是这一任务的一个例子。 (3) *胞腔预测（Cell prediction）*: 通过利用底层胞腔复形的拓扑结构和相关特征，预测胞腔相互作用的属性，有时包括预测胞腔的存在。这种任务的一个例子是预测超图超桥中的联系。"  />
+<p class="caption">
+图 5.1: 拓扑空间上的学习可以粗略地分为三类任务 (1) <em>胞腔分类（Cell classification）</em>: 预测胞腔复形中单个胞腔。 这种任务的一个例子是网格分割，拓扑神经网络会为输入网格中的每个面输出一个分割标签。 (2) <em>复形分类（Complex classification）</em>: 预测整个复形，涉及到将拓扑结构还原为一种通用的表示方法。输入网格的类别预测就是这一任务的一个例子。 (3) <em>胞腔预测（Cell prediction）</em>: 通过利用底层胞腔复形的拓扑结构和相关特征，预测胞腔相互作用的属性，有时包括预测胞腔的存在。这种任务的一个例子是预测超图超桥中的联系。
+</p>
+</div>
+<p>图<a href="combinatorial-complex-neural-networks.html#fig:tdl">5.2</a>概述了TDL的一般设置。首先，在集合 <span class="math inline">\(S\)</span> 上构建一个由 CC 表示的高阶域。然后选择一组定义在该域上的邻域函数。邻域函数通常根据当前的学习问题来选择，并用于构建拓扑神经网络。为了开发我们的通用 TDL 框架，我们引入了<em>组合复形神经网络（combinatorial complex neural networks，CCNN）</em>，这是一类由 CC 支持的抽象神经网络，它有效地捕捉了图<a href="combinatorial-complex-neural-networks.html#fig:tdl">5.2</a>中的流水线。CCNN 可被视为一种<em>模板</em>，它概括了许多流行的架构，如卷积神经网络和注意力神经网络,CCNN 的抽象化具有很多优势。首先，任何适用于 CCNN 的结果都立即适用于 CCNN 架构的任何特定实例。事实上，只要符合 CCNN 定义，本文的理论分析和结果都适用于任何基于 CC 的神经网络。其次，如果神经网络的架构复杂，使用特定参数可能会很麻烦。在第 <a href="combinatorial-complex-neural-networks.html#building-ccnns-tensor-diagrams">5.1</a>节中，我们将详细介绍参数化 TDL 模型的复杂架构。CCNN 更抽象的高层表示简化了学习过程的符号和一般目的，从而使 TDL 建模更直观。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:tdl"></span>
+<img src="figures/tdl_blue_print.png" alt="TDL蓝图 (a): 一组抽象实体. (b): 定义在$S$上的CC $(S, \mathcal{X}, \mbox{rk})$ . (c): 对于元素 $x \in \mathcal{X}$, 选择定义在CC上的邻域函数集合 (d): 用(c)中选择的领域函数建立神经网络. 神经网络利用在 (c) 中选择的邻域函数来更新 $x$ 上支持的数据."  />
+<p class="caption">
+图 5.2: TDL蓝图 (a): 一组抽象实体. (b): 定义在<span class="math inline">\(S\)</span>上的CC <span class="math inline">\((S, \mathcal{X}, \mbox{rk})\)</span> . (c): 对于元素 <span class="math inline">\(x \in \mathcal{X}\)</span>, 选择定义在CC上的邻域函数集合 (d): 用(c)中选择的领域函数建立神经网络. 神经网络利用在 (c) 中选择的邻域函数来更新 <span class="math inline">\(x\)</span> 上支持的数据.
+</p>
+</div>
+<div class="definition">
+<p><span id="def:hoans-definition" class="definition"><strong>定义 5.1  (组合复形神经网络，Combinatorial complex neural networks) </strong></span>令 <span class="math inline">\(\mathcal{X}\)</span> 是 CC， 令<span class="math inline">\(\mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \ldots \times  \mathcal{C}^{i_m}\)</span> 和 <span class="math inline">\(\mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \ldots \times  \mathcal{C}^{j_n}\)</span> 是<span class="math inline">\(m\)</span> 和 <span class="math inline">\(\mathcal{X}\)</span>上共链空间（cochain spaces）<span class="math inline">\(n\)</span> 的笛卡尔积。 那么， <em>组合复形神经网络（combinatorial complex neural network，CCNN)</em> 就是如下形式的函数
+<span class="math display">\[\begin{equation*}
+\mbox{CCNN}: \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \ldots \times  \mathcal{C}^{i_m} \longrightarrow \mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \ldots \times \mathcal{C}^{j_n}.
+\end{equation*}\]</span></p>
+</div>
+<p>直观上，CCNN以共链向量 <span class="math inline">\((\mathbf{H}_{i_1},\ldots, \mathbf{H}_{i_m})\)</span>作为输入，返回共链向量<span class="math inline">\((\mathbf{K}_{j_1},\ldots, \mathbf{K}_{j_n})\)</span>作为输出。在章节<a href="combinatorial-complex-neural-networks.html#building-ccnns-tensor-diagrams">5.1</a>，我们将展示邻域函数如何在构建一般 CCNN 时发挥核心作用。定义 <a href="combinatorial-complex-neural-networks.html#def:hoans-definition">5.1</a>并没有说明 CCNN 在一般情况下是如何计算的，章节 <a href="message-passing.html#message-passing">6</a> 和 <a href="push-forward-pooling-and-unpooling.html#push-forward-pooling-and-unpooling">7</a>将 形式化将 CCNN 的计算工作流程。</p>
+<div id="building-ccnns-tensor-diagrams" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> 构建 CCNN：张量图<a href="combinatorial-complex-neural-networks.html#building-ccnns-tensor-diagrams" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>与涉及顶点或边缘信号的图不同，高阶网络需要更多的信号（见图 <a href="combinatorial-complexes.html#fig:cc-cochain">4.8</a>）。因此，构建 CCNN 需要构建大量相互作用的子神经网络。由于通过 CCNN 处理的共链数量可能很大，我们引入了<em>张量图（tensor diagrams）</em>，这是一种图解符号，用于描述拓扑域上支持的通用计算模型，并描述该域上支持和处理的各种信号的流向。</p>
+<div class="remark">
+<p><span id="unlabeled-div-3" class="remark"><em>备注</em>. </span>图解符号在几何拓扑文献中很常见<span class="citation">Turaev (<a href="#ref-turaev2016quantum">2016</a>)</span>，通常用于构建由更简单的构件构成的函数。进一步讨论见附录 <a href="ccnn-architecture-search-and-topological-quantum-field-theories.html#ccnn-architecture-search-and-topological-quantum-field-theories">C</a>。关于单纯形神经网络的相关构造，另请参阅<span class="citation">(<a href="#ref-roddenberry2021principled">T. Mitchell Roddenberry, Glaze, and Segarra 2021</a>)</span>。</p>
+</div>
+<div class="definition">
+<p><span id="def:tdd" class="definition"><strong>定义 5.2  (张量图，Tensor diagram) </strong></span>张量图可把CCNN表示成有相同图，张量图上的信号从<em>源节点</em>流向<em>目标节点</em>。源节点和目标节点分别对应 CCNN 的域和共域.</p>
+</div>
+<p>图<a href="combinatorial-complex-neural-networks.html#fig:td">5.3</a>张量图的示例。左边显示的是三维的 CC，考虑0-cochain <span class="math inline">\(\mathcal{C}^0\)</span>，1-cochain <span class="math inline">\(\mathcal{C}^1\)</span>和2-cochain <span class="math inline">\(\mathcal{C}^2\)</span>；中间的图给出了CCNN，它把<span class="math inline">\(\mathcal{C}^0 \times \mathcal{C}^1\times \mathcal{C}^2\)</span>的共链向量映射到<span class="math inline">\(\mathcal{C}^0\times\mathcal{C}^1 \times \mathcal{C}^2\)</span>中的共链向量；右图给出的是CCNN的张量图。用共链映射或其矩阵表示来标注张量图上的每条边，张量图<a href="combinatorial-complex-neural-networks.html#fig:td">5.3</a>上的边标签是<span class="math inline">\(A_{0,1}, B_{0,1}^{T}, A_{1,1}, B_{1,2}\)</span> 和 <span class="math inline">\(coA_{2,1}\)</span>。因此，该张量图指明了 CC 上的共链流向。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:td"></span>
+<img src="figures/tensor_diagram.png" alt="张量图是 CCNN 的图解表示法，可捕捉 CCNN 上的信号流。"  />
+<p class="caption">
+图 5.3: 张量图是 CCNN 的图解表示法，可捕捉 CCNN 上的信号流。
+</p>
+</div>
+<p>张量图箭头上的标签构成了一个<span class="math inline">\(\mathbf{G}= (G_i)_{i=1}^l\)</span> 的共链映射序列，该序列定义在底层 CC 上，例如在<a href="combinatorial-complex-neural-networks.html#fig:td">5.3</a>中的<span class="math inline">\(\mathbf{G}=(G_i)_{i=1}^5 = (A_{0,1}, B_{0,1}^{T}, A_{1,1}, B_{1,2}, coA_{2,1})\)</span>。当使用张量图表示 CCNN 时，就可使用符号 <span class="math inline">\(\mbox{CCNN}_{\mathbf{G}}\)</span> 表示张量图及其对应的 CCNN。共链映射<span class="math inline">\((G_i)_{i=1}^l\)</span>反应了CC的结构，也确定了CC上的信号流。在第 <a href="combinatorial-complexes.html#neighbourhood-functions-on-ccs">4.4</a>节中提到的任何邻域矩阵都可以用作共链图，共链映射的选择取决于学习任务。</p>
+<p>图<a href="combinatorial-complex-neural-networks.html#fig:tensor">5.4</a>可视化了张量图的其它示例。张量图的<em>高度（heigh）</em>是指从源节点到目标节点的最长路径上的边的数量。例如，图 <a href="combinatorial-complex-neural-networks.html#fig:tensor">5.4</a> (a) 和 <a href="combinatorial-complex-neural-networks.html#fig:tensor">5.4</a> (d) 中张量图的高度分别为 1 和 2。两个张量图的垂直连接表示其对应的 CCNN 的组成。例如，图 <a href="combinatorial-complex-neural-networks.html#fig:tensor">5.4</a>(d)中的张量图就是图 <a href="combinatorial-complex-neural-networks.html#fig:tensor">5.4</a>(c)和(b)中张量图的垂直连接。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:tensor"></span>
+<img src="figures/hon_example.png" alt="张量图示例 (a): 张量图 $\mbox{CCNN}_{coA_{1,1}}\colon \mathcal{C}^1 \to \mathcal{C}^1$. (b): 张量图 $\mbox{CCNN}_{ \{B_{1,2}, B_{1,2}^T\}} \colon \mathcal{C}^1 \times \mathcal{C}^2 \to \mathcal{C}^1 \times \mathcal{C}^2$. (c):合并节点，可合并三条共链. (d): 由 (c) 和 (b) 中的张量图垂直连接生成的张量图，边标签 $Id$ 表示同一矩阵。"  />
+<p class="caption">
+图 5.4: 张量图示例 (a): 张量图 <span class="math inline">\(\mbox{CCNN}_{coA_{1,1}}\colon \mathcal{C}^1 \to \mathcal{C}^1\)</span>. (b): 张量图 <span class="math inline">\(\mbox{CCNN}_{ \{B_{1,2}, B_{1,2}^T\}} \colon \mathcal{C}^1 \times \mathcal{C}^2 \to \mathcal{C}^1 \times \mathcal{C}^2\)</span>. (c):合并节点，可合并三条共链. (d): 由 (c) 和 (b) 中的张量图垂直连接生成的张量图，边标签 <span class="math inline">\(Id\)</span> 表示同一矩阵。
+</p>
+</div>
+<p>如果张量图上的节点可以收到一个或多个信号，就称为<em>聚合节点（merge node）</em>。在数学上来解释，聚合节点就是函数<span class="math inline">\(\mathcal{M}_{G_1,\ldots ,G_m}\colon \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \ldots \times \mathcal{C}^{i_m} \to \mathcal{C}^{j}\)</span>，该函数由下式给出：</p>
+<p><span class="math display" id="eq:sum">\[\begin{equation}
+    (\mathbf{H}_{i_1},\ldots,\mathbf{H}_{i_m}) \xrightarrow[]{\mathcal{M}} \mathbf{K}_{j}=
+    \mathcal{M}_{G_1,\ldots,G_m}(\mathbf{H}_{i_1},\ldots,\mathbf{H}_{i_m}),
+    \tag{5.1}
+\end{equation}\]</span>
+其中，<span class="math inline">\(G_k \colon C^{i_k}(\mathcal{X})\to C^{j}(\mathcal{X}), k=1,\ldots,m\)</span>，是共链映射。我们将 <span class="math inline">\(\mathcal{M}\)</span> 视为一个消息传递函数，它考虑了由映射 <span class="math inline">\(G_1,\ldots,G_m\)</span>输出的消息，这些映射共同作用于一个共链向量 <span class="math inline">\((\mathbf{H}_{i_1},\ldots,\mathbf{H}_{i_m})\)</span>，从而得到一个更新的共链 <span class="math inline">\(\mathbf{K}_{j}\)</span>。更多细节参看<a href="combinatorial-complex-neural-networks.html#push-forward-operator-and-merge-node">5.2</a> 和 <a href="message-passing.html#higher-order-message-passing-neural-networks-are-ccnns">6.2</a>，图<a href="combinatorial-complex-neural-networks.html#fig:tensor">5.4</a>(c)就给出了这样的一个聚合节点示例。</p>
+</div>
+<div id="push-forward-operator-and-merge-node" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> 前推操作（Push-forward operator）和聚合节点<a href="combinatorial-complex-neural-networks.html#push-forward-operator-and-merge-node" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>本节引入了前推操作，它是一种计算方案，可以将 <span class="math inline">\(i-cells\)</span>胞腔支持的共链发送到 <span class="math inline">\(j-cells\)</span> 胞腔。前推操作是一个计算构件，用于形式化定义方程 <a href="combinatorial-complex-neural-networks.html#eq:sum">(5.1)</a>中给出的聚合节点、第 <a href="message-passing.html#message-passing">6</a>章中介绍的高阶消息传递，以及第 <a href="push-forward-pooling-and-unpooling.html#push-forward-pooling-and-unpooling">7</a>节中介绍的(un)pooling操作。</p>
+<div class="definition">
+<p><span id="def:pushing-exact-definition" class="definition"><strong>定义 5.3  (共链前推，Cochain push-forward) </strong></span>在 CC <span class="math inline">\(\mathcal{X}\)</span>上, 有共链映射 <span class="math inline">\(G\colon\mathcal{C}^i(\mathcal{X})\to \mathcal{C}^j(\mathcal{X})\)</span> 和 <span class="math inline">\(\mathbf{H}_i\)</span> in <span class="math inline">\(\mathcal{C}^i(\mathcal{X})\)</span>。 <span class="math inline">\(G\)</span>诱导的<em>(cochain) push-forward</em> 就是算子 <span class="math inline">\(\mathcal{F}_G \colon \mathcal{C}^i(\mathcal{X})\to \mathcal{C}^j(\mathcal{X})\)</span>，该算子定义如下
+<span class="math display">\[\begin{equation}
+\mathbf{H}_i \to \mathbf{K}_j=[ \mathbf{k}_{y^j_1},\ldots,\mathbf{k}_{y^j_{|\mathcal{X}^j|} }] = \mathcal{F}_G(\mathbf{H}_i),
+\end{equation}\]</span>
+使得 <span class="math inline">\(k=1,\ldots,|\mathcal{X}^j|\)</span>,
+<span class="math display" id="eq:functional">\[\begin{equation}
+\mathbf{k}_{y_k^j}= \bigoplus_{x_l^i \in \mathcal{N}_{G^T(y_k^j)}} \alpha_{G} ( \mathbf{ \mathbf{h}_{x_l^i}}),
+\tag{5.2}
+\end{equation}\]</span>
+其中，<span class="math inline">\(\bigoplus\)</span> 是具有置换不变性（permutation-invariant）的聚合函数，<span class="math inline">\(\alpha_G\)</span> 是可微函数（differentiable function）。</p>
+</div>
+<blockquote>
+<p>译者注：置换不变性（permutation-invariant），元素的次序对函数的响应没有影响。假设函数<span class="math inline">\(f\)</span>将<span class="math inline">\(\mathcal{X}\in \mathbb{R}^{d}\)</span>域的向量空间映射到<span class="math inline">\(\mathcal{Y}\)</span>域的离散空间，作用于集合上的函数<span class="math inline">\(f:\mathcal{X}\rightarrow \mathcal{Y}\)</span>对集合中元素的作用在任何置换<span class="math inline">\(\pi\)</span>下都不变，即：<span class="math inline">\(f(\{x_{1},\ldots,x_{M}\})=f(\{x_{\pi(1)},\ldots,x_{\pi(M)})\}\)</span>，则说<span class="math inline">\(f\)</span>具有置换不变性。</p>
+</blockquote>
+<p>算子<span class="math inline">\(\mathcal{F}_{G}\)</span>前推<span class="math inline">\(\mathcal{X}^i\)</span>支持的<span class="math inline">\(i-cochain\)</span> <span class="math inline">\(\mathbf{H}_i\)</span>到<span class="math inline">\(\mathcal{X}^j\)</span>支持的 <span class="math inline">\(j-cochain\)</span> <span class="math inline">\(\mathcal{F}_{G}(\mathbf{H}_i)\)</span>。对于每个胞腔<span class="math inline">\(y \in \mathcal{X}^j\)</span>，公式<a href="combinatorial-complex-neural-networks.html#eq:functional">(5.2)</a>通过聚合所有隶属于<span class="math inline">\(y\)</span>由邻域函<span class="math inline">\(\mathcal{N}_{G^T}\)</span>确定的邻域<span class="math inline">\(x \in \mathcal{X}^i\)</span>上的向量<span class="math inline">\(\mathbf{h}_x\)</span>来构造向量<span class="math inline">\(\mathbf{k}_y\)</span>，而且还对聚合向量集合<span class="math inline">\(\{ \mathbf{h}_x| x\in \mathcal{N}_{G^T}(y)\}\)</span>施加了微分函数<span class="math inline">\(\alpha_G\)</span>。</p>
+<p>图<a href="combinatorial-complex-neural-networks.html#fig:push-forward">5.5</a>可视化了两个前推算子的示例。示例<a href="combinatorial-complex-neural-networks.html#exm:non-trainable-pushforward">5.1</a>提供了由关联矩阵（indicence matrix）诱导的前推函数，而示例<a href="combinatorial-complex-neural-networks.html#exm:non-trainable-pushforward">5.1</a>中的前推函数不包含任何参数，因此无法训练。在章节<a href="combinatorial-complex-neural-networks.html#definition-of-combinatorial-complex-convolutional-networks">5.4</a>，将给出参数化的前推操作，其参数是可训练的。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:push-forward"></span>
+<img src="figures/push_forward.png" alt="前推操作示例 (a): 令 $G_1\colon \mathcal{C}^1\to \mathcal{C}^2$ 是共链映射。由$G_1$诱导的前推 $\mathcal{F}_{G_1}$ 操作输入一个定义在底层CC $\mathcal{X}$的边上的1-cochain $\textbf{H}_{1}$，然后前推该共链到定义在$\mathcal{X}^2$上的2-cochain $\mathbf{K}_2$。通过用邻域函数 $\mathcal{N}_{G_1^T}$聚合$\mathbf{H}_1$上的消息就形成了共链$\mathbf{K}_2$。在这种情况下，相对于 $G_1$，2-rank（蓝色）胞腔的邻居是该胞腔边界上的四条（粉色）边。（b）类似的，$G_2\colon \mathcal{C}^0\to \mathcal{C}^2$诱导前推映射$\mathcal{F}_{G_2}\colon \mathcal{C}^0\to \mathcal{C}^2$，发送0-cochain $\mathbf{H}_0$到2-cochain $\mathbf{K}_2$。使用邻域函数$\mathcal{N}_{G_2^T}$聚合$\mathbf{H}_0$上的消息就形成了共链$\mathbf{K}_2$。"  />
+<p class="caption">
+图 5.5: 前推操作示例 (a): 令 <span class="math inline">\(G_1\colon \mathcal{C}^1\to \mathcal{C}^2\)</span> 是共链映射。由<span class="math inline">\(G_1\)</span>诱导的前推 <span class="math inline">\(\mathcal{F}_{G_1}\)</span> 操作输入一个定义在底层CC <span class="math inline">\(\mathcal{X}\)</span>的边上的1-cochain <span class="math inline">\(\textbf{H}_{1}\)</span>，然后前推该共链到定义在<span class="math inline">\(\mathcal{X}^2\)</span>上的2-cochain <span class="math inline">\(\mathbf{K}_2\)</span>。通过用邻域函数 <span class="math inline">\(\mathcal{N}_{G_1^T}\)</span>聚合<span class="math inline">\(\mathbf{H}_1\)</span>上的消息就形成了共链<span class="math inline">\(\mathbf{K}_2\)</span>。在这种情况下，相对于 <span class="math inline">\(G_1\)</span>，2-rank（蓝色）胞腔的邻居是该胞腔边界上的四条（粉色）边。（b）类似的，<span class="math inline">\(G_2\colon \mathcal{C}^0\to \mathcal{C}^2\)</span>诱导前推映射<span class="math inline">\(\mathcal{F}_{G_2}\colon \mathcal{C}^0\to \mathcal{C}^2\)</span>，发送0-cochain <span class="math inline">\(\mathbf{H}_0\)</span>到2-cochain <span class="math inline">\(\mathbf{K}_2\)</span>。使用邻域函数<span class="math inline">\(\mathcal{N}_{G_2^T}\)</span>聚合<span class="math inline">\(\mathbf{H}_0\)</span>上的消息就形成了共链<span class="math inline">\(\mathbf{K}_2\)</span>。
+</p>
+</div>
+<div class="example">
+<p><span id="exm:non-trainable-pushforward" class="example"><strong>示例 5.1  (维度2 CC上的前推操作) </strong></span>在维度2 CC <span class="math inline">\(\mathcal{X}\)</span>上，令 <span class="math inline">\(B_{0,2}\colon \mathcal{C}^2 (\mathcal{X})\to \mathcal{C}^0 (\mathcal{X})\)</span> 是关联矩阵。由<span class="math inline">\(\mathcal{F}^{m}_{B_{0,2}}(\mathbf{H_{2}})= B_{0,2} (\mathbf{H}_{2})\)</span>定义的函数<span class="math inline">\(\mathcal{F}^{m}_{B_{0,2}}\colon\mathcal{C}^2 (\mathcal{X})\to \mathcal{C}^0 (\mathcal{X})\)</span>是由<span class="math inline">\(B_{0,2}\)</span>诱导的前推操作。<span class="math inline">\(\mathcal{F}^{m}_{B_{0,2}}\)</span> 前推共链 <span class="math inline">\(\mathbf{H}_{2}\in \mathcal{C}^2\)</span> 到共链 <span class="math inline">\(B_{0,2} (\mathbf{H}_{2}) \in \mathcal{C}^0\)</span>.</p>
+</div>
+<p>在定义 <a href="combinatorial-complex-neural-networks.html#def:exact-definition-merge-node">5.4</a>中, 我们使用前推算子来表述聚合节点的概念. 图<a href="combinatorial-complex-neural-networks.html#fig:merge-node">5.6</a>用张量图可视化了聚合节点的定义<a href="combinatorial-complex-neural-networks.html#def:exact-definition-merge-node">5.4</a> 。</p>
+<div class="definition">
+<p><span id="def:exact-definition-merge-node" class="definition"><strong>定义 5.4  (聚合节点，Merge node) </strong></span>令 <span class="math inline">\(\mathcal{X}\)</span>是CC，令 <span class="math inline">\(G_1\colon\mathcal{C}^{i_1}(\mathcal{X})\to\mathcal{C}^j(\mathcal{X})\)</span>和 <span class="math inline">\(G_2\colon\mathcal{C}^{i_2}(\mathcal{X})\to\mathcal{C}^j(\mathcal{X})\)</span>是两个共链映射。给定共链向量 <span class="math inline">\((\mathbf{H}_{i_1},\mathbf{H}_{i_2}) \in \mathcal{C}^{i_1}\times \mathcal{C}^{i_2}\)</span>, <em>聚合节点</em> <span class="math inline">\(\mathcal{M}_{G_1,G_2}\colon\mathcal{C}^{i_1} \times \mathcal{C}^{i_2} \to \mathcal{C}^j\)</span> 被定义为
+<span class="math display">\[\begin{equation}
+    \mathcal{M}_{G_1,G_2}(\mathbf{H}_{i_1},\mathbf{H}_{i_2})= \beta\left( \mathcal{F}_{G_1}(\mathbf{H}_{i_1})  \bigotimes \mathcal{F}_{G_2}(\mathbf{H}_{i_2}) \right),
+\end{equation}\]</span>
+其中， <span class="math inline">\(\bigotimes \colon \mathcal{C}^j \times \mathcal{C}^j \to \mathcal{C}^j\)</span> 是聚合函数, <span class="math inline">\(\mathcal{F}_{G_1}\)</span> 和 <span class="math inline">\(\mathcal{F}_{G_2}\)</span>是<span class="math inline">\(G_1\)</span> 和 <span class="math inline">\(G_2\)</span>诱导的前推操作，并且<span class="math inline">\(\beta\)</span>是激活函数。</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:merge-node"></span>
+<img src="figures/merge_node_scaled.png" alt="聚合节点定义的可视化."  />
+<p class="caption">
+图 5.6: 聚合节点定义的可视化.
+</p>
+</div>
+</div>
+<div id="the-main-three-tensor-operations" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> 三种主要的张量操作<a href="combinatorial-complex-neural-networks.html#the-main-three-tensor-operations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>CCNN 的任何张量图都可以通过两个基本操作构建：前推算子和聚合节点。在实践中，引入其他操作可以更有效地构建相关的神经网络架构。例如，一个有用的操作是聚合节点的双重操作，称之为分裂节点。</p>
+<div class="definition">
+<p><span id="def:exact-definition-split-node" class="definition"><strong>定义 5.5  (分裂节点，Split node) </strong></span>令 <span class="math inline">\(\mathcal{X}\)</span>是CC，令<span class="math inline">\(G_1\colon\mathcal{C}^{j}(\mathcal{X})\to\mathcal{C}^{i_1}(\mathcal{X})\)</span> 和 <span class="math inline">\(G_2\colon\mathcal{C}^{j}(\mathcal{X})\to\mathcal{C}^{i_2}(\mathcal{X})\)</span>是两个共链映射。给定共链<span class="math inline">\(\mathbf{H}_{j} \in \mathcal{C}^{j}\)</span>， <em>分裂节点</em>操作 <span class="math inline">\(\mathcal{S}_{G_1,G_2}\colon\mathcal{C}^j \to \mathcal{C}^{i_1} \times \mathcal{C}^{i_2}\)</span> 定义为:
+<span class="math display">\[\begin{equation}
+\mathcal{S}_{G_1,G_2}(\mathbf{H}_{j})= \left(  \beta_1(\mathcal{F}_{G_1}(\mathbf{H}_{j})) , \beta_2(\mathcal{F}_{G_2}(\mathbf{H}_{j})) \right),
+\end{equation}\]</span>
+其中， <span class="math inline">\(\mathcal{F}_{G_i}\)</span> 是<span class="math inline">\(G_i\)</span>诱导的前推操作，并且<span class="math inline">\(\beta_i\)</span>是激活函数，<span class="math inline">\(i=1, 2\)</span>。</p>
+</div>
+<p>虽然从定义 <a href="combinatorial-complex-neural-networks.html#def:exact-definition-split-node">5.5</a>中可以看出，分裂节点只是前推操作的元组，但使用分裂节点可以让我们更有效、更直观地构建神经网络。定义 <a href="combinatorial-complex-neural-networks.html#def:elem-opers">5.6</a>提出了一组基本的张量运算，包括分裂节点，以方便用张量图来表述 CCNN。</p>
+<div class="definition">
+<p><span id="def:elem-opers" class="definition"><strong>定义 5.6  (基本张量运算) </strong></span>我们将前推操作、聚合节点和分裂节点统称为基本张量操作。</p>
+</div>
+<p>图 <a href="combinatorial-complex-neural-networks.html#fig:split-merge-pushforward">5.7</a> 给出了基本张量运算的张量图，图 <a href="combinatorial-complex-neural-networks.html#fig:prior-work">5.8</a> 举例说明现有拓扑神经网络如何通过基于基本张量运算的张量图来表达。 例如，文献<span class="citation">(<a href="#ref-roddenberry2021principled">T. Mitchell Roddenberry, Glaze, and Segarra 2021</a>)</span>提出的基于霍奇分解（Hodge decomposition）的神经网络–单纯复形网（SCoNe），就可以有效地通分裂分和聚合节点来实现，如图所示。 <a href="combinatorial-complex-neural-networks.html#fig:prior-work">5.8</a>(a).</p>
+<blockquote>
+<p>霍奇分解定理,曲面上任意一个光滑切向量场，可以被唯一地分解为三个向量场：梯度场、散度场和调和场</p>
+</blockquote>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:split-merge-pushforward"></span>
+<img src="figures/split_merge_push.png" alt="基本张量运算（即前推运算、聚合节点和分裂节点）的张量图。这三种基本映射张量运算是构建一般 CCNN 张量图的基石. 利用三种基本张量运算的合成和横向连接，可以形成一般的张量图。 (a): 由共链 $G\colon\mathcal{C}^i \to \mathcal{C}^j$ 定义的操作为。）（b）两个共链映射 $G_1\colon\mathcal{C}^{i_1} \to \mathcal{C}^j$和$G_2\colon\mathcal{C}^{i_2} \to \mathcal{C}^j$ 诱导生成的聚合节点。（c）两个共链映射公 $G_1\colon\mathcal{C}^{j}\to\mathcal{C}^{i_1}$ 和 $G_2\colon\mathcal{C}^{j}\to\mathcal{C}^{i_2}$ 诱导生成的分裂节点. 在图示中，函数 $\Delta \colon \mathcal{C}^{j}\to \mathcal{C}^{j}\times \mathcal{C}^{j}$ 被定义为 $\Delta(\mathbf{H}_j)= (\mathbf{H}_j,\mathbf{H}_j)$."  />
+<p class="caption">
+图 5.7: 基本张量运算（即前推运算、聚合节点和分裂节点）的张量图。这三种基本映射张量运算是构建一般 CCNN 张量图的基石. 利用三种基本张量运算的合成和横向连接，可以形成一般的张量图。 (a): 由共链 <span class="math inline">\(G\colon\mathcal{C}^i \to \mathcal{C}^j\)</span> 定义的操作为。）（b）两个共链映射 <span class="math inline">\(G_1\colon\mathcal{C}^{i_1} \to \mathcal{C}^j\)</span>和<span class="math inline">\(G_2\colon\mathcal{C}^{i_2} \to \mathcal{C}^j\)</span> 诱导生成的聚合节点。（c）两个共链映射公 <span class="math inline">\(G_1\colon\mathcal{C}^{j}\to\mathcal{C}^{i_1}\)</span> 和 <span class="math inline">\(G_2\colon\mathcal{C}^{j}\to\mathcal{C}^{i_2}\)</span> 诱导生成的分裂节点. 在图示中，函数 <span class="math inline">\(\Delta \colon \mathcal{C}^{j}\to \mathcal{C}^{j}\times \mathcal{C}^{j}\)</span> 被定义为 <span class="math inline">\(\Delta(\mathbf{H}_j)= (\mathbf{H}_j,\mathbf{H}_j)\)</span>.
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:prior-work"></span>
+<img src="figures/prior_work.png" alt="可通过三种基本张量运算实现现有神经网络的示例。为简化说明，去掉了边标签. (a):文献[@roddenberry2021principled]提出的单纯复形网络（simplicial complex net，SCoNe）可以实现为分裂节点的组合，把输入的1-cochain分裂为三个0维、1维、2维共链，然后通过一个聚合节点再把这些共链聚合为 1-cochain。 (b): 文献[@ebli2020simplicial]提出的单纯形神经网络（simplicial neural network，SCN）可以实现为前推操作。 (c)--(e): 胞腔复形神经网络的示例（cell complex neural networks，CXNs)，参见文献 [@hajijcell]。 注意： (e) 通过将0-cochains和2-cochains聚合为1-cochains的聚合节点，以及将1-cochain分裂为0-cochain和2-cochains的分裂节点来实现。"  />
+<p class="caption">
+图 5.8: 可通过三种基本张量运算实现现有神经网络的示例。为简化说明，去掉了边标签. (a):文献<span class="citation">(<a href="#ref-roddenberry2021principled">T. Mitchell Roddenberry, Glaze, and Segarra 2021</a>)</span>提出的单纯复形网络（simplicial complex net，SCoNe）可以实现为分裂节点的组合，把输入的1-cochain分裂为三个0维、1维、2维共链，然后通过一个聚合节点再把这些共链聚合为 1-cochain。 (b): 文献<span class="citation">(<a href="#ref-ebli2020simplicial">Ebli, Defferrard, and Spreemann 2020</a>)</span>提出的单纯形神经网络（simplicial neural network，SCN）可以实现为前推操作。 (c)–(e): 胞腔复形神经网络的示例（cell complex neural networks，CXNs)，参见文献 <span class="citation">(<a href="#ref-hajijcell">Hajij, Istvan, and Zamzmi 2020</a>)</span>。 注意： (e) 通过将0-cochains和2-cochains聚合为1-cochains的聚合节点，以及将1-cochain分裂为0-cochain和2-cochains的分裂节点来实现。
+</p>
+</div>
+<div class="remark">
+<p><span id="unlabeled-div-4" class="remark"><em>备注</em>. </span>基本张量运算构成了定义任何参数化拓扑神经网络所需的唯一框架。事实上，既然可以通过三个基本张量运算建立张量图，那么只需定义前推运算和聚合运算，就可以完全定义一类参数化的 CCNN（回顾一下，分裂节点完全由前推运算决定）。 在章节<a href="combinatorial-complex-neural-networks.html#definition-of-combinatorial-complex-convolutional-networks">5.4</a> 和 <a href="combinatorial-complex-neural-networks.html#combinatorial-complex-attention-neural-networks">5.5</a>，我们建立了两类参数化的CCNN：卷积类和注意力类。在这两种情况下，我们只定义了相应的参数化基本张量运算。除了卷积和注意力版本的CCNNs，三种基本张量运算允许我们构建任意参数化的张量图，因此为发现新的拓扑神经网络架构提供了空间，而我们的理论仍适用于这些架构。</p>
+</div>
+<p>构建 CCNN 的另一种方法是借鉴拓扑量子场论（topological quantum field theory，TQFT）的思想。在附录 <a href="ccnn-architecture-search-and-topological-quantum-field-theories.html#ccnn-architecture-search-and-topological-quantum-field-theories">C</a>中，我们简要地讨论了他们之间的深层关系。</p>
+</div>
+<div id="definition-of-combinatorial-complex-convolutional-networks" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> 组合复形卷积网络的定义（combinatorial complex convolutional networks）<a href="combinatorial-complex-neural-networks.html#definition-of-combinatorial-complex-convolutional-networks" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>在高阶域上的深度学习的基本计算需求之一是具备定义和计算卷积运算的能力。在本节，我们将介绍配备卷积算子的CCNNs，称之为<em>组合复形卷积神经网络（combinatorial complex convolutional neural networks，CCCNN）</em>。特别地，为 CCCNNs 提出了两种卷积算子：CC-卷积（CC-convolutional）前推算子和CC-卷积聚合节点。</p>
+<p>我们将演示如何从两个基本模块引入 CCCNN：在章节<a href="combinatorial-complex-neural-networks.html#push-forward-operator-and-merge-node">5.2</a>抽象定义的前推和聚合操作。正如在定义 <a href="combinatorial-complex-neural-networks.html#def:cc-conv-pushforward">5.7</a>所设想的那样，CC-convolutional前推操作用最简单的形式将文献<span class="citation">(<a href="#ref-kipf2016semi">Kipf and Welling 2016</a>)</span>中引入的卷积图神经网络进行了泛化。</p>
+<div class="definition">
+<p><span id="def:cc-conv-pushforward" class="definition"><strong>定义 5.7  (CC卷积前推，CC-convolutional push-forward) </strong></span>假设在一个CC <span class="math inline">\(\mathcal{X}\)</span> 上, 有共链映射 <span class="math inline">\(G\colon \mathcal{C}^i (\mathcal{X}) \to \mathcal{C}^j(\mathcal{X})\)</span> 和 <span class="math inline">\(\mathbf{H}_i \in C^i(\mathcal{X}, \mathbb{R}^{{s}_{in}})\)</span>。 <em>CC-convolutional push-forward</em> 操作就是共链映射 <span class="math inline">\(\mathcal{F}^{conv}_{G;W} \colon C^i(\mathcal{X}，\mathbb{R}^{{s}_{in}}) \to C^j(\mathcal{X}, \mathbb{R}^{{t}_{out}})\)</span> 定义如下
+<span class="math display" id="eq:cc-conv-push-forward-eq">\[\begin{equation}
+\mathbf{H}_i \to  \mathbf{K}_j=  G \mathbf{H}_i W ,
+\tag{5.3}
+\end{equation}\]</span>
+其中， <span class="math inline">\(W \in \mathbb{R}^{d_{s_{in}}\times d_{s_{out}}}\)</span> 是可训练参数。</p>
+</div>
+<p>一旦有了CC-convolutional前推操作的定义，CC-convolutional聚合节点的定义（参见<a href="combinatorial-complex-neural-networks.html#def:cc-convolutional">5.8</a>）就是定义<a href="combinatorial-complex-neural-networks.html#def:exact-definition-merge-node">5.4</a>的直接应用。在最近的文献 <span class="citation">(<a href="#ref-bunch2020simplicial">Bunch et al. 2020</a>; <a href="#ref-ebli2020simplicial">Ebli, Defferrard, and Spreemann 2020</a>; <a href="#ref-hajijcell">Hajij, Istvan, and Zamzmi 2020</a>; <a href="#ref-schaub2020random">Schaub et al. 2020</a>, <a href="#ref-schaub2021signal">2021</a>; <a href="#ref-roddenberry2021principled">T. Mitchell Roddenberry, Glaze, and Segarra 2021</a>; <a href="#ref-calmon2022higher">Calmon, Schaub, and Bianconi 2022</a>; <a href="#ref-hajij2021simplicial">Hajij, Zamzmi, et al. 2022</a>; <a href="#ref-roddenberry2021signal">T. Mitchell Roddenberry, Schaub, and Hajij 2022</a>; <a href="#ref-yang2023convolutional">Yang and Isufi 2023</a>)</span>中也出现了一些定义<a href="combinatorial-complex-neural-networks.html#def:cc-convolutional">5.8</a>的变种。</p>
+<div class="definition">
+<p><span id="def:cc-convolutional" class="definition"><strong>定义 5.8  (CC卷积聚合节点，CC-convolutional merge node) </strong></span>令 <span class="math inline">\(\mathcal{X}\)</span>是CC,令<span class="math inline">\(G_1\colon\mathcal{C}^{i_1}(\mathcal{X}) \to\mathcal{C}^j(\mathcal{X})\)</span> 和 <span class="math inline">\(G_2\colon\mathcal{C}^{i_2}(\mathcal{X})\to\mathcal{C}^j(\mathcal{X})\)</span>是两个共链映射。给定共链向量 <span class="math inline">\((\mathbf{H}_{i_1},\mathbf{H}_{i_2}) \in \mathcal{C}^{i_1}\times \mathcal{C}^{i_2}\)</span>， <em>CC-convolutional聚合节点</em> <span class="math inline">\(\mathcal{M}^{conv}_{\mathbf{G};\mathbf{W}} \colon\mathcal{C}^{i_1} \times \mathcal{C}^{i_2} \to \mathcal{C}^j\)</span> 可以定义如下：
+<span class="math display">\[\begin{equation}
+\begin{aligned}
+\mathcal{M}^{conv}_{\mathbf{G};\mathbf{W}}
+(\mathbf{H}_{i_1},\mathbf{H}_{i_2}) &amp;=
+\beta\left( \mathcal{F}^{conv}_{G_1;W_1}(\mathbf{H}_{i_1})
++ \mathcal{F}^{conv}_{G_2;W_2}(\mathbf{H}_{i_2})  \right)\\
+&amp;= \beta ( G_1 \mathbf{H}_{i_1} W_1  +  G_2 \mathbf{H}_{i_2} W_2 ),\\
+\end{aligned}
+\end{equation}\]</span>
+其中，
+<span class="math inline">\(\mathbf{G}=(G_1, G_2)\)</span>, <span class="math inline">\(\mathbf{W}=(W_1, W_2)\)</span>是一组可训练参数，<span class="math inline">\(\beta\)</span> 是激活函数。</p>
+</div>
+<p>事实上，定义<a href="combinatorial-complex-neural-networks.html#def:cc-conv-pushforward">5.7</a>中共链映射<span class="math inline">\(G\)</span>的矩阵表示可能在训练过程中需要针对具体问题进行归一化（normalization）。关于高阶卷积算子背景下的各种归一化，我们推荐读者参阅<span class="citation">(<a href="#ref-kipf2016semi">Kipf and Welling 2016</a>; <a href="#ref-bunch2020simplicial">Bunch et al. 2020</a>; <a href="#ref-schaub2020random">Schaub et al. 2020</a>)</span> <span class="citation">(<a href="#ref-kipf2016semi">Kipf and Welling 2016</a>; <a href="#ref-bunch2020simplicial">Bunch et al. 2020</a>; <a href="#ref-schaub2020random">Schaub et al. 2020</a>)</span>。</p>
+<p>我们用 <span class="math inline">\(\mbox{CCNN}_{\mathbf{G}}\)</span> 概念表示张量图及其对应的 CCNN。 我们所用的负号表明，CCNN 是由基于定义在底层 CC 上的共链映射序列 <span class="math inline">\(\mathbf{G}= (G_i)_{i=1}^l\)</span> 的基本张量运算组成的。 当组成 CCNN 的基本张量运算由可训练参数序列 <span class="math inline">\(\mathbf{W}= (W_i)_{i=1}^k\)</span> 参数化时，就可以用 <span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span> 表示 CCNN 及其张量图表示。</p>
+</div>
+<div id="combinatorial-complex-attention-neural-networks" class="section level2 hasAnchor" number="5.5">
+<h2><span class="header-section-number">5.5</span> 组合复形注意力神经网络<a href="combinatorial-complex-neural-networks.html#combinatorial-complex-attention-neural-networks" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>大多数高阶深度学习模型都侧重于使用<em>各向同性聚合(isotropic aggregation)</em>的层，这意味着元素附近的邻近元素对元素表示的更新贡献相同。由于信息是以扩散的方式聚合的，这种各向同性的聚合会限制这些学习模型的表现力，从而导致过平滑（oversmoothing）等现象<span class="citation">(<a href="#ref-beaini2021directional">Beaini et al. 2021</a>)</span>。相比之下，<em>基于注意力的学习（attention-based learning）</em> <span class="citation">(<a href="#ref-choi2017gram">Choi et al. 2017</a>)</span>允许深度学习模型为底层领域中元素局部附近的邻域分配概率分布，从而突出具有最相关任务信息的组件<span class="citation">(<a href="#ref-velickovic2017graph">Veličković et al. 2018</a>)</span>。
+基于注意力的模型在实践中是成功的，因为它们忽略了域中的噪声，从而提高了信噪比（signal-to-noise ratio）<span class="citation">(<a href="#ref-mnih2014recurrent">Mnih et al. 2014</a>; <a href="#ref-boaz2019">J. B. Lee et al. 2019</a>)</span>。因此，基于注意力的模型在图的传统机器学习任务中取得了显著的成功，包括节点分类和链接预测 <span class="citation">(<a href="#ref-li2021learning">Z. Li et al. 2021</a>)</span>、节点排名 <span class="citation">(<a href="#ref-sun2009rankclus">Sun et al. 2009</a>)</span> 和基于注意力的嵌入 <span class="citation">(<a href="#ref-choi2017gram">Choi et al. 2017</a>; <a href="#ref-lee2018graph">J. B. Lee, Rossi, and Kong 2018</a>)</span> 等。</p>
+<p>章节<a href="combinatorial-complex-neural-networks.html#definition-of-combinatorial-complex-convolutional-networks">5.4</a>给CC-convolutional引入了前推操作，本节将给出前推操作的第二个示例：CC注意力前推操作（CC-attention push-forward）。</p>
+<p>那么，就可以使用配备了CC-attention前推算子的CCNNs，称之为<em>组合复形注意力神经网络（combinatorial complex attention neural networks，CCANNs）</em>。我们首先提供一个 CC 的sub-CC <span class="math inline">\(\mathcal{Y}_0\)</span> 相对于 CC 中其他sub-CC 的注意力的一般概念。</p>
+<div class="definition">
+<p><span id="def:hoa" class="definition"><strong>定义 5.9  (高阶注意力，Higher-order attention) </strong></span>令 <span class="math inline">\(\mathcal{X}\)</span> 是 CC, <span class="math inline">\(\mathcal{N}\)</span>是<span class="math inline">\(\mathcal{X}\)</span>上的邻域函数，<span class="math inline">\(\mathcal{Y}_0\)</span>是 <span class="math inline">\(\mathcal{X}\)</span>的sub-CC。 令 <span class="math inline">\(\mathcal{N}(\mathcal{Y}_0)=\{ \mathcal{Y}_1,\ldots, \mathcal{Y}_{|\mathcal{N}(\mathcal{Y}_0)|} \}\)</span> 是sub-CCs 集合，该集合的元素是邻域函数<span class="math inline">\(\mathcal{N}\)</span>下<span class="math inline">\(\mathcal{Y}_0\)</span>的邻居。那么，在<span class="math inline">\(\mathcal{N}\)</span>下，<span class="math inline">\(\mathcal{Y}_0\)</span>的<em>higher-order attention</em>就是函数 <span class="math inline">\(a\colon {\mathcal{Y}_0}\times \mathcal{N}(\mathcal{Y}_0)\to [0,1]\)</span>，该函数给每个元素<span class="math inline">\(\mathcal{Y}_i\in\mathcal{N}(\mathcal{Y}_0)\)</span>赋予权重 <span class="math inline">\(a(\mathcal{Y}_0, \mathcal{Y}_i)\)</span>，使得 <span class="math inline">\(\sum_{i=1}^{| \mathcal{N}(\mathcal{Y}_0)|} a(\mathcal{Y}_0,\mathcal{Y}_i)=1\)</span>.</p>
+</div>
+<blockquote>
+<p>译者注：原文中，上述定义写的是Cigher-order attention，我觉得是写错了，应该是Highr</p>
+</blockquote>
+<p>正如定义<a href="combinatorial-complex-neural-networks.html#def:hoa">5.9</a>所反应的，邻域函数<span class="math inline">\(\mathcal{N}\)</span>下sub-CC <span class="math inline">\(\mathcal{Y}_0\)</span>的高阶注意力给<span class="math inline">\(\mathcal{Y}_0\)</span>的每个邻居赋予了一个离散分布值。</p>
+<p>基于注意力的学习通常旨在学习函数 <span class="math inline">\(a\)</span>。请注意，函数 <span class="math inline">\(a\)</span> 依赖于邻域函数 <span class="math inline">\(\mathcal{N}\)</span>。在我们的语境中，我们的目标是学习邻域函数<span class="math inline">\(a\)</span>，它是一个关联或（共）邻接函数 ，正如第<a href="combinatorial-complexes.html#neighbourhood-functions-on-ccs">4.4</a>节所介绍的那样。</p>
+<p>回忆一下定义<a href="combinatorial-complex-neural-networks.html#def:hoa">5.9</a>，权重<span class="math inline">\(a(\mathcal{Y}_0,\mathcal{Y}_i)\)</span>需要一个源sub-CC <span class="math inline">\(\mathcal{Y}_0\)</span>和一个目标sub-CC <span class="math inline">\(\mathcal{Y}_i\)</span>作为输入。因此，一个CC-attention push-forward操作需要两个共链空间。定义<a href="combinatorial-complex-neural-networks.html#def:hoan-sym">5.10</a> 引入了概念CC-attention push-forward，其中两个底层共链空间包含等秩胞腔上支持的共链。</p>
+<div class="definition">
+<p><span id="def:hoan-sym" class="definition"><strong>定义 5.10  (等秩（equal rank）胞腔上的CC注意力前推CC-attention push-forward) </strong></span>令 <span class="math inline">\(G\colon C^{s}(\mathcal{X})\to C^{s}(\mathcal{X})\)</span>是邻域矩阵。 <span class="math inline">\(G\)</span>诱导的<em>CC-attention push-forward</em> 就是一个共链映射 <span class="math inline">\(\mathcal{F}^{att}_{G}\colon C^{s}(\mathcal{X}, \mathbb{R}^{d_{s_{in}}}) \to C^{s}(\mathcal{X},\mathbb{R}^{d_{s_{out}}})\)</span>，定义为：
+<span class="math display" id="eq:attention1">\[\begin{equation}
+\mathbf{H}_s \to \mathbf{K}_{s} = (G \odot att)  \mathbf{H}_{s}  W_{s} ,
+\tag{5.4}
+\end{equation}\]</span>
+其中，<span class="math inline">\(\odot\)</span> 是Hadamard积， <span class="math inline">\(W_{s}  \in \mathbb{R}^{d_{s_{in}}\times d_{s_{out}}}\)</span>可训练参数， <span class="math inline">\(att\colon C^{s}(\mathcal{X})\to C^{s}(\mathcal{X})\)</span> 是 <em>高阶注意力矩阵（higher-order attention matrix）</em>，该矩阵和矩阵<span class="math inline">\(G\)</span>有同样的维度。 矩阵<span class="math inline">\(att\)</span>的第<span class="math inline">\((i,j)\)</span>-th项定义为：
+<span class="math display">\[\begin{equation}
+att(i,j) =  \frac{e_{ij}}{ \sum_{k \in \mathcal{N}_{G}(i) e_{ik} } },
+\end{equation}\]</span>
+其中， <span class="math inline">\(e_{ij}= \phi(a^T [W_{s} \mathbf{H}_{s,i}||W_{s} \mathbf{H}_{s,j} ] )\)</span>, <span class="math inline">\(a \in \mathbb{R}^{2 \times s_{out}}\)</span>是可训练向量， <span class="math inline">\([a ||b ]\)</span> 表示<span class="math inline">\(a\)</span> 和 <span class="math inline">\(b\)</span>的连接（concatenation）， <span class="math inline">\(\phi\)</span> 是激活函数，<span class="math inline">\(\mathcal{N}_{G}(i)\)</span>是矩阵<span class="math inline">\(G\)</span>下胞腔<span class="math inline">\(i\)</span>的邻居。</p>
+</div>
+<blockquote>
+<p>译者注：哈达玛积(Hadamard product)，若<span class="math inline">\(A=(a_{i,j})\)</span>和<span class="math inline">\(B=(b_{i,j})\)</span>是两个同阶矩阵，若<span class="math inline">\(c_{i,j}=a_{i,j}\times b_{i,j}\)</span>，则称矩阵<span class="math inline">\(C=(c_{i,j})\)</span>为A和B的哈达玛积，或称基本积</p>
+</blockquote>
+<p>定义 <a href="combinatorial-complex-neural-networks.html#def:hoan-asym">5.11</a>处理的情况比定义 <a href="combinatorial-complex-neural-networks.html#def:hoan-sym">5.10</a>更普遍。具体来说，定义 <a href="combinatorial-complex-neural-networks.html#def:hoan-asym">5.11</a>引入了一个 CC-attention push-forward 的概念，在这个概念中，两个底层共链空间可以包含不同秩的胞腔上所支持的共链。</p>
+<div class="definition">
+<p><span id="def:hoan-asym" class="definition"><strong>定义 5.11  (不等秩胞腔（unequal ranks）上的CC注意力前推CC-attention push-forward) </strong></span>对于 <span class="math inline">\(s\neq t\)</span>, 令 <span class="math inline">\(G\colon C^{s}(\mathcal{X})\to C^{t}(\mathcal{X})\)</span> 是邻域矩阵，<span class="math inline">\(G\)</span>诱导的<em>CC-attention block</em> 是共链映射 <span class="math inline">\(\mathcal{F}_{G}^{att}  {\mathcal{A}}\colon C^{s}(\mathcal{X},\mathbb{R}^{d_{s_{in}}}) \times C^{t}(\mathcal{X},\mathbb{R}^{d_{t_{in}}}) \to C^{t}(\mathcal{X},\mathbb{R}^{d_{t_{out}}}) \times C^{s}(\mathcal{X},\mathbb{R}^{d_{s_{out}}})\)</span>，定义为
+<span class="math display">\[\begin{equation}
+(\mathbf{H}_{s},\mathbf{H}_{t}) \to  (\mathbf{K}_{t}, \mathbf{K}_{s} ),
+\end{equation}\]</span>
+且
+<span class="math display" id="eq:attention2">\[\begin{equation}
+\mathbf{K}_{t} = ( G \odot att_{s\to t})  \mathbf{H}_{s} W_{s} ,\;
+\mathbf{K}_{s} = (G^T \odot att_{t\to s})  \mathbf{H}_{t}  W_{t} ,
+\tag{5.5}
+\end{equation}\]</span>
+其中， <span class="math inline">\(W_s \in \mathbb{R}^{d_{s_{in}}\times d_{t_{out}}} , W_t \in \mathbb{R}^{d_{t_{in}}\times d_{s_{out}}}\)</span>是可训练参数，<span class="math inline">\(att_{s\to t}^{k}\colon C^{s}(\mathcal{X})\to C^{t}(\mathcal{X}) , att_{t\to s}^{k}\colon C^{t}(\mathcal{X})\to C^{s}(\mathcal{X})\)</span> 是 <em>高阶注意力矩阵（higher-order attention matrices）</em>，这些矩阵分别和矩阵<span class="math inline">\(G\)</span> 、 <span class="math inline">\(G^T\)</span>有同样的维度。 矩阵<span class="math inline">\(att_{s\to t}\)</span>的第 <span class="math inline">\((i,j)\)</span>-th项和<span class="math inline">\(att_{t\to s}\)</span>可定义为
+<span class="math display" id="eq:ast-ats">\[\begin{equation}
+(att_{s\to t})_{ij} =  \frac{e_{ij}}{ \sum_{k \in \mathcal{N}_{G} (i) e_{ik} } },\;
+(att_{t\to s})_{ij} =  \frac{f_{ij}}{ \sum_{k \in \mathcal{N}_{G^T} (i) f_{ik} } },
+\tag{5.6}
+\end{equation}\]</span>
+且
+<span class="math display" id="eq:ef">\[\begin{equation}
+e_{ij} = \phi((a)^T [W_s \mathbf{H}_{s,i}||W_t \mathbf{H}_{t,j}] ),\;
+f_{ij} = \phi(rev(a)^T [W_t \mathbf{H}_{t,i}||W_s \mathbf{H}_{s,j}]),
+\tag{5.7}
+\end{equation}\]</span>
+其中， <span class="math inline">\(a \in \mathbb{R}^{t_{out} + s_{out}}\)</span> 是可训练向量，并且 <span class="math inline">\(rev(a)= [ a^l[:t_{out}]||a^l[t_{out}:]]\)</span>.</p>
+</div>
+<p>定义<a href="combinatorial-complexes.html#def:inc-mat">4.8</a>中的关联矩阵可用作定义<a href="combinatorial-complex-neural-networks.html#def:hoan-asym">5.11</a>中的邻居矩阵。在图<a href="combinatorial-complex-neural-networks.html#fig:B12">5.9</a>中，我们说明了关联邻域矩阵的 CC-attention 概念。图<a href="combinatorial-complex-neural-networks.html#fig:B12">5.9</a>(c)给出了与图<a href="combinatorial-complex-neural-networks.html#fig:B12">5.9</a>(a) 中显示的 CC 相关的非方正关联矩阵（non-squared incidence matrix） <span class="math inline">\(B_{1,2}\)</span>。注意力模块<span class="math inline">\(\mbox{HB}_{B_{1,2}}\)</span>负责学习两个关联矩阵<span class="math inline">\(att_{s\to t}\)</span> 和 <span class="math inline">\(att_{t\to s}\)</span>，矩阵<span class="math inline">\(att_{s\to t}\)</span>和<span class="math inline">\(B_{1,2}\)</span>有同样的形状，并且非零元素恰好位于 <span class="math inline">\(B_{1,2}\)</span> 中元素等于 1 的地方。</p>
+<p>在 <span class="math inline">\(att_{s\to t}\)</span> 中，每列 <span class="math inline">\(i\)</span>都代表一个概率分布，它定义了第 <span class="math inline">\(i\)</span>-th个 2-cell相对其关联1-cells的注意力。矩阵 <span class="math inline">\(att_{t\to s}\)</span> 的形状与 <span class="math inline">\(B_{1,2}^T\)</span>相同，并且1-cells到2-cells的注意力也有同样的表示形式。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:B12"></span>
+<img src="figures/B12.png" alt="图示不等秩胞腔上的CC-attention (a): 一个CC。 CC的每个 $2$-cell (蓝色面)都连接着它自己的关联$1$-cells(粉色边). (b): 图上给出了由胞腔及其关联关系确定的注意力权重。 (c): (a)中CC的关联矩阵。列$[1,2,3]$中的非零元对应于$[1,2,3]$关于$B_{1,2}$的邻域$\mathcal{N}_{B_{1,2}}([1,2,3])$"  />
+<p class="caption">
+图 5.9: 图示不等秩胞腔上的CC-attention (a): 一个CC。 CC的每个 <span class="math inline">\(2\)</span>-cell (蓝色面)都连接着它自己的关联<span class="math inline">\(1\)</span>-cells(粉色边). (b): 图上给出了由胞腔及其关联关系确定的注意力权重。 (c): (a)中CC的关联矩阵。列<span class="math inline">\([1,2,3]\)</span>中的非零元对应于<span class="math inline">\([1,2,3]\)</span>关于<span class="math inline">\(B_{1,2}\)</span>的邻域<span class="math inline">\(\mathcal{N}_{B_{1,2}}([1,2,3])\)</span>
+</p>
+</div>
+<div class="remark">
+<p><span id="unlabeled-div-5" class="remark"><em>备注</em>. </span>前推共链<span class="math inline">\(\mathbf{K}_t\)</span>的计算需要两个共链，称作<span class="math inline">\(\mathbf{H}_s\)</span> and <span class="math inline">\(\mathbf{H}_t\)</span>。在公式<a href="combinatorial-complex-neural-networks.html#eq:attention2">(5.5)</a>中，<span class="math inline">\(\mathbf{K}_t\)</span>直接依赖<span class="math inline">\(\mathbf{H}_s\)</span>，但是从<a href="combinatorial-complex-neural-networks.html#eq:attention2">(5.5)</a>–<a href="combinatorial-complex-neural-networks.html#eq:ef">(5.7)</a>可见，它也通过<span class="math inline">\(att_{s\to t}\)</span>非直接依赖于<span class="math inline">\(\mathbf{H}_t\)</span>。此外，共链<span class="math inline">\(\mathbf{H}_t\)</span>在训练期间仅需要有<span class="math inline">\(att_{s\to t}\)</span>就行，但是在推断期间则不行。也就是说，CC-attention前推模块的计算在推断期间仅需要单个共链<span class="math inline">\(\mathbf{H}_s\)</span>即可，这和定义<a href="combinatorial-complex-neural-networks.html#def:pushing-exact-definition">5.3</a>中定义的通用共链前推操作的计算一样。</p>
+</div>
+<p>公式<a href="combinatorial-complex-neural-networks.html#eq:attention1">(5.4)</a>和<a href="combinatorial-complex-neural-networks.html#eq:attention2">(5.5)</a>中的算子<span class="math inline">\(G \odot att\)</span> 和 <span class="math inline">\(G \odot att_{s\to t}\)</span> 可被看作<span class="math inline">\(G\)</span>的注意力学习版本，这使得可以使用CCANNs来学习任意类型的离散外积分算子（discrete exterior calculus operators），正如附录<a href="learning-discrete-exterior-calculus-operators-with-ccanns.html#learning-discrete-exterior-calculus-operators-with-ccanns">D</a>中所描述的那样。</p>
+
+</div>
+</div>
+
+
+
+<h3>参考文献<a href="参考文献.html#参考文献" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-beaini2021directional" class="csl-entry">
+Beaini, Dominique, Saro Passaro, Vincent Létourneau, Will Hamilton, Gabriele Corso, and Pietro Liò. 2021. <span>“Directional Graph Networks.”</span> In <em>International Conference on Machine Learning</em>.
+</div>
+<div id="ref-bunch2020simplicial" class="csl-entry">
+Bunch, Eric, Qian You, Glenn Fung, and Vikas Singh. 2020. <span>“Simplicial 2-Complex Convolutional Neural Nets.”</span> <em>NeurIPS Workshop on Topological Data Analysis and Beyond</em>.
+</div>
+<div id="ref-calmon2022higher" class="csl-entry">
+Calmon, Lucille, Michael T. Schaub, and Ginestra Bianconi. 2022. <span>“Higher-Order Signal Processing with the <span>D</span>irac Operator.”</span> In <em>Asilomar Conference on Signals, Systems, and Computers</em>.
+</div>
+<div id="ref-choi2017gram" class="csl-entry">
+Choi, Edward, Mohammad Taha Bahadori, Le Song, Walter F Stewart, and Jimeng Sun. 2017. <span>“<span>GRAM</span>: Graph-Based Attention Model for Healthcare Representation Learning.”</span> In <em>Proceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining</em>.
+</div>
+<div id="ref-ebli2020simplicial" class="csl-entry">
+Ebli, Stefania, Michaël Defferrard, and Gard Spreemann. 2020. <span>“Simplicial Neural Networks.”</span> <em>NeurIPS Workshop on Topological Data Analysis and Beyond</em>.
+</div>
+<div id="ref-hajijcell" class="csl-entry">
+Hajij, Mustafa, Kyle Istvan, and Ghada Zamzmi. 2020. <span>“Cell Complex Neural Networks.”</span> In <em>NeurIPS 2020 Workshop TDA and Beyond</em>.
+</div>
+<div id="ref-hajij2021simplicial" class="csl-entry">
+Hajij, Mustafa, Ghada Zamzmi, Theodore Papamarkou, Vasileios Maroulas, and Xuanting Cai. 2022. <span>“Simplicial Complex Representation Learning.”</span> In <em>Machine Learning on Graphs (MLoG) Workshop at ACM International WSD Conference</em>.
+</div>
+<div id="ref-kipf2016semi" class="csl-entry">
+Kipf, Thomas N., and Max Welling. 2016. <span>“Semi-Supervised Classification with Graph Convolutional Networks.”</span> <em>arXiv Preprint arXiv:1609.02907</em>.
+</div>
+<div id="ref-boaz2019" class="csl-entry">
+Lee, John Boaz, Ryan A Rossi, Sungchul Kim, Nesreen K Ahmed, and Eunyee Koh. 2019. <span>“Attention Models in Graphs: A Survey.”</span> <em>ACM Transactions on Knowledge Discovery from Data</em> 13 (6): 1–25.
+</div>
+<div id="ref-lee2018graph" class="csl-entry">
+Lee, John Boaz, Ryan Rossi, and Xiangnan Kong. 2018. <span>“Graph Classification Using Structural Attention.”</span> In <em>Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery &amp; Data Mining</em>.
+</div>
+<div id="ref-li2021learning" class="csl-entry">
+Li, Zhifei, Hai Liu, Zhaoli Zhang, Tingting Liu, and Neal N Xiong. 2021. <span>“Learning Knowledge Graph Embedding with Heterogeneous Relation Attention Networks.”</span> <em>IEEE Transactions on Neural Networks and Learning Systems</em>.
+</div>
+<div id="ref-mnih2014recurrent" class="csl-entry">
+Mnih, Volodymyr, Nicolas Heess, Alex Graves, et al. 2014. <span>“Recurrent Models of Visual Attention.”</span> In <em>Advances in Neural Information Processing Systems</em>. Vol. 27.
+</div>
+<div id="ref-roddenberry2021principled" class="csl-entry">
+Roddenberry, T. Mitchell, Nicholas Glaze, and Santiago Segarra. 2021. <span>“Principled Simplicial Neural Networks for Trajectory Prediction.”</span> In <em>International Conference on Machine Learning</em>.
+</div>
+<div id="ref-roddenberry2021signal" class="csl-entry">
+Roddenberry, T. Mitchell, Michael T. Schaub, and Mustafa Hajij. 2022. <span>“Signal Processing on Cell Complexes.”</span> In <em>IEEE International Conference on Acoustics, Speech and Signal Processing</em>.
+</div>
+<div id="ref-schaub2020random" class="csl-entry">
+Schaub, Michael T., Austin R. Benson, Paul Horn, Gabor Lippner, and Ali Jadbabaie. 2020. <span>“Random Walks on Simplicial Complexes and the Normalized <span>H</span>odge 1-<span>L</span>aplacian.”</span> <em>SIAM Review</em> 62 (2): 353–91.
+</div>
+<div id="ref-schaub2021signal" class="csl-entry">
+Schaub, Michael T., Yu Zhu, Jean-Baptiste Seby, T. Mitchell Roddenberry, and Santiago Segarra. 2021. <span>“Signal Processing on Higher-Order Networks: Livin’on the Edge... And Beyond.”</span> <em>Signal Processing</em> 187: 108149.
+</div>
+<div id="ref-sun2009rankclus" class="csl-entry">
+Sun, Yizhou, Jiawei Han, Peixiang Zhao, Zhijun Yin, Hong Cheng, and Tianyi Wu. 2009. <span>“Rank<span>C</span>lus: Integrating Clustering with Ranking for Heterogeneous Information Network Analysis.”</span> In <em>Proceedings of the 12th International Conference on Extending Database Technology: Advances in Database Technology</em>.
+</div>
+<div id="ref-turaev2016quantum" class="csl-entry">
+Turaev, Vladimir G. 2016. <em>Quantum Invariants of Knots and 3-Manifolds</em>. Vol. 18. Walter de Gruyter GmbH &amp; Co KG.
+</div>
+<div id="ref-velickovic2017graph" class="csl-entry">
+Veličković, Petar, Guillem Cucurull, Arantxa Casanova, Adriana Romero, Pietro Lio, and Yoshua Bengio. 2018. <span>“Graph Attention Networks.”</span> In <em>International Conference on Learning Representations</em>.
+</div>
+<div id="ref-yang2023convolutional" class="csl-entry">
+Yang, Maosheng, and Elvin Isufi. 2023. <span>“Convolutional Learning on Simplicial Complexes.”</span> <em>arXiv Preprint arXiv:2301.11163</em>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="combinatorial-complexes.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="message-passing.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook/js/app.min.js"></script>
+<script src="libs/gitbook/js/clipboard.min.js"></script>
+<script src="libs/gitbook/js/plugin-search.js"></script>
+<script src="libs/gitbook/js/plugin-sharing.js"></script>
+<script src="libs/gitbook/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook/js/jquery.highlight.js"></script>
+<script src="libs/gitbook/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/pyt-team/tdlbook/edit/main/rmd/05-ccnns.rmd",
+"text": "编辑"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "none"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
