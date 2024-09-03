@@ -60,6 +60,8 @@ knitr::include_graphics('figures/face.jpeg', dpi=NA)
 
 > **问题2.** 如果生成的HTML中公式显示不正常，重启电脑就好了，不指导为什么
 
+> "dsfdsfdsfsfd"
+
 除了本文，下面再给出一些有用的链接：
 
 + TDL4CV，https://tdl4cv.github.io/
