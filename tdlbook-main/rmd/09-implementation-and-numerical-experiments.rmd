@@ -45,7 +45,7 @@ CCNN 将共链向量作为输入特征。对于形状分析任务，我们考虑
 
 对于人体数据集 [@maron2017convolutional]，我们构建了一个 CCNN，它能产生一个边类。架构的张量图如图\@ref(fig:mesh-net)(a)所示。对于 COSEG 数据集[@wang2012active]，我们构建了一个 CCNN，结合我们提出的定义在顶点、边和面上的特征向量来学习最终的面类。如图 \@ref(fig:mesh-net)(b)所示，该架构使用关联矩阵以及（共）邻接矩阵来构建信号流。具体来说，张量图显示了三个非平方注意块（non-squared attention-blocks）和三个平方注意块（squared attention blocks）。如图 \@ref(fig:mesh-net)(b)所示，模型的深度选择为2。
 
-```{r mesh-net, echo=FALSE, fig.align="center", fig.cap="实验中所用的CCNNs的张量图 (a): 用于网格分割任务的 CCNNs. In particular, $\\mbox{CCNN}_{HB}$ and $\\mbox{CCNN}_{COSEG}$ are the architectures used on the Human Body dataset [@atzmon2018point] and on the COSEG dataset [@wang2012active], respectively. (b): The mesh classification CCNN used on the SHREC11 dataset [@lian2011shape]. (c): The graph classification CCNN used on the dataset provided in [@bianchi2020mincutpool]. (d): The mesh/point cloud classification CCNNs used in conjunction with the MOG algorithm on the SHREC11 dataset."}
+```{r mesh-net, echo=FALSE, fig.align="center", fig.cap="实验中所用的CCNNs的张量图 (a): 用于网格分割任务的 CCNNs. 尤其, $\\mbox{CCNN}_{HB}$ 和 $\\mbox{CCNN}_{COSEG}$分别是 是人体数据集[@atzmon2018point]和COSEG dataset [@wang2012active]使用的架构。 (b): SHREC11 数据集 [@lian2011shape]使用网格分类CCNN. (c): 数据集[@bianchi2020mincutpool]使用图分类CCNN。 (d): 在 SHREC11 数据集上网格/点云分类 CCNNs与 MOG 算法结合使用."}
 knitr::include_graphics('figures/experiment.png', dpi=NA)
 ```
 
