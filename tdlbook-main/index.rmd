@@ -1,0 +1,111 @@
+---
+title: "拓扑深度学习：超越图数据"
+author: "Mustafa Hajij, Theodore Papamarkou, Ghada Zamzmi, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Michael T. Schaub "
+date: "`r Sys.Date()`"
+documentclass: krantz
+bibliography: [bib/main.bib, bib/related-work.bib, bib/appendix.bib]
+biblio-style: apalike
+fontsize: 12pt
+link-citations: yes
+colorlinks: yes
+lot: yes
+lof: yes
+site: bookdown::bookdown_site
+description: "一本关于拓扑深度学习的书。"
+github-repo: pyt-team/tdlbook
+graphics: yes
+#cover-image: figures/unifying.png
+editor_options: 
+  markdown: 
+    wrap: 72
+    
+---
+
+```{r setup, include=FALSE}
+options(
+  htmltools.dir.version = FALSE, formatR.indent = 2, width = 55, digits = 4
+)
+
+# install the packages needed by this book; you fill out c(), e.g. c('ggplot2', 'dplyr')
+lapply(c('xfun'), function(pkg) {
+  if (system.file(package = pkg) == '') install.packages(pkg)
+})
+```
+
+# 贡献者 {.unnumbered}
+
+除了共同作者之外，以下贡献者对本书的撰写做出了很多贡献: *Nina Miolane,
+Aldo Guzmán-Sáenz, Tamal K. Dey, Soham Mukherjee, Shreyas N. Samaga,
+Neal Livesay, Robin Walters, Paul Rosen*.
+
+# 译者 {.unnumbered}
+
+**秦广军**
+
+北京联合大学 智慧城市学院
+
+2024年08月06日开始，xxxx年xx月xx日结束
+
+北京
+
+> 几何深度学习，这真的是一个很酷的想法，作为其一个分支，拓扑深度学习更是直接将代数拓扑应用到了神经网络中。读过作者的相关文章，本书是作者写的第一本关于拓扑深度学习的书，于是决定把本书翻译了。说它是书，其实更像个小册子，或者蓝皮书，是学习几何深度学习和拓扑深度学习的重要入门材料。
+
+> 对于深度学习，我不是太了解的那么深入，只是在科研上逐渐开始使用，对于代数拓扑这种十分抽象的专业知识更是初次接触，不确定相关术语和表述翻译是否准确，请参考原文阅读（[TDLBook](https://tdlbook.org/)）。
+
+```{r thissite, echo=FALSE, fig.align="center", fig.cap="来自这个网站"}
+knitr::include_graphics('figures/face.jpeg', dpi=NA)
+```
+
+> **问题1.** 生成html文件正常，但是生成epub文件里的公式不能正常显示
+
+> **问题2.** 如果生成的HTML中公式显示不正常，重启电脑就好了，不指导为什么
+
+除了本文，下面再给出一些有用的链接：
+
++ TDL4CV，https://tdl4cv.github.io/
+
++ awesome-topological-deep-learning
+Public， https://github.com/lrnzgiusti/awesome-topological-deep-learning
+
++ ICML Topological Deep Learning Challenge 2024: Beyond the Graph Domain，https://pyt-team.github.io/packs/challenge.html
+
+# 序言 {.unnumbered}
+
+拓扑深度学习是一个快速发展的领域，用于为拓扑域(如单纯复形、胞腔复形和超图等多种科学计算中常用的数据域)上的数据研发深度学习模型。在本文中，我们提出了一个统一的深度学习框架，该框架涵盖丰富的数据结构，其中包括广泛采用的拓扑域。
+
+具体来说，我们首先介绍*组合复形(combinatorial
+complexes)*--一种新型拓扑域。组合复形可以被看作保持某些理想性质的图的一般化，与超图类似，组合复形对关系集不施加任何约束。此外，组合复形可以用于构建分层的高阶关系，类似于单纯复形和胞腔复形中的关系。因此，组合复形涵盖并结合了超图和胞腔复形的有用特征（他们是两种有前途的抽象概念），这有助于将图神经网络推广到拓扑空间。
+
+其次，在组合复形及其丰富的组合和代数结构基础上，我们构造了一类通用的消息传递组合复形神经网络*（combinatorial
+complex neural networks,CCNNs）*，主要侧重于基于注意力的
+CCNNs。我们描述了 CCNNs 的置换和方向等变关系，并详细讨论了 CCNNs
+中的池化和反池化操作。
+
+最后，我们评估了 CCNN
+在网格形状分析和图形学习任务中的表现。实验表明，与专为相同任务定制的最先进的深度学习模型相比，CCNN
+的性能更具竞争力。
+
+## 编译 {.unnumbered}
+
+本书用*knitr包*[@xie2015]和*bookdown包*[@xie2024]编辑，书中源代码见[TDLBook的github仓库](https://github.com/pyt-team/tdlbook)
+
+## 致谢 {.unnumbered}
+
+M. H. 感谢美国国家科学基金会 DMS-2134231 奖项的支持。 G.
+Z.目前隶属于美国国立卫生研究院（NIH），但本研究的核心内容是在南佛罗里达大学（USF）工作期间完成的。本文仅代表作者个人观点，不代表美国国立卫生研究院或美国政府的观点。
+N. M. 感谢美国国家科学基金会（National Science Foundation）颁发的
+DMS-2134241 奖项。 T. B. 感谢工程与物理科学研究委员会 [grant
+EP/X011364/1] 的支持。 T. K. D. 感谢美国国家科学基金会 CCF 2049010
+奖项的资助。 N. L. 感谢 Roux 研究所和 Harold Alfond 基金会的支持。 R. W.
+感谢美国国家科学基金会 DMS-2134178 奖项的资助。 P. R.
+感谢美国国家科学基金会 IIS-2316496 奖项的资助。 M. T. S.
+感谢德国北莱茵-威斯特法伦州文化与科学部（MKW）（NRW
+Rückkehrprogramm）和欧盟（ERC, HIGH-HOPeS,
+101039827）的资助。然而，所表达的观点和意见仅代表 M. T. S.
+的观点和意见，并不一定反映欧盟或欧洲研究理事会执行局的观点和意见；欧盟或拨款机构均不对这些观点和意见负责。
+
+作者感谢玛蒂尔德-帕皮隆和索菲亚-桑伯恩帮助改进图\@ref(fig:hon)，并就张量图的发展进行了深入讨论。
+
+```{block2, type='flushright', html.tag='p'}
+本书作者
+```

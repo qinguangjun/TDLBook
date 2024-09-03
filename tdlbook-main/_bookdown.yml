@@ -1,0 +1,28 @@
+book_filename: bookdown
+clean: [bookdown.bbl]
+delete_merged_file: true
+language:
+  label:
+    fig: "图 "
+    tab: "表 "
+    def: "定义 "
+    remark: "备注 "
+    exm: "示例 "
+    proof: "证明 "
+    mynote: "译者注 "
+    proposition: "命题 "
+    eq: "公式 "
+    thm: "定理 "
+    lem: "引理 "
+    cor: "推论 "
+    prp: "命题 "
+    cnj: "'Conjecture '"
+    exr: "练习 "
+    hyp: "假设 "
+    solution: "解答 "
+  ui:
+    edit: "编辑"
+    chapter_name: ["第 ", " 章"]
+    appendix_name: ["附录 "]
+rmd_subdir: rmd
+

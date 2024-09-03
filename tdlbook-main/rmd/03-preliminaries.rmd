@@ -1,0 +1,132 @@
+# 预备知识{#preliminaries}
+
+在各种机器学习应用中，集合$S$中实体间的邻近性概念具有重要意义，因为它有助于理解$S$中实体间的关系。例如，聚类算法的目的是将相互接近的点进行分组。在推荐系统中，目标是推荐与用户已表示感兴趣的项具有相似性的项。然而，问题是我们如何精确量化近似性的概念？
+
+考虑一个由抽象实体集合组成的集合$S$，如图\@ref(fig:proximity)(a)所示。考虑同一图中的红色实体（节点）$x$。我们希望找出$S$中与$x$"密切相关 "或 "非常接近 "的实体（节点）。然而，集合本身并没有实体之间的接近或关系的概念。
+
+```{r proximity, echo=FALSE, fig.align="center", fig.cap="集合$S$实体间邻近性概念的说明. (a): 抽象实体的有限集合$S$. (b): $S$中实体$x$（红色）的邻域（黄色），邻域的定义是$S$中通过边与$x$相邻的实体集合。 (c): $x$的邻域，由$S$中与红色实体$x$距离最远为2的所有黄色实体组成. (d): 由$S$中所有与红色实体$x$形成三角形（蓝色）的黄色实体组成的$x$邻域. (e): 由 $S$ 中所有与红色实体 $x$ 形成梯形（蓝色）的黄色实体组成的 $x$ 邻域。"}
+knitr::include_graphics('figures/proximity.png', dpi=NA)
+```
+
+在集合 $S$ 的实体间定义二元关系（边）是引入邻近性概念的一种方法，其结果是一个顶点集为 $S$ 的图，如图所示\@ref(fig:proximity)(b)。 利用这种定义在集合 $S$ 上的边的 "辅助结构"，我们就可以声明 $x$ 的 "局部邻域"（用 $\mathcal{N}(x)$ 表示），它是 $S$ 的子集，由通过一条边与 $x$ 相邻的所有实体组成。在图\@ref(fig:proximity)(b)中，$S$中顶点$x$（红色）的邻域由所有黄色顶点组成。
+
+在图\@ref(fig:proximity)(b) 中，邻域 $\mathcal{N}(x)$ 的选择可以是任意的。例如，通过定义$mathcal{N}(x)$包含所有与红色顶点$x$的距离最多为2的顶点，可以给出另一个可选的有效邻域概念，即图\@ref(fig:proximity)(c)中所有黄色顶点。在图\@ref(fig:proximity)(d)中，$mathcal{N}(x)$邻域是由所有与红色顶点$x$形成三角形的黄色顶点组成的。在图\@ref(fig:proximity)(e)中，$mathcal{N}(x)$邻域是由所有与红色顶点$x$形成梯形的黄色顶点组成的。从图（d）和（e）中可以清楚地看出，三角形和梯形等其他辅助结构也可以用来定义邻域概念。实际上，邻域的选择通常取决于应用。最近的研究探索了使用图形几何来获得更丰富的邻域概念，如 [@morris2019weisfeiler; @hajijcell; @zhao2022from] 所示。不过，基本概念仍然相同：首先引入定义在顶点集上的辅助结构，然后利用辅助结构推导出定义明确的邻近性概念。
+
+将图推广到高阶网络后，自然也要将图的邻域概念推广到高阶网络。拓扑学[@munkres1974]对集合 $S$ 实体间邻域或邻近性的精确概念已经进行了研究，定义在 $S$ 上的拓扑允许我们有意义地描述 $S$ 中元素之间的邻近性。本节将介绍拓扑概念和定义，目的是将图推广到高阶网络。
+
+## 邻域函数和拓扑空间
+
+拓扑空间有几种等价的定义方法。例如，拓扑空间通常用 "开集 "或 "闭集 "来定义，参见 [@munkres1974]。在本文中，我们选择用 "邻域 "来定义拓扑空间。这一定义更符合通常定义在图上的消息传递范式[@gilmer2017neural]，而且可以推广到高阶网络。关于为什么以邻域为单位的定义等同于以开集为单位的定义，我们请读者参阅[@brown2006]。
+
+```{definition, ns, name="领域函数"}
+令$S$ 是非空集。$S$上的*邻域函数*是函数$\mathcal{N}\colon S\to\mathcal{P}(\mathcal{P}(S))$，该函数给$S$中的每个点$x$分配一个$S$非空子集$\mathcal{N}(x)$。$\mathcal{N}(x)$中的元素被称为$x$相对于$\mathcal{N}$的*邻域*。
+```
+
+```{definition, nt, name="领域拓扑"}
+令$\mathcal{N}$是集合$S$上的邻域函数，如果$\mathcal{N}$满足如下规则，则称$\mathcal{N}$为$S$上的领域拓扑:
+
+1. 如果$N$是$x$的邻域, 则$x\in N$.
+2. 如果$N$包含$x$邻域的$S$的子集,则$N$是$x$的邻域.
+3. $S$内顶点$x$的两个邻域的交集也是$x$的邻域.
+4. $S$内顶点$x$存在一个邻域$M$，使得$x$的任何邻域$N$也是$M$内每个顶点的邻域。
+```
+
+```{definition, topospace, name="拓扑空间"}
+由非空集$S$和$S$上的邻域拓扑$\mathcal{N}$组成的$(S,\mathcal{N})$称为*拓扑空间*。
+```
+
+因此，拓扑空间就是定义了邻域函数$\mathcal{N}$，且满足定义\@ref(def:nt)中属性的集合$S$。在章节\@ref(neighbourhood-functions-on-ccs)，我们将引入高阶网络环境下关于近邻的类似概念。进一步来讲，邻域函数$\mathcal{N}$的选择是构建高阶域支持的深度学习模型的第一步，也是最基本的一步(参见\@ref(combinatorial-complex-neural-networks)章节)。
+
+## 填补与高阶网络间的代沟{#bridging-the-gap-among-higher-order-networks}
+
+给定抽象实体组成的有限集$S$，$S$上的邻域函数$\mathcal{N}$可以通过给$S$配置辅助结构来推导，例如边，如图\@ref(fig:proximity)(b)所示。边提供了一种定义$S$内实体间关系的方法[^03-preliminaries-1]，特别说明的是，每条边都定义了$S$上的一种二元关系（例如，两个实体间的关系）。在许多应用中，我们希望允许包含两个以上实体间的关系，这种涉及两个以上实体间关系的思想就是高阶网络的核心。这种高阶关系使得可以在$S$上定义更广泛的邻域函数，以捕获$S$内实体间的多路交互作用。
+
+[^03-preliminaries-1]: $S$上的关系是$S$的非空子集
+
+为了描述更广泛的多路相互作用，就需要使用更复杂的邻域函数和拓扑。章节 \@ref(combinatorial-complexes)着眼于定义通用的高阶网络（正如章节\@ref(motivation)所谈到的研究动机），本节则综述通常研究的高阶网络的定义、优势和劣势，包括（抽象的）单纯复形、正则胞腔复形（regular cell complexes）、超图等。在章节\@ref(combinatorial-complexes)，我们将引入组合复形，该定义更广义且能填补通常研究的高阶网络间的代沟。
+
+单纯复形是带有期望属性的最简单的高阶域，它将图的相应属性进行了扩展。例如，**Hodge理论**是在单纯复形上很自然的定义，它扩展了图的类似属性[@barbarossa2020topological; @schaub2020random; @schaub2021signal]。
+
+```{definition, scmain, name="单纯复形，Simplicial complex"}
+非空集$S$上的[*抽象单纯复形（abstract simplicial complex）*](https://app.vectary.com/p/4HZRioKH7lZ2jWESIBrjhf)被表示为$(S,\mathcal{X})$，其中，$\mathcal{X}$ 是$\mathcal{P}(S) \setminus \{\emptyset\}$的子集，且满足$x \in \mathcal{X} \bigcup y \subseteq x \rightarrow y \in \mathcal{X}$， $\mathcal{X}$中的元素被称为*单纯形（simplices）*
+```
+
+::: {.glossarybox data-latex=""}
+> **译者注**：原文中上述定义中的$x \in \mathcal{X} \bigcup y \subseteq x \rightarrow y \in \mathcal{X}$是这么写的$x \in \mathcal{X}$ and $y \subseteq x$ imply $y \in \mathcal{X}$
+
+:::
+
+图\@ref(fig:unifying)(c)给出了三角形网格（triangular meshes）的示例，这是计算机图形学中许多应用中常见的单纯复形的特例。读者可参考[@schaub2021signal; @crane2013digital]获得关于单纯复形的相关介绍。从定义 \@ref(def:scmain)中可看出，$S$上的每个关系$x$必须包含所有具有$y\subseteq x$的关系$y$。因此，一个单纯复形可能会编码了相当大量的数据，这将占用大量内存[@roddenberry2021signal]。此外，现实世界中的高阶数据（如矩形街道网络上的交通流量）可能无法采用有意义的单纯复形结构，这是因为底层数据空间本身缺乏可用的单纯形。为了解决这一局限，可以采用胞腔复形，胞腔复形[@hatcher2005algebraic; @hansen2019toward]可以泛化单纯复形，并克服它们的许多缺点。
+
+::: {.glossarybox data-latex=""}
+> **译者注：** 图\@ref(fig:unifying)(c)是三角剖分
+
+:::
+
+```{definition, rccmain, name="正则胞腔复形，Regular cell complex"}
+[*正则胞腔复形*](https://app.vectary.com/p/3EBiRiJcYjFNvkbbWszQ0Z)是一个可划分为多个子空间（*胞腔*）的拓扑空间 $S$，其子空间为 $\{x_\alpha\}_{\alpha \in P_{S} }$，其中 $P_{S}$ 是索引集。正则胞腔复形满足以下条件：
+
+1. $S= \cup_{\alpha \in P_{S}} \mbox{int}(x_{\alpha})$, 其中，$\mbox{int}(x)$ 胞腔$x$内部。
+2. 对每个$\alpha \in P_S$, 都存在$x_\alpha$的一个同胚（homeomorphism）映射$\psi_{\alpha}$（称作*粘合映射，attaching map）*, 将$x_\alpha$映射到$\mathbb{R}^{n_\alpha}$，$n_\alpha\in \mathbb{N}$，$n_\alpha$称作胞腔$x_\alpha$的*维度（dimension）*。
+3. 对每个胞腔$x_\alpha$，边界(boundary)$\partial x_{\alpha}$是有限多个胞腔的并集，且每个这样的胞腔的维度都小于 $x_\alpha$的维度。
+```
+
+::: {.glossarybox data-latex=""}
+> **译者注：**
+
+> 粘合映射，attaching map，描述如何将一个更高维的胞腔粘合到现有的胞腔复形上的过程。在这个过程中，粘合映射定义了新胞腔的边界如何与现有复形的低维胞腔相连。在构造拓扑空间时，如何将两个或多个空间粘合在一起形成一个新的空间。粘合映射是定义在边界上的一个连续映射，它将一个空间的边界映射到另一个空间的边界上，从而实现空间的粘合。
+
+> 同态, homomorphism，描述的是两个代数结构之间的映射关系，这种映射保持了两个结构之间的运算关系。
+
+> 同胚，homeomorphism，描述的是两个空间之间可以通过连续的变形从一个变成另一个，双方连续的一一映射，从拓扑学的角度来说就认为两个图是没有区别的。
+
+> 1.  条件2说明$x_\alpha$可被编码为实数空间中的向量编码？
+
+> 2.  条件3说明$x_\alpha$的边界是比$x_\alpha$低阶的结构？
+
+:::
+
+为简洁起见，我们下文将 "正则胞腔复形 "称为 "胞腔复形"。胞腔复形包含多种高阶网络，许多高阶网络可以看作胞腔复形的实例。例如，胞腔复形是图、单纯复形和立方复形的自然推广[@hajijcell]。图\@ref(fig:unifying)(d) 给出了胞腔复形的一些示例。直观地说，一个胞腔复形是多个胞腔的不相交并，其中每个胞腔都与某个 $k$ 的 $k$维欧式球的内部同构。这些胞腔通过粘合映射以局部适合的方式连接在一起。正则胞腔复形的粘合映射信息可以组合形式存储在矩阵序列中，该矩阵称作*关联矩阵（incidence matrices）*[@hatcher2005algebraic]，在章节\@ref(incidence-in-a-cc)对这些矩阵有详细的描述。
+
+定义\@ref(def:rccmain)中的条件3被称作正则胞腔复形的*正则条件（regularity condition）*。正则性条件意味着，当且仅当 $x_{\alpha} \subseteq \overline{x_{\beta}}$ 时，可以通过在索引集 $P_{S}$ 中配备一个由$\alpha\leq\beta$给出的偏序结构(Poset structure)来组合实现胞腔复形的拓扑信息，其中 $\overline{x}$ 表示胞腔 $x$ 的闭包（closure）。该偏序结构通常称为*面偏序（face poset）*[@hansen2019toward]，它表明胞腔复形的拓扑信息编码完全由面偏序结构确定[@hansen2019toward]，这使得组合复形事实上可以通过偏序结构来组合表示[@aschbacher1996combinatorial; @klette2000cell; @basak2010combinatorial; @savoy2022combinatorial]。
+
+::: {.glossarybox data-latex=""}
+>**译者注**
+
+> poset，偏序，Partial order set的简写
+
+> closure，闭包
+
+:::
+
+定义\@ref(def:rccmain)意味着胞腔复形内每个胞腔的边界胞腔也是胞腔复形中的胞腔，因此，可以把胞腔复形看作是不同维度的胞腔的集合，这些胞腔通过它们的边界相互关联。就关系而言，这意味着胞腔复形中胞腔的边界也必须是胞腔复形中的胞腔。虽然胞腔复形构成了高阶网络的一般类别，但这一属性对胞腔复形的关系设置了约束。在某些应用中，如果数据不满足这种约束，那么这种约束可能并不可取。为了消除对集合中实体间关系的所有限制，通常会考虑超图。
+
+```{definition, hgmain, name="超图"}
+非空集$S$上的*超图*是$(S,\mathcal{X})$，其中，$\mathcal{X}$是$\mathcal{P}(S)\setminus\{\emptyset\}$的子集，$\mathcal{X}$的元素被称作*超图*。
+```
+
+基数为 2（cardinality two） 的超边称为*边*。超图可以看作是单纯复形和胞腔复形的一般化。然而，超图并不直接包含胞腔（或关系）维度的概念，而胞腔复形的定义中明确包含了维度的概念，并且在单纯复形中关系的基数来表明维度的概念。正如我们在第\@ref(motivation-for-ccs)节中所演示的，单纯复形和胞腔复形中胞腔和关系的维度可以用来赋予这些复形以层次结构，而层次结构可以用来在这些结构上进行（非）池化计算。
+
+## 层次化结构与集合型关系{#hierarchical-structure-and-set-type-relations}
+
+正如第 \@ref(bridging-the-gap-among-higher-order-networks)节所概述的那样，单纯复形、胞腔复形和超图的性质产生了高阶域上关系的两个主要特征，即关系的层次和集合型关系。在本小节中，我们将形式化这两个特征。
+
+```{definition, rank, name="秩函数，Rank function"}
+高阶域$\mathcal{X}$上的*秩函数*是一个保序函数（order-preserving function）$\mbox{rk}\colon \mathcal{X}\to \mathbb{Z}_{\ge 0}$，例如，$\forall x,y\in\mathcal{X}, x\subseteq y\rightarrow \mbox{rk}(x) \leq \mbox{rk}(y)$ 。
+```
+
+::: {.glossarybox data-latex=""}
+>**译者注**
+> 原书中写作：$x\subseteq  y$ implies $\mbox{rk}(x) \leq \mbox{rk}(y)$ for all $x,y\in\mathcal{X}$
+
+:::
+
+直观地说，在高阶域$\mathcal{X}$上的秩函数$\mbox{rk}$给$\mathcal{X}$中的每一个关系附加一个用非负整数值表示的秩，使得$\mathcal{X}$中的集合胞腔通过$\mbox{rk}$得以保全。实际上，秩函数在$\mathcal{X}$上诱导了一个*层次结构*。胞腔和单纯复形是具有秩函数的高阶域的常见例子，因此具有层次化关系。。
+
+
+```{definition, strelations, name="集合型关系，Set-type relations"}
+如果高阶域中的一个关系的存在并不隐含于域中的另一个关系，那么这种关系就被称为*集合型关系*。
+```
+
+超图可算作具有集合类型关系的高阶域的例子。鉴于单纯复形、胞腔复形和超图在建模上的局限性，我们在章节 \@ref(combinatorial-complexes) 中提出了组合复形，这是一个同时具有层次关系和集合类型关系的高阶域。
+

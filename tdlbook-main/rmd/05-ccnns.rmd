@@ -1,0 +1,276 @@
+---
+output: 
+  pdf_document: 
+    toc: true
+    fig_caption: true
+    number_sections: true
+  html_document: 
+    number_sections: true
+---
+---
+
+# 组合复形神经网络（Combinatorial complex neural networks） {#combinatorial-complex-neural-networks}
+
+CCs建模的灵活性使得可以研究和分析多种基于CC构建的神经网络架构，基于 CC 的神经网络可以利用所有邻域矩阵或其中的一个子集，从而考察 CC 中各个胞腔之间的多向交互作用，以解决学习任务。在本节中，我们将通过制定基于 CC 的 TDL 模型的一般原则来介绍 TDL 的蓝图。我们将利用我们的 TDL 蓝图框架来研究当前的方法，并为设计新型模型提供指导。
+
+TDL中的学习任务可以粗略分成三类：胞腔分类、复形分类、胞腔预测，参见图\@ref(fig:tdl-tasks)。我们在章节\@ref(implementation-and-numerical-results)的实验提供了关于胞腔和复分类的示例，三类学习任务的具体细节如下：
+
+-   *胞腔分类（Cell classification）*：预测胞腔复形中每个胞腔。为了做到这一点，我们可以利用 TDL分类器，将目标胞腔的拓扑邻域及其相关特征考虑在内。胞腔分类的一个例子是三角形网格分割（triangular mesh segmentation），其中的任务是预测给定网格中每个面或边的类别。
+-   *复形分类（Complex classification）*: 预测整个复形。为了实现这一目标，我们可以使用高阶胞腔将复形的拓扑结构还原成一个常见的表示形式，例如池化方法，然后在得到的平面向量（flat vector）上学习 TDL 分类器。复形分类的一个例子是对每个输入网格进行类别预测。
+-   *胞腔预测（Cell prediction）*: 预测胞腔复形中胞腔-胞腔相互作用的特征，在某些情况下，预测胞腔复形中是否存在某个胞腔。这可以通过利用胞腔的拓扑结构和相关特征来实现。一个相关的例子是预测超图的超边中实体之间的联系。
+
+```{r tdl-tasks, echo=FALSE, fig.align="center", fig.cap="拓扑空间上的学习可以粗略地分为三类任务 (1) *胞腔分类（Cell classification）*: 预测胞腔复形中单个胞腔。 这种任务的一个例子是网格分割，拓扑神经网络会为输入网格中的每个面输出一个分割标签。 (2) *复形分类（Complex classification）*: 预测整个复形，涉及到将拓扑结构还原为一种通用的表示方法。输入网格的类别预测就是这一任务的一个例子。 (3) *胞腔预测（Cell prediction）*: 通过利用底层胞腔复形的拓扑结构和相关特征，预测胞腔相互作用的属性，有时包括预测胞腔的存在。这种任务的一个例子是预测超图超桥中的联系。"}
+knitr::include_graphics('figures/tasks.png', dpi=NA)
+```
+
+图\@ref(fig:tdl)概述了TDL的一般设置。首先，在集合 $S$ 上构建一个由 CC 表示的高阶域。然后选择一组定义在该域上的邻域函数。邻域函数通常根据当前的学习问题来选择，并用于构建拓扑神经网络。为了开发我们的通用 TDL 框架，我们引入了*组合复形神经网络（combinatorial complex neural networks，CCNN）*，这是一类由 CC 支持的抽象神经网络，它有效地捕捉了图\@ref(fig:tdl)中的流水线。CCNN 可被视为一种*模板*，它概括了许多流行的架构，如卷积神经网络和注意力神经网络,CCNN 的抽象化具有很多优势。首先，任何适用于 CCNN 的结果都立即适用于 CCNN 架构的任何特定实例。事实上，只要符合 CCNN 定义，本文的理论分析和结果都适用于任何基于 CC 的神经网络。其次，如果神经网络的架构复杂，使用特定参数可能会很麻烦。在第 \@ref(building-ccnns-tensor-diagrams)节中，我们将详细介绍参数化 TDL 模型的复杂架构。CCNN 更抽象的高层表示简化了学习过程的符号和一般目的，从而使 TDL 建模更直观。
+
+
+
+```{r tdl, echo=FALSE, fig.align="center", fig.cap="TDL蓝图 (a): 一组抽象实体. (b): 定义在$S$上的CC $(S, \\mathcal{X}, \\mbox{rk})$ . (c): 对于元素 $x \\in \\mathcal{X}$, 选择定义在CC上的邻域函数集合 (d): 用(c)中选择的领域函数建立神经网络. 神经网络利用在 (c) 中选择的邻域函数来更新 $x$ 上支持的数据."}
+knitr::include_graphics('figures/tdl_blue_print.png', dpi=NA)
+```
+
+```{definition, hoans-definition, name="组合复形神经网络，Combinatorial complex neural networks"}
+令 $\mathcal{X}$ 是 CC， 令$\mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \ldots \times  \mathcal{C}^{i_m}$ 和 $\mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \ldots \times  \mathcal{C}^{j_n}$ 是$m$ 和 $\mathcal{X}$上共链空间（cochain spaces）$n$ 的笛卡尔积。 那么， *组合复形神经网络（combinatorial complex neural network，CCNN)* 就是如下形式的函数
+\begin{equation*}
+\mbox{CCNN}: \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \ldots \times  \mathcal{C}^{i_m} \longrightarrow \mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \ldots \times \mathcal{C}^{j_n}.
+\end{equation*}
+```
+
+直观上，CCNN以共链向量 $(\mathbf{H}_{i_1},\ldots, \mathbf{H}_{i_m})$作为输入，返回共链向量$(\mathbf{K}_{j_1},\ldots, \mathbf{K}_{j_n})$作为输出。在章节\@ref(building-ccnns-tensor-diagrams)，我们将展示邻域函数如何在构建一般 CCNN 时发挥核心作用。定义 \@ref(def:hoans-definition)并没有说明 CCNN 在一般情况下是如何计算的，章节 \@ref(message-passing) 和 \@ref(push-forward-pooling-and-unpooling)将 形式化将 CCNN 的计算工作流程。
+
+## 构建 CCNN：张量图{#building-ccnns-tensor-diagrams}
+
+
+与涉及顶点或边缘信号的图不同，高阶网络需要更多的信号（见图 \@ref(fig:cc-cochain)）。因此，构建 CCNN 需要构建大量相互作用的子神经网络。由于通过 CCNN 处理的共链数量可能很大，我们引入了*张量图（tensor diagrams）*，这是一种图解符号，用于描述拓扑域上支持的通用计算模型，并描述该域上支持和处理的各种信号的流向。
+
+```{remark}
+图解符号在几何拓扑文献中很常见[@hatcher2005algebraic；@turaev2016quantum]，通常用于构建由更简单的构件构成的函数。进一步讨论见附录 \@ref(ccnn-architecture-search-and-topological-quantum-field-theories)。关于单纯形神经网络的相关构造，另请参阅[@roddenberry2021principled]。
+```
+
+```{definition, tdd, name="张量图，Tensor diagram"}
+张量图可把CCNN表示成有相同图，张量图上的信号从*源节点*流向*目标节点*。源节点和目标节点分别对应 CCNN 的域和共域.
+```
+
+图\@ref(fig:td)张量图的示例。左边显示的是三维的 CC，考虑0-cochain $\mathcal{C}^0$，1-cochain $\mathcal{C}^1$和2-cochain $\mathcal{C}^2$；中间的图给出了CCNN，它把$\mathcal{C}^0 \times \mathcal{C}^1\times \mathcal{C}^2$的共链向量映射到$\mathcal{C}^0\times\mathcal{C}^1 \times \mathcal{C}^2$中的共链向量；右图给出的是CCNN的张量图。用共链映射或其矩阵表示来标注张量图上的每条边，张量图\@ref(fig:td)上的边标签是$A_{0,1}, B_{0,1}^{T}, A_{1,1}, B_{1,2}$ 和 $coA_{2,1}$。因此，该张量图指明了 CC 上的共链流向。
+
+```{r td, echo=FALSE, fig.align="center", fig.cap="张量图是 CCNN 的图解表示法，可捕捉 CCNN 上的信号流。"}
+knitr::include_graphics('figures/tensor_diagram.png', dpi=NA)
+```
+
+张量图箭头上的标签构成了一个$\mathbf{G}= (G_i)_{i=1}^l$ 的共链映射序列，该序列定义在底层 CC 上，例如在\@ref(fig:td)中的$\mathbf{G}=(G_i)_{i=1}^5 = (A_{0,1}, B_{0,1}^{T}, A_{1,1}, B_{1,2}, coA_{2,1})$。当使用张量图表示 CCNN 时，就可使用符号 $\mbox{CCNN}_{\mathbf{G}}$ 表示张量图及其对应的 CCNN。共链映射$(G_i)_{i=1}^l$反应了CC的结构，也确定了CC上的信号流。在第 \@ref(neighbourhood-functions-on-ccs)节中提到的任何邻域矩阵都可以用作共链图，共链映射的选择取决于学习任务。
+
+图\@ref(fig:tensor)可视化了张量图的其它示例。张量图的*高度（heigh）*是指从源节点到目标节点的最长路径上的边的数量。例如，图 \@ref(fig:tensor) (a) 和 \@ref(fig:tensor) (d) 中张量图的高度分别为 1 和 2。两个张量图的垂直连接表示其对应的 CCNN 的组成。例如，图 \@ref(fig:tensor)(d)中的张量图就是图 \@ref(fig:tensor)(c)和(b)中张量图的垂直连接。
+
+```{r tensor, echo=FALSE, fig.align="center", fig.cap="张量图示例 (a): 张量图 $\\mbox{CCNN}_{coA_{1,1}}\\colon \\mathcal{C}^1 \\to \\mathcal{C}^1$. (b): 张量图 $\\mbox{CCNN}_{ \\{B_{1,2}, B_{1,2}^T\\}} \\colon \\mathcal{C}^1 \\times \\mathcal{C}^2 \\to \\mathcal{C}^1 \\times \\mathcal{C}^2$. (c):合并节点，可合并三条共链. (d): 由 (c) 和 (b) 中的张量图垂直连接生成的张量图，边标签 $Id$ 表示同一矩阵。"}
+knitr::include_graphics('figures/hon_example.png', dpi=NA)
+```
+
+如果张量图上的节点可以收到一个或多个信号，就称为*聚合节点（merge node）*。在数学上来解释，聚合节点就是函数$\mathcal{M}_{G_1,\ldots ,G_m}\colon \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \ldots \times \mathcal{C}^{i_m} \to \mathcal{C}^{j}$，该函数由下式给出：
+
+\begin{equation}
+    (\mathbf{H}_{i_1},\ldots,\mathbf{H}_{i_m}) \xrightarrow[]{\mathcal{M}} \mathbf{K}_{j}=
+    \mathcal{M}_{G_1,\ldots,G_m}(\mathbf{H}_{i_1},\ldots,\mathbf{H}_{i_m}),
+    (\#eq:sum)
+\end{equation}
+其中，$G_k \colon C^{i_k}(\mathcal{X})\to C^{j}(\mathcal{X}), k=1,\ldots,m$，是共链映射。我们将 $\mathcal{M}$ 视为一个消息传递函数，它考虑了由映射 $G_1,\ldots,G_m$输出的消息，这些映射共同作用于一个共链向量 $(\mathbf{H}_{i_1},\ldots,\mathbf{H}_{i_m})$，从而得到一个更新的共链 $\mathbf{K}_{j}$。更多细节参看\@ref(push-forward-operator-and-merge-node) 和 \@ref(higher-order-message-passing-neural-networks-are-ccnns)，图\@ref(fig:tensor)(c)就给出了这样的一个聚合节点示例。
+
+## 前推操作（Push-forward operator）和聚合节点{#push-forward-operator-and-merge-node}
+
+本节引入了前推操作，它是一种计算方案，可以将 $i-cells$胞腔支持的共链发送到 $j-cells$ 胞腔。前推操作是一个计算构件，用于形式化定义方程 \@ref(eq:sum)中给出的聚合节点、第 \@ref(message-passing)章中介绍的高阶消息传递，以及第 \@ref(push-forward-pooling-and-unpooling)节中介绍的(un)pooling操作。
+
+```{definition, pushing-exact-definition, name="共链前推，Cochain push-forward"}
+在 CC $\mathcal{X}$上, 有共链映射 $G\colon\mathcal{C}^i(\mathcal{X})\to \mathcal{C}^j(\mathcal{X})$ 和 $\mathbf{H}_i$ in $\mathcal{C}^i(\mathcal{X})$。 $G$诱导的*(cochain) push-forward* 就是算子 $\mathcal{F}_G \colon \mathcal{C}^i(\mathcal{X})\to \mathcal{C}^j(\mathcal{X})$，该算子定义如下
+\begin{equation}
+\mathbf{H}_i \to \mathbf{K}_j=[ \mathbf{k}_{y^j_1},\ldots,\mathbf{k}_{y^j_{|\mathcal{X}^j|} }] = \mathcal{F}_G(\mathbf{H}_i),
+\end{equation}
+使得 $k=1,\ldots,|\mathcal{X}^j|$,
+\begin{equation}
+\mathbf{k}_{y_k^j}= \bigoplus_{x_l^i \in \mathcal{N}_{G^T(y_k^j)}} \alpha_{G} ( \mathbf{ \mathbf{h}_{x_l^i}}),
+(\#eq:functional)
+\end{equation}
+其中，$\bigoplus$ 是具有置换不变性（permutation-invariant）的聚合函数，$\alpha_G$ 是可微函数（differentiable function）。
+```
+
+> 译者注：置换不变性（permutation-invariant），元素的次序对函数的响应没有影响。假设函数$f$将$\mathcal{X}\in \mathbb{R}^{d}$域的向量空间映射到$\mathcal{Y}$域的离散空间，作用于集合上的函数$f:\mathcal{X}\rightarrow \mathcal{Y}$对集合中元素的作用在任何置换$\pi$下都不变，即：$f(\{x_{1},\ldots,x_{M}\})=f(\{x_{\pi(1)},\ldots,x_{\pi(M)})\}$，则说$f$具有置换不变性。
+
+算子$\mathcal{F}_{G}$前推$\mathcal{X}^i$支持的$i-cochain$ $\mathbf{H}_i$到$\mathcal{X}^j$支持的 $j-cochain$ $\mathcal{F}_{G}(\mathbf{H}_i)$。对于每个胞腔$y \in \mathcal{X}^j$，公式\@ref(eq:functional)通过聚合所有隶属于$y$由邻域函$\mathcal{N}_{G^T}$确定的邻域$x \in \mathcal{X}^i$上的向量$\mathbf{h}_x$来构造向量$\mathbf{k}_y$，而且还对聚合向量集合$\{ \mathbf{h}_x| x\in \mathcal{N}_{G^T}(y)\}$施加了微分函数$\alpha_G$。
+
+图\@ref(fig:push-forward)可视化了两个前推算子的示例。示例\@ref(exm:non-trainable-pushforward)提供了由关联矩阵（indicence matrix）诱导的前推函数，而示例\@ref(exm:non-trainable-pushforward)中的前推函数不包含任何参数，因此无法训练。在章节\@ref(definition-of-combinatorial-complex-convolutional-networks)，将给出参数化的前推操作，其参数是可训练的。
+
+
+```{r push-forward, echo=FALSE, fig.align="center", fig.cap="前推操作示例 (a): 令 $G_1\\colon \\mathcal{C}^1\\to \\mathcal{C}^2$ 是共链映射。由$G_1$诱导的前推 $\\mathcal{F}_{G_1}$ 操作输入一个定义在底层CC $\\mathcal{X}$的边上的1-cochain $\\textbf{H}_{1}$，然后前推该共链到定义在$\\mathcal{X}^2$上的2-cochain $\\mathbf{K}_2$。通过用邻域函数 $\\mathcal{N}_{G_1^T}$聚合$\\mathbf{H}_1$上的消息就形成了共链$\\mathbf{K}_2$。在这种情况下，相对于 $G_1$，2-rank（蓝色）胞腔的邻居是该胞腔边界上的四条（粉色）边。（b）类似的，$G_2\\colon \\mathcal{C}^0\\to \\mathcal{C}^2$诱导前推映射$\\mathcal{F}_{G_2}\\colon \\mathcal{C}^0\\to \\mathcal{C}^2$，发送0-cochain $\\mathbf{H}_0$到2-cochain $\\mathbf{K}_2$。使用邻域函数$\\mathcal{N}_{G_2^T}$聚合$\\mathbf{H}_0$上的消息就形成了共链$\\mathbf{K}_2$。"}
+knitr::include_graphics('figures/push_forward.png', dpi=NA)
+```
+
+```{example, non-trainable-pushforward, name="维度2 CC上的前推操作"}
+在维度2 CC $\mathcal{X}$上，令 $B_{0,2}\colon \mathcal{C}^2 (\mathcal{X})\to \mathcal{C}^0 (\mathcal{X})$ 是关联矩阵。由$\mathcal{F}^{m}_{B_{0,2}}(\mathbf{H_{2}})= B_{0,2} (\mathbf{H}_{2})$定义的函数$\mathcal{F}^{m}_{B_{0,2}}\colon\mathcal{C}^2 (\mathcal{X})\to \mathcal{C}^0 (\mathcal{X})$是由$B_{0,2}$诱导的前推操作。$\mathcal{F}^{m}_{B_{0,2}}$ 前推共链 $\mathbf{H}_{2}\in \mathcal{C}^2$ 到共链 $B_{0,2} (\mathbf{H}_{2}) \in \mathcal{C}^0$.
+```
+
+在定义 \@ref(def:exact-definition-merge-node)中, 我们使用前推算子来表述聚合节点的概念. 图\@ref(fig:merge-node)用张量图可视化了聚合节点的定义\@ref(def:exact-definition-merge-node) 。
+
+```{definition, exact-definition-merge-node, name="聚合节点，Merge node"}
+令 $\mathcal{X}$是CC，令 $G_1\colon\mathcal{C}^{i_1}(\mathcal{X})\to\mathcal{C}^j(\mathcal{X})$和 $G_2\colon\mathcal{C}^{i_2}(\mathcal{X})\to\mathcal{C}^j(\mathcal{X})$是两个共链映射。给定共链向量 $(\mathbf{H}_{i_1},\mathbf{H}_{i_2}) \in \mathcal{C}^{i_1}\times \mathcal{C}^{i_2}$,  *聚合节点* $\mathcal{M}_{G_1,G_2}\colon\mathcal{C}^{i_1} \times \mathcal{C}^{i_2} \to \mathcal{C}^j$ 被定义为
+\begin{equation}
+    \mathcal{M}_{G_1,G_2}(\mathbf{H}_{i_1},\mathbf{H}_{i_2})= \beta\left( \mathcal{F}_{G_1}(\mathbf{H}_{i_1})  \bigotimes \mathcal{F}_{G_2}(\mathbf{H}_{i_2}) \right),
+\end{equation}
+其中， $\bigotimes \colon \mathcal{C}^j \times \mathcal{C}^j \to \mathcal{C}^j$ 是聚合函数, $\mathcal{F}_{G_1}$ 和 $\mathcal{F}_{G_2}$是$G_1$ 和 $G_2$诱导的前推操作，并且$\beta$是激活函数。
+```
+
+```{r merge-node, echo=FALSE, fig.align="center", fig.cap="聚合节点定义的可视化."}
+knitr::include_graphics('figures/merge_node_scaled.png', dpi=NA)
+```
+
+## 三种主要的张量操作{#the-main-three-tensor-operations}
+
+CCNN 的任何张量图都可以通过两个基本操作构建：前推算子和聚合节点。在实践中，引入其他操作可以更有效地构建相关的神经网络架构。例如，一个有用的操作是聚合节点的双重操作，称之为分裂节点。
+
+```{definition, exact-definition-split-node, name="分裂节点，Split node"}
+令 $\mathcal{X}$是CC，令$G_1\colon\mathcal{C}^{j}(\mathcal{X})\to\mathcal{C}^{i_1}(\mathcal{X})$ 和 $G_2\colon\mathcal{C}^{j}(\mathcal{X})\to\mathcal{C}^{i_2}(\mathcal{X})$是两个共链映射。给定共链$\mathbf{H}_{j} \in \mathcal{C}^{j}$， *分裂节点*操作 $\mathcal{S}_{G_1,G_2}\colon\mathcal{C}^j \to \mathcal{C}^{i_1} \times \mathcal{C}^{i_2}$ 定义为:
+\begin{equation}
+\mathcal{S}_{G_1,G_2}(\mathbf{H}_{j})= \left(  \beta_1(\mathcal{F}_{G_1}(\mathbf{H}_{j})) , \beta_2(\mathcal{F}_{G_2}(\mathbf{H}_{j})) \right),
+\end{equation}
+其中， $\mathcal{F}_{G_i}$ 是$G_i$诱导的前推操作，并且$\beta_i$是激活函数，$i=1, 2$。
+```
+
+
+虽然从定义 \@ref(def:exact-definition-split-node)中可以看出，分裂节点只是前推操作的元组，但使用分裂节点可以让我们更有效、更直观地构建神经网络。定义 \@ref(def:elem-opers)提出了一组基本的张量运算，包括分裂节点，以方便用张量图来表述 CCNN。
+
+```{definition, elem-opers, name="基本张量运算"}
+我们将前推操作、聚合节点和分裂节点统称为基本张量操作。
+```
+
+图 \@ref(fig:split-merge-pushforward) 给出了基本张量运算的张量图，图 \@ref(fig:prior-work) 举例说明现有拓扑神经网络如何通过基于基本张量运算的张量图来表达。 例如，文献[@roddenberry2021principled]提出的基于霍奇分解（Hodge decomposition）的神经网络--单纯复形网（SCoNe），就可以有效地通分裂分和聚合节点来实现，如图所示。 \@ref(fig:prior-work)(a).
+
+>霍奇分解定理,曲面上任意一个光滑切向量场，可以被唯一地分解为三个向量场：梯度场、散度场和调和场
+
+```{r split-merge-pushforward, echo=FALSE, fig.align="center", fig.cap="基本张量运算（即前推运算、聚合节点和分裂节点）的张量图。这三种基本映射张量运算是构建一般 CCNN 张量图的基石. 利用三种基本张量运算的合成和横向连接，可以形成一般的张量图。 (a): 由共链 $G\\colon\\mathcal{C}^i \\to \\mathcal{C}^j$ 定义的操作为。）（b）两个共链映射 $G_1\\colon\\mathcal{C}^{i_1} \\to \\mathcal{C}^j$和$G_2\\colon\\mathcal{C}^{i_2} \\to \\mathcal{C}^j$ 诱导生成的聚合节点。（c）两个共链映射公 $G_1\\colon\\mathcal{C}^{j}\\to\\mathcal{C}^{i_1}$ 和 $G_2\\colon\\mathcal{C}^{j}\\to\\mathcal{C}^{i_2}$ 诱导生成的分裂节点. 在图示中，函数 $\\Delta \\colon \\mathcal{C}^{j}\\to \\mathcal{C}^{j}\\times \\mathcal{C}^{j}$ 被定义为 $\\Delta(\\mathbf{H}_j)= (\\mathbf{H}_j,\\mathbf{H}_j)$."}
+knitr::include_graphics('figures/split_merge_push.png', dpi=NA)
+```
+
+```{r prior-work, echo=FALSE, fig.align="center", fig.cap="可通过三种基本张量运算实现现有神经网络的示例。为简化说明，去掉了边标签. (a):文献[@roddenberry2021principled]提出的单纯复形网络（simplicial complex net，SCoNe）可以实现为分裂节点的组合，把输入的1-cochain分裂为三个0维、1维、2维共链，然后通过一个聚合节点再把这些共链聚合为 1-cochain。 (b): 文献[@ebli2020simplicial]提出的单纯形神经网络（simplicial neural network，SCN）可以实现为前推操作。 (c)--(e): 胞腔复形神经网络的示例（cell complex neural networks，CXNs)，参见文献 [@hajijcell]。 注意： (e) 通过将0-cochains和2-cochains聚合为1-cochains的聚合节点，以及将1-cochain分裂为0-cochain和2-cochains的分裂节点来实现。"}
+knitr::include_graphics('figures/prior_work.png', dpi=NA)
+```
+
+```{remark}
+基本张量运算构成了定义任何参数化拓扑神经网络所需的唯一框架。事实上，既然可以通过三个基本张量运算建立张量图，那么只需定义前推运算和聚合运算，就可以完全定义一类参数化的 CCNN（回顾一下，分裂节点完全由前推运算决定）。 在章节\@ref(definition-of-combinatorial-complex-convolutional-networks) 和 \@ref(combinatorial-complex-attention-neural-networks)，我们建立了两类参数化的CCNN：卷积类和注意力类。在这两种情况下，我们只定义了相应的参数化基本张量运算。除了卷积和注意力版本的CCNNs，三种基本张量运算允许我们构建任意参数化的张量图，因此为发现新的拓扑神经网络架构提供了空间，而我们的理论仍适用于这些架构。
+```
+
+构建 CCNN 的另一种方法是借鉴拓扑量子场论（topological quantum field theory，TQFT）的思想。在附录 \@ref(ccnn-architecture-search-and-topological-quantum-field-theories)中，我们简要地讨论了他们之间的深层关系。
+
+## 组合复形卷积网络的定义（combinatorial complex convolutional networks）{#definition-of-combinatorial-complex-convolutional-networks}
+
+在高阶域上的深度学习的基本计算需求之一是具备定义和计算卷积运算的能力。在本节，我们将介绍配备卷积算子的CCNNs，称之为*组合复形卷积神经网络（combinatorial complex convolutional neural networks，CCCNN）*。特别地，为 CCCNNs 提出了两种卷积算子：CC-卷积（CC-convolutional）前推算子和CC-卷积聚合节点。
+
+我们将演示如何从两个基本模块引入 CCCNN：在章节\@ref(push-forward-operator-and-merge-node)抽象定义的前推和聚合操作。正如在定义 \@ref(def:cc-conv-pushforward)所设想的那样，CC-convolutional前推操作用最简单的形式将文献[@kipf2016semi]中引入的卷积图神经网络进行了泛化。
+
+
+```{definition, cc-conv-pushforward, name="CC卷积前推，CC-convolutional push-forward"}
+假设在一个CC $\mathcal{X}$ 上, 有共链映射 $G\colon \mathcal{C}^i (\mathcal{X}) \to \mathcal{C}^j(\mathcal{X})$ 和 $\mathbf{H}_i \in C^i(\mathcal{X}, \mathbb{R}^{{s}_{in}})$。  *CC-convolutional push-forward* 操作就是共链映射 $\mathcal{F}^{conv}_{G;W} \colon C^i(\mathcal{X}，\mathbb{R}^{{s}_{in}}) \to C^j(\mathcal{X}, \mathbb{R}^{{t}_{out}})$ 定义如下
+\begin{equation}
+\mathbf{H}_i \to  \mathbf{K}_j=  G \mathbf{H}_i W ,
+(\#eq:cc-conv-push-forward-eq)
+\end{equation}
+其中， $W \in \mathbb{R}^{d_{s_{in}}\times d_{s_{out}}}$ 是可训练参数。
+```
+
+一旦有了CC-convolutional前推操作的定义，CC-convolutional聚合节点的定义（参见\@ref(def:cc-convolutional)）就是定义\@ref(def:exact-definition-merge-node)的直接应用。在最近的文献 [@bunch2020simplicial; @ebli2020simplicial; @hajijcell; @schaub2020random; @schaub2021signal; @roddenberry2021principled; @calmon2022higher; @hajij2021simplicial; @roddenberry2021signal; @yang2023convolutional]中也出现了一些定义\@ref(def:cc-convolutional)的变种。
+
+
+```{definition, cc-convolutional, name="CC卷积聚合节点，CC-convolutional merge node"}
+令 $\mathcal{X}$是CC,令$G_1\colon\mathcal{C}^{i_1}(\mathcal{X}) \to\mathcal{C}^j(\mathcal{X})$ 和 $G_2\colon\mathcal{C}^{i_2}(\mathcal{X})\to\mathcal{C}^j(\mathcal{X})$是两个共链映射。给定共链向量 $(\mathbf{H}_{i_1},\mathbf{H}_{i_2}) \in \mathcal{C}^{i_1}\times \mathcal{C}^{i_2}$， *CC-convolutional聚合节点* $\mathcal{M}^{conv}_{\mathbf{G};\mathbf{W}} \colon\mathcal{C}^{i_1} \times \mathcal{C}^{i_2} \to \mathcal{C}^j$ 可以定义如下：
+\begin{equation}
+\begin{aligned}
+\mathcal{M}^{conv}_{\mathbf{G};\mathbf{W}}
+(\mathbf{H}_{i_1},\mathbf{H}_{i_2}) &=
+\beta\left( \mathcal{F}^{conv}_{G_1;W_1}(\mathbf{H}_{i_1})
++ \mathcal{F}^{conv}_{G_2;W_2}(\mathbf{H}_{i_2})  \right)\\
+&= \beta ( G_1 \mathbf{H}_{i_1} W_1  +  G_2 \mathbf{H}_{i_2} W_2 ),\\
+\end{aligned}
+\end{equation}
+其中，
+$\mathbf{G}=(G_1, G_2)$, $\mathbf{W}=(W_1, W_2)$是一组可训练参数，$\beta$ 是激活函数。
+```
+
+事实上，定义\@ref(def:cc-conv-pushforward)中共链映射$G$的矩阵表示可能在训练过程中需要针对具体问题进行归一化（normalization）。关于高阶卷积算子背景下的各种归一化，我们推荐读者参阅[@kipf2016semi; @bunch2020simplicial; @schaub2020random] [@kipf2016semi;@bunch2020simplicial;@schaub2020random]。
+ 
+我们用 $\mbox{CCNN}_{\mathbf{G}}$ 概念表示张量图及其对应的 CCNN。 我们所用的负号表明，CCNN 是由基于定义在底层 CC 上的共链映射序列 $\mathbf{G}= (G_i)_{i=1}^l$ 的基本张量运算组成的。 当组成 CCNN 的基本张量运算由可训练参数序列 $\mathbf{W}= (W_i)_{i=1}^k$ 参数化时，就可以用 $\mbox{CCNN}_{\mathbf{G};\mathbf{W}}$ 表示 CCNN 及其张量图表示。
+
+## 组合复形注意力神经网络{#combinatorial-complex-attention-neural-networks}
+
+大多数高阶深度学习模型都侧重于使用*各向同性聚合(isotropic aggregation)*的层，这意味着元素附近的邻近元素对元素表示的更新贡献相同。由于信息是以扩散的方式聚合的，这种各向同性的聚合会限制这些学习模型的表现力，从而导致过平滑（oversmoothing）等现象[@beaini2021directional]。相比之下，*基于注意力的学习（attention-based learning）* [@choi2017gram]允许深度学习模型为底层领域中元素局部附近的邻域分配概率分布，从而突出具有最相关任务信息的组件[@velickovic2017graph]。
+基于注意力的模型在实践中是成功的，因为它们忽略了域中的噪声，从而提高了信噪比（signal-to-noise ratio）[@mnih2014recurrent; @boaz2019]。因此，基于注意力的模型在图的传统机器学习任务中取得了显著的成功，包括节点分类和链接预测 [@li2021learning]、节点排名 [@sun2009rankclus] 和基于注意力的嵌入 [@choi2017gram; @lee2018graph] 等。
+
+章节\@ref(definition-of-combinatorial-complex-convolutional-networks)给CC-convolutional引入了前推操作，本节将给出前推操作的第二个示例：CC注意力前推操作（CC-attention push-forward）。
+
+那么，就可以使用配备了CC-attention前推算子的CCNNs，称之为*组合复形注意力神经网络（combinatorial complex attention neural networks，CCANNs）*。我们首先提供一个 CC 的sub-CC $\mathcal{Y}_0$ 相对于 CC 中其他sub-CC 的注意力的一般概念。
+
+```{definition, hoa, name="高阶注意力，Higher-order attention"}
+令 $\mathcal{X}$ 是 CC, $\mathcal{N}$是$\mathcal{X}$上的邻域函数，$\mathcal{Y}_0$是 $\mathcal{X}$的sub-CC。 令 $\mathcal{N}(\mathcal{Y}_0)=\{ \mathcal{Y}_1,\ldots, \mathcal{Y}_{|\mathcal{N}(\mathcal{Y}_0)|} \}$ 是sub-CCs 集合，该集合的元素是邻域函数$\mathcal{N}$下$\mathcal{Y}_0$的邻居。那么，在$\mathcal{N}$下，$\mathcal{Y}_0$的*higher-order attention*就是函数 $a\colon {\mathcal{Y}_0}\times \mathcal{N}(\mathcal{Y}_0)\to [0,1]$，该函数给每个元素$\mathcal{Y}_i\in\mathcal{N}(\mathcal{Y}_0)$赋予权重 $a(\mathcal{Y}_0, \mathcal{Y}_i)$，使得 $\sum_{i=1}^{| \mathcal{N}(\mathcal{Y}_0)|} a(\mathcal{Y}_0,\mathcal{Y}_i)=1$.
+```
+
+>译者注：原文中，上述定义写的是Cigher-order attention，我觉得是写错了，应该是Highr
+
+正如定义\@ref(def:hoa)所反应的，邻域函数$\mathcal{N}$下sub-CC $\mathcal{Y}_0$的高阶注意力给$\mathcal{Y}_0$的每个邻居赋予了一个离散分布值。
+
+基于注意力的学习通常旨在学习函数 $a$。请注意，函数 $a$ 依赖于邻域函数 $\mathcal{N}$。在我们的语境中，我们的目标是学习邻域函数$a$，它是一个关联或（共）邻接函数 ，正如第\@ref(neighbourhood-functions-on-ccs)节所介绍的那样。
+
+回忆一下定义\@ref(def:hoa)，权重$a(\mathcal{Y}_0,\mathcal{Y}_i)$需要一个源sub-CC $\mathcal{Y}_0$和一个目标sub-CC $\mathcal{Y}_i$作为输入。因此，一个CC-attention push-forward操作需要两个共链空间。定义\@ref(def:hoan-sym) 引入了概念CC-attention push-forward，其中两个底层共链空间包含等秩胞腔上支持的共链。
+
+```{definition, hoan-sym, name="等秩（equal rank）胞腔上的CC注意力前推CC-attention push-forward"}
+令 $G\colon C^{s}(\mathcal{X})\to C^{s}(\mathcal{X})$是邻域矩阵。 $G$诱导的*CC-attention push-forward* 就是一个共链映射 $\mathcal{F}^{att}_{G}\colon C^{s}(\mathcal{X}, \mathbb{R}^{d_{s_{in}}}) \to C^{s}(\mathcal{X},\mathbb{R}^{d_{s_{out}}})$，定义为：
+\begin{equation}
+\mathbf{H}_s \to \mathbf{K}_{s} = (G \odot att)  \mathbf{H}_{s}  W_{s} ,
+(\#eq:attention1)
+\end{equation}
+其中，$\odot$ 是Hadamard积， $W_{s}  \in \mathbb{R}^{d_{s_{in}}\times d_{s_{out}}}$可训练参数， $att\colon C^{s}(\mathcal{X})\to C^{s}(\mathcal{X})$ 是 *高阶注意力矩阵（higher-order attention matrix）*，该矩阵和矩阵$G$有同样的维度。 矩阵$att$的第$(i,j)$-th项定义为：
+\begin{equation}
+att(i,j) =  \frac{e_{ij}}{ \sum_{k \in \mathcal{N}_{G}(i) e_{ik} } },
+\end{equation}
+其中， $e_{ij}= \phi(a^T [W_{s} \mathbf{H}_{s,i}||W_{s} \mathbf{H}_{s,j} ] )$, $a \in \mathbb{R}^{2 \times s_{out}}$是可训练向量，  $[a ||b ]$ 表示$a$ 和 $b$的连接（concatenation）， $\phi$ 是激活函数，$\mathcal{N}_{G}(i)$是矩阵$G$下胞腔$i$的邻居。
+```
+
+> 译者注：哈达玛积(Hadamard product)，若$A=(a_{i,j})$和$B=(b_{i,j})$是两个同阶矩阵，若$c_{i,j}=a_{i,j}\times b_{i,j}$，则称矩阵$C=(c_{i,j})$为A和B的哈达玛积，或称基本积
+
+定义 \@ref(def:hoan-asym)处理的情况比定义 \@ref(def:hoan-sym)更普遍。具体来说，定义 \@ref(def:hoan-asym)引入了一个 CC-attention push-forward 的概念，在这个概念中，两个底层共链空间可以包含不同秩的胞腔上所支持的共链。
+
+```{definition, hoan-asym, name="不等秩胞腔（unequal ranks）上的CC注意力前推CC-attention push-forward"}
+对于 $s\neq t$, 令 $G\colon C^{s}(\mathcal{X})\to C^{t}(\mathcal{X})$ 是邻域矩阵，$G$诱导的*CC-attention block* 是共链映射 $\mathcal{F}_{G}^{att}  {\mathcal{A}}\colon C^{s}(\mathcal{X},\mathbb{R}^{d_{s_{in}}}) \times C^{t}(\mathcal{X},\mathbb{R}^{d_{t_{in}}}) \to C^{t}(\mathcal{X},\mathbb{R}^{d_{t_{out}}}) \times C^{s}(\mathcal{X},\mathbb{R}^{d_{s_{out}}})$，定义为
+\begin{equation}
+(\mathbf{H}_{s},\mathbf{H}_{t}) \to  (\mathbf{K}_{t}, \mathbf{K}_{s} ),
+\end{equation}
+且
+\begin{equation}
+\mathbf{K}_{t} = ( G \odot att_{s\to t})  \mathbf{H}_{s} W_{s} ,\;
+\mathbf{K}_{s} = (G^T \odot att_{t\to s})  \mathbf{H}_{t}  W_{t} ,
+(\#eq:attention2)
+\end{equation}
+其中， $W_s \in \mathbb{R}^{d_{s_{in}}\times d_{t_{out}}} , W_t \in \mathbb{R}^{d_{t_{in}}\times d_{s_{out}}}$是可训练参数，$att_{s\to t}^{k}\colon C^{s}(\mathcal{X})\to C^{t}(\mathcal{X}) , att_{t\to s}^{k}\colon C^{t}(\mathcal{X})\to C^{s}(\mathcal{X})$ 是 *高阶注意力矩阵（higher-order attention matrices）*，这些矩阵分别和矩阵$G$ 、 $G^T$有同样的维度。 矩阵$att_{s\to t}$的第 $(i,j)$-th项和$att_{t\to s}$可定义为
+\begin{equation}
+(att_{s\to t})_{ij} =  \frac{e_{ij}}{ \sum_{k \in \mathcal{N}_{G} (i) e_{ik} } },\;
+(att_{t\to s})_{ij} =  \frac{f_{ij}}{ \sum_{k \in \mathcal{N}_{G^T} (i) f_{ik} } },
+(\#eq:ast-ats)
+\end{equation}
+且
+\begin{equation}
+e_{ij} = \phi((a)^T [W_s \mathbf{H}_{s,i}||W_t \mathbf{H}_{t,j}] ),\;
+f_{ij} = \phi(rev(a)^T [W_t \mathbf{H}_{t,i}||W_s \mathbf{H}_{s,j}]),
+(\#eq:ef)
+\end{equation}
+其中， $a \in \mathbb{R}^{t_{out} + s_{out}}$ 是可训练向量，并且 $rev(a)= [ a^l[:t_{out}]||a^l[t_{out}:]]$.
+```
+
+定义\@ref(def:inc-mat)中的关联矩阵可用作定义\@ref(def:hoan-asym)中的邻居矩阵。在图\@ref(fig:B12)中，我们说明了关联邻域矩阵的 CC-attention 概念。图\@ref(fig:B12)(c)给出了与图\@ref(fig:B12)(a) 中显示的 CC 相关的非方正关联矩阵（non-squared incidence matrix） $B_{1,2}$。注意力模块$\mbox{HB}_{B_{1,2}}$负责学习两个关联矩阵$att_{s\to t}$ 和 $att_{t\to s}$，矩阵$att_{s\to t}$和$B_{1,2}$有同样的形状，并且非零元素恰好位于 $B_{1,2}$ 中元素等于 1 的地方。
+
+在 $att_{s\to t}$ 中，每列 $i$都代表一个概率分布，它定义了第 $i$-th个 2-cell相对其关联1-cells的注意力。矩阵 $att_{t\to s}$ 的形状与 $B_{1,2}^T$相同，并且1-cells到2-cells的注意力也有同样的表示形式。
+
+```{r B12, echo=FALSE, fig.align="center", fig.cap="图示不等秩胞腔上的CC-attention (a): 一个CC。 CC的每个 $2$-cell (蓝色面)都连接着它自己的关联$1$-cells(粉色边). (b): 图上给出了由胞腔及其关联关系确定的注意力权重。 (c): (a)中CC的关联矩阵。列$[1,2,3]$中的非零元对应于$[1,2,3]$关于$B_{1,2}$的邻域$\\mathcal{N}_{B_{1,2}}([1,2,3])$"}
+knitr::include_graphics('figures/B12.png', dpi=NA)
+```
+
+```{remark}
+前推共链$\mathbf{K}_t$的计算需要两个共链，称作$\mathbf{H}_s$ and $\mathbf{H}_t$。在公式\@ref(eq:attention2)中，$\mathbf{K}_t$直接依赖$\mathbf{H}_s$，但是从\@ref(eq:attention2)--\@ref(eq:ef)可见，它也通过$att_{s\to t}$非直接依赖于$\mathbf{H}_t$。此外，共链$\mathbf{H}_t$在训练期间仅需要有$att_{s\to t}$就行，但是在推断期间则不行。也就是说，CC-attention前推模块的计算在推断期间仅需要单个共链$\mathbf{H}_s$即可，这和定义\@ref(def:pushing-exact-definition)中定义的通用共链前推操作的计算一样。
+```
+
+公式\@ref(eq:attention1)和\@ref(eq:attention2)中的算子$G \odot att$ 和 $G \odot att_{s\to t}$ 可被看作$G$的注意力学习版本，这使得可以使用CCANNs来学习任意类型的离散外积分算子（discrete exterior calculus operators），正如附录\@ref(learning-discrete-exterior-calculus-operators-with-ccanns)中所描述的那样。

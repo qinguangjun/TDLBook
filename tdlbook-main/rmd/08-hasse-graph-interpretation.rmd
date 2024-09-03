@@ -1,0 +1,251 @@
+# CCNNs的Hasse图解释{#hasse-graph-interpretation-of-ccnns-1}
+
+在本节中，我们将通过与已有的 GNN研究成果建立联系，仔细研究拓扑学习机的特性。首先将CCs解释为专门的图，例如哈斯图（*Hasse graphs*），然后针对置换和方向的作用描述它们的等变特性，还将进一步将等变性定义与Hasse图表示法下的传统等变定义联系起来。
+
+>译者注：Hasse graphs，用来表示有限偏序集的一种数学图表，它是一种图形形式的对偏序集的传递简约。具体的说，对于偏序集合$(S, ≤)$，把$S$的每个元素表示为平面上的顶点，并绘制从$x$到$y$向上的线段或弧线，只要$y$ 覆盖$x$(就是说，只要$x < y$并且没有$z$使得$x < z < y$)。这些弧线可以相互交叉但不能触及任何非其端点的顶点。带有标注的顶点的这种图唯一确定这个集合的偏序。
+
+## CCNNs的Hasse图解释{#hasse-graph-interpretation-of-ccnns-2}
+
+我们将首先阐明，每个 CC 都可以归约为一个唯一且特定的图，即 *Hasse 图*。通过这种归约，就可以用基于图的模型来分析和理解 CCNN 的各种计算和概念。
+
+### CCs作为Hasse图{#ccs-as-hasse-graphs}
+
+定义 \@ref(def:maps)表明CC是偏序的（poset）, 是一个部分有序集合，其部分有序关系是集合包含关系。 这也意味着，当且仅当两个 CC 的 偏序关系 等价时，它们才是等价的^[对于相关结构 (例如, 单纯形/胞腔/胞腔复形), 偏序关系一般称为 *面偏序（face poset）* [@wachs2006poset]。]。 定义\@ref(def:hg) 给CC引入了*Hasse图* [@wachs2006poset; @abramenko2008buildings]，它是和有限偏序关系关联的有向图。
+
+```{definition, hg, name="Hasse 图"}
+CC $(S, \mathcal{X},\mbox{rk})$ 的*Hasse图*是有向图 $\mathcal{H}_{\mathcal{X}}= (V (\mathcal{H}_{\mathcal{X}}), E(\mathcal{H}_{\mathcal{X}}) )$，顶点集为$V (\mathcal{H}_{\mathcal{X}})=\mathcal{X}$，边集为 $E(\mathcal{H}_{\mathcal{X}})=\{ (x,y) : x\subsetneq y, \mbox{rk}(x)=\mbox{rk}(y)-1 \}$。
+```
+
+CC $(S, \mathcal{X},\mbox{rk})$的Hasse图 $\mathcal{H}_{\mathcal{X}}$的顶点是$\mathcal{X}$中的胞腔，$\mathcal{H}_{\mathcal{X}}$的边由胞腔间的直接互连关系（immediate incidence）确定，图 \@ref(fig:hasse-diagram) 提供了一个CC的Hasse图示例。
+
+```{r hasse-diagram, echo=FALSE, fig.align="center", fig.cap="CC的Hasse图示例。 (a): 莫比乌斯环（$M\\ddot{o}bius$ strip）的CC。 (b): CC的Hasse图，描述了胞腔之间的偏序结构。 (c): 带有边$A_{0,1}$ and $coA_{2,1}$的增强Hasse图"}
+knitr::include_graphics('figures/poset.png', dpi=NA)
+```
+
+*CC 结构类（CC structure class）*是根据定义 \@ref(def:maps)确定的同构 CC 的集合，命题\@ref(prp:structure)为确定 CC 结构类提供了充分的标准，命题\@ref(prp:structure)的证明依赖于对由底层Hasse图表示确定的 CC 结构类的观察，Hasse图提供了与关联矩阵$\{B_{k,k+1}\}_{k=0}^{\dim(\mathcal{X})-1}$同样的信息。图\@ref(fig:vis-structure)给出了命题\@ref(prp:structure)的证明的第二、三部分的可视化。
+
+```{proposition, structure, name="CC 结构的确定 "}
+令 $(S, \mathcal{X},\mbox{rk})$是CC，对于$(S, \mathcal{X},\mbox{rk})$表示的CC结构类，需满足如下充分条件:
+
+1. CC结构类由关联矩阵$\{B_{k,k+1}\}_{k=0}^{ \dim(\mathcal{X}) -1}$确定。
+2. CC结构类由邻接矩阵 $\{A_{k,1}\}_{k=0}^{\dim(\mathcal{X})-1}$确定。
+3. CC结构类由共邻矩阵 $\{coA_{k,1}\}_{k=1}^{\dim(\mathcal{X})}$确定。
+```
+
+```{proof}
+如果注意到 CC 的结构完全由其 Hasse 图表示法决定，那么命题三部分的证明就水到渠成了。 命题的第一部分源于这样一个事实：Hasse图中的边正是矩阵$\{B_{k,k+1}\}_{k=0}^{\dim(\mathcal{X}-1)}$的非零项。 第二部分是观察到，当且仅当存在一个$k$-cell $z^k$时（关联 $x^{k-1}$ 和 $y^{k-1}$），$(k-1)$ cells $x^{k-1}$ 和 $y^{k-1}$ 是 1-adjacent。 第三步是注意到，当且仅当存在一个$k$-cell $z^k$（关联$x^{k+1}$ 和 $y^{k+1}$）时， $(k+1)$-cells $x^{k+1}$ 和 $y^{k+1}$ 是 1-coadjacent。
+```
+
+```{r vis-structure, echo=FALSE, fig.align="center", fig.cap="在CC的Hasse图上，直接关联（immediate incidence）和（共）邻接之间的关系 。 (a):  当且仅当存在一个$k$-cell $z^k$ (粉色顶点)时（关联$x^{k-1}$ 和 $y^{k-1}$），$(k-1)$ cells $x^{k-1}$ 和 $y^{k-1}$ (橙色顶点) 是1-adjacent。 (b): 当且仅当存在一个$k$-cell $z^k$ (粉色顶点)时（关联$x^{k+1}$ 和 $y^{k+1}$），$(k+1)$ cells $x^{k+1}$ 和 $y^{k+1}$ (蓝色顶点) 是 1-coadjacent"}
+knitr::include_graphics('figures/prop_structure.png', dpi=NA)
+```
+
+### 增强的Hasse图{#augmented-hasse-graphs}
+
+CC 的 Hasse 图非常有用，因为它表明高阶深度学习模型的计算可以归约为基于图的模型的计算。尤其，在 CC $\mathcal{X}$ 上处理的 $k$-cochain（信号）可视为关联的Hasse图 $\mathcal{H}_{mathcal{X}}$ 上对应顶点的信号。 由矩阵 $B_{k,k+1}$ 指定的边决定了定义在 $\mathcal{X}$ 上的给定高阶模型的消息传递结构。然而，通过矩阵 $A_{r,k}$ 确定的消息传递结构并不直接支持 $\mathcal{H}_{mathcal{X}}$ 的相应边。 因此，除了CC的poset偏序关系所指定的边之外，有时还需要用额外的边来*增强Hasse图*。按照这种思路，定义\@ref(def:ahg)引入了增强Hasse图（augmented Hasse graph）的概念。
+
+```{definition, ahg, name="增强Hasse图，Augmented Hasse graph"}
+令 $\mathcal{X}$ 是CC，$\mathcal{H}_{\mathcal{X}}$ 是它的Hasse图，顶点集为 $V(\mathcal{H}_{\mathcal{X}})$，边集为 $E(\mathcal{H}_{\mathcal{X}})$；$\mathcal{N}=\{\mathcal{N}_1,\ldots,\mathcal{N}_n\}$ 是定义在$\mathcal{X}$上的邻域函数。如果存在$\mathcal{N}_i \in \mathcal{N}$，使得$x \in \mathcal{N}_i(y)$ 或 $y \in \mathcal{N}_i(x)$成立，那么称$\mathcal{H}_{\mathcal{X}}$有$\mathcal{N}$诱导的增强边$e_{x,y}$。记$\mathcal{N}$诱导的所有增强边集为$E_{\mathcal{N}}$。$\mathcal{N}$诱导的$\mathcal{X}$的*增强Hasse图*定义了图$\mathcal{H}_{\mathcal{X}}(\mathcal{N})= (V(\mathcal{H}_{\mathcal{X}}), E(\mathcal{H}_{\mathcal{X}}) \cup E_{\mathcal{N}})$.
+```
+
+定义中的增强Hasse图可以更容易地理解为矩阵：
+如果将$\mathbf{G}=\{G_1,\ldots,G_n\}$ 和邻域函数 $\mathcal{N}=\{\mathcal{N}_1,\ldots,\mathcal{N}_n\}$联系起来，那么$\mathcal{H}_{\mathcal{X}}(\mathcal{N})$ 中的每条增强边将都对对应于某个$G_i\in \mathbf{G}$中的非零项。由于$\mathcal{N}$ 和 $\mathbf{G}$ 存储了同样的信息，可以用 $\mathcal{H}_{\mathcal{X}}(\mathbf{G})$ 来标记由$\mathbf{G}$确定的边所诱导的增强 Hasse图。 例如， 图\@ref(fig:hasse-diagram)(c)中给出的图可用 $\mathcal{H}_{\mathcal{X}}( A_{0,1},coA_{2,1})$标记。
+
+### CCNN对图模型的归约能力{#reducibility-of-ccnns-to-graph-basedmodels}
+
+在本节中，我们将展示任何基于 CCNN 的计算模型都可以通过底层 CC 的增强Hasse图的子图上的消息传递方案来实现。每个 CCNN 都是通过计算张量图确定的，而计算张量图可以使用基本的张量运算，即推前运算、聚合节点和分裂节点来构建。因此，通过证明这三种张量运算可以在增强的Hasse图上执行，就可以实现基于CCNN的计算对图上消息传递方案的归约能力。命题 \@ref(prp:hasse-pushforward)就表述了前推操作可以在增强的Hasse图上执行。
+
+```{proposition, hasse-pushforward, name="增强Hasse图上的计算，Computation over augmented Hasse graph"}
+令$\mathcal{X}$是CC，$\mathcal{F}_G \colon \mathcal{C}^i(\mathcal{X})\to \mathcal{C}^j(\mathcal{X})$是共链映射$G\colon\mathcal{C}^i(\mathcal{X})\to \mathcal{C}^j(\mathcal{X})$诱导的前推操作。任何通过$\mathcal{F}_G$执行的计算都能归约为$\mathcal{X}$的增强Hasse图$\mathcal{H}_{\mathcal{X}}(G)$ 上的相应计算。
+```
+
+```{proof}
+令 $\mathcal{X}$是CC，$\mathcal{H}_{\mathcal{X}}(G)$是$G$确定的$\mathcal{X}$的增强Hasse图。增强Hasse图的定义表明，在顶点$\mathcal{H}_{\mathcal{X}}(G)$ 和$\mathcal{X}$的胞腔之间有一对一的对应关系。 给定胞腔$x\in \mathcal{X}$，令$x^{\prime}$是$\mathcal{H}_{\mathcal{X}}(G)$中的顶点，$y$是$\mathcal{X}$中带有特征向量$\mathbf{h}_y$的胞腔，该特征向量是由公式\@ref(eq:functional)指定的前推操作计算得到。回想一下，$\mathbf{h}_y$ 向量是通过聚合$x \in \mathcal{X}^i$中与$y$相邻的所有向量$\mathbf{h}_x$计算出来的，这与邻域函数$\mathcal{N}_{G^T}$有关。令$m_{x,y}$表示$\mathcal{X}$中两个胞腔$x$ 和$y$之间的计算（即：消息），该计算是前推操作$\mathcal{F}_G$计算的一部分。根据增强 Hasse 图的定义，胞腔 $x$ 和 $y$ 在矩阵 $G$ 中必须有相应的非零项。此外，这些非零项对应于$\mathcal{H}_{\mathcal{X}}(G)$中$x^{\prime}$ 和 $y^{\prime}$之间的一条边。因此， $\mathcal{X}$的胞腔 $x$ 和 $y$之间的计算$m_{x,y}$可以看作$\mathcal{H}_{\mathcal{X}}(G)$的对应顶点$x^{\prime}$ 和 $y^{\prime}$之间的计
+（消息）$m_{x^{\prime},y^{\prime}}$。
+```
+
+同样，对任意聚合节点的计算都可以用对底层 CC 的增强 Hasse 图的子图的计算来描述。命题 \@ref(prp:hasse)正式表述了这一说法。
+
+```{proposition, hasse, name="聚合顶点到增强Hasse图的归约，Reduction of merge node to augmented Hasse graph"}
+正如公式\@ref(eq:sum)中那样，通过聚合顶点$\mathcal{M}_{\mathbf{G},\mathbf{W}}$执行的任何计算都可以归约到底层CC的增强Hasse图$\mathcal{H}_{\mathcal{X}}(\mathbf{G})$上的相应计算。
+```
+
+```{proof}
+令 $\mathcal{X}$是CC，$\mathbf{G}=\{ G_1,\ldots,G_n\}$是定义在$\mathcal{X}$上的共链操作序列， $\mathcal{H}_{\mathcal{X}}(\mathbf{G})$ 是$\mathbf{G}$确定的增强Hasse图。按照增强Hasse图的定义，$\mathcal{H}_{\mathcal{X}}(\mathbf{G})$的顶点和$\mathcal{X}$的胞腔之间有一对一的关系。对$x\in \mathcal{X}$中的每个胞腔，令$x^{\prime}$ 是$\mathcal{H}_{\mathcal{X}}(\mathbf{G})$中的对应顶点，令 $m_{x,y}$ 是 在$\mathcal{X}$的两个胞腔$x$ 和 $y$上执行的计算（消息），该计算是函数$\mathcal{M}_{\mathbf{G},W}$计算的一部分。因此，两个胞腔 $x$ 
+ 和$y$必须在矩阵$G_i\in\mathbf{G}$上有相应的一对一非零项。根据增强Hasse图的定义，非零项对应于 $\mathcal{H}_{\mathcal{X}}(\mathbf{G})$中 $x^{\prime}$ 和 $y^{\prime}$之间的一条边。因此，在$\mathcal{X}$的两个胞腔$x$ 和 $y$之间执行计算 $m_{x,y}$就可以看作是在$\mathcal{H}_{\mathcal{X}}(\mathbf{G})$的顶点$x^{\prime}$ 和 $y^{\prime}$之间执行计算（消息）$m_{x^{\prime},y^{\prime}}$。
+```
+
+命题 \@ref(prp:hasse-pushforward) 和 \@ref(prp:hasse) 确保了前推和聚合节点计算可以在增强Hasse图上实现。定理 \@ref(thm:hasse-theorem) 泛化了命题 \@ref(prp:hasse-pushforward) 和\@ref(prp:hasse)，表明张量图上的任何计算都可在增强哈塞图上实现.
+
+```{theorem, hasse-theorem, name="张量图可归约到增强Hasse图，Reduction of tensor diagram to augmented Hasse graph"}
+ 通过张量图$\mbox{CCNN}_{\mathbf{G};\mathbf{W}}$执行的任何计算都可以归约到增强Hasse图$\mathcal{H}_{\mathcal{X}}(\mathbf{G})$。
+```
+
+```{proof}
+结论直接来自命题 \@ref(prp:hasse)和 \@ref(prp:hasse-pushforward)，以及任何张量图都可以用三个基本张量运算来实现这一事实。
+```
+
+根据定理 \@ref(thm:hasse-theorem)，张量图和它相应的增强Hasse图以两种可选的方式编码了同样的计算，图 \@ref(fig:hasse-diagram-examples) 演示了Hasse图提供了关联的CCNN的张量图表示的计算摘要。
+
+```{r hasse-diagram-examples, echo=FALSE, fig.align="center", fig.cap="两个CCNNs的张量图以及他们相应的Hasse图。 为了避免杂乱，张量图中去掉了边标签，因为它们可以从相应的增强 Hasse 图中推断出来。(a): 从高阶信息传递方案中获得的张量图。 (b): 使用三种基本张量运算得到的张量图。"}
+knitr::include_graphics('figures/augmented_hasse_graph_examples.png', dpi=NA)
+```
+
+### 增强Hasse图和CC-pooling{#augmented-hasse-graphs-and-cc-pooling}
+
+Hasse 图及其增强版本是底层 CC 的偏序结构的图表示。 针对这些图解释（反）池化操作（定义 \@ref(def:pooling-exact-definition) 和 \@ref(def:unpooling-exact-definition)）是很有启发性的。定义 \@ref(def:pooling-exact-definition)中的 CC 池化操作将 偏序结构中的信号从低秩胞腔映射到高秩胞腔。另一方面，定义 \@ref(def:unpooling-exact-definition)中的 CC-unpooling 操作将信号映射到相反的方向。图（fig:hasse-graph-pooling）展示了一个在底层 CC 的增强 Hasse 图上可视化的 执行CC（反）池化操作的示例。
+
+```{r hasse-graph-pooling, echo=FALSE, fig.align="center", fig.cap="CC增强Hasse图视角下的CC池化于反池化操作。 图中的顶点代表底层 CC 中的骨架。黑色边代表这些顶点之间 Hasse 图中的边，而红色边代表从增强 Hasse 图结构中获得的边。CC-pooling对应于将偏序集合结构中的信号从低秩顶点推向高秩顶点，而 CC-unpooling对应于将偏序集合结构中的信号从高秩顶点推向低秩顶点。"}
+knitr::include_graphics('figures/hasse_graph_pooling_scaled.png', dpi=NA)
+```
+
+### 增强Hasse图消息传递和聚合节点{#augmented-hasse-diagrams-message-passing-and-mergenodes}
+有两种方式可用来构造CCNN，一是用章节\@ref(definition-of-higher-order-message-passing)给出的高阶消息传递图来
+构造，二是使用章节 \@ref(the-main-three-tensor-operations) 给出的三个基本张量操作来构造，这在章节\@ref(merge-nodes-and-higher-order-message-passing-a-qualitative-comparison)中已经阐明。尤其，章节 \@ref(merge-nodes-and-higher-order-message-passing-a-qualitative-comparison)中 提到，聚合节点 与高阶消息传递范式相比，聚合节点自然可以实现更灵活的计算框架。
+这种灵活性体现在底层张量图以及所考虑的网络输入方面。如图 \@ref(fig:hasse-diagram-examples)所示，张量运算和高阶消息传递之间的区别也可以通过增强的 Hasse 图来突出显示。图 \@ref(fig:hasse-diagram-examples)(a)给出了从CCNN的高阶消息传递方案中获得的张量图。
+我们观察到这种 CCNN 的两个关键特性：初始输入的共链在域的所有维度的所有胞腔上都能支持，而且 CCNN 在每次迭代时都会按照预定的邻域函数来更新域的所有维度的所有胞腔上支持的所有共链。因此，相应的增强 Hasse 图呈现出统一的拓扑结构。相比之下，图 \@ref(fig:hasse-diagram-examples)(b) 显示的是使用三种基本张量运算构建的张量图。由于高阶信息传递规则不施加限制，因此得到的增强 Hasse 图呈现出更灵活的结构。
+
+### 高阶表征学习{#higher-order-representation-learning}
+定理\@ref(thm:hasse-theorem)给出的增强Hasse图和CCs关系表明，许多基于的深度学习也有类似的CCs构造方法。在本节，我们将阐明*高阶表征学习（higher-order representation learning）*如何归约到图表示学习 [@hamilton2017representation]，将某些 CC 计算应用转为增强哈塞图计算。
+
+图形表示法(graph representation)的目标是学习一种映射，将图形的顶点、边或子图嵌入欧几里得空间，使由此产生的嵌入能捕捉到图形的有用信息。类似的，高阶表征学习 [@hajijcell] 是学习一种嵌入，在保留拓扑域的主要结构属性的前提下，将给定拓扑域的胞腔嵌入到欧氏空间。更确切的说，对于给定复形$\mathcal{X}$，高阶表征学习是要学习一对函数$(enc, dec)$，其中，$enc$是*编码器映射（encoder map）* $enc \colon \mathcal{X}^k \to \mathbb{R}^d$，$dec$是*解码器映射（decoder map）* $dec \colon \mathbb{R}^d \times \mathbb{R}^d \to \mathbb{R}$。编码器函数会为 $\mathcal{X}$ 中的每个 $k$-cell $x^k$ 关联一个特征向量 $enc(x^k)$，该特征向量会根据 $\mathcal{X}$ 中其他胞腔的结构对 $x^k$ 的结构进行编码。另一方面，解码器函数给
+ 另一方面，解码器函数为每一对胞腔嵌入关联了一个相似度量，它量化了相应胞腔之间的某种关系概念。我们使用特定上下文环境的*相似性度量* $sim \colon \mathcal{X}^k \times \mathcal{X}^k \to \mathbb{R}$ 和目标函数来优化可训练函数 $(enc,dec)$，目标函数形式如下：
+\begin{equation}
+\mathcal{L}_k=\sum_{ x^k \in \mathcal{X}^k     } l(  dec(  enc(x^{k}), enc(y^{k})),sim(x^{k},y^k)),
+(\#eq:loss)
+\end{equation}
+其中， $l \colon \mathbb{R} \times \mathbb{R} \to \mathbb{R}$ 是损失函数。高阶表征学习和图表征学习的确切关系在命题\@ref(prp:convert-graphtocc)中给出
+
+```{proposition, convert-graphtocc, name="高阶表征学习可作为图表征学习，Higher-order representation learning as graph representation learning"}
+高阶表征学习可以归约到图表征学习。
+```
+
+```{proof}
+令 $sim\colon \mathcal{X}^k \times \mathcal{X}^k \to \mathbb{R}$ 是相似性度量， 图$\mathcal{G}_{\mathcal{X}^k}$定义为：顶点集对应于$\mathcal{X}^k$中的胞腔，边对应于$\mathcal{X}^k \times \mathcal{X}^k$中通过函数$sim$映射成非零值的胞腔对。因此，一对 $(enc, dec)$ 就对应一对$(enc_{\mathcal{G}}, dec_{\mathcal{G}})$，各函数的形式分别为$enc_{\mathcal{G}}\colon \mathcal{G}_{\mathcal{X}^k} \to \mathbb{R}$ 和 $dec_{\mathcal{G}}\colon \mathbb{R}^d \times \mathbb{R}^d \to \mathbb{R}$。所以，学习一对$(enc, dec)$可以归约为学习一对 $(enc_{\mathcal{G}}, dec_{\mathcal{G}})$。
+```
+
+[TopoEmbedX](https://github.com/pyt-team/TopoEmbedX), 是我们贡献的三个软件包中的一个，支持胞腔复形、单纯复形、CCs上的高阶表征学习，其主要计算原则就是命题\@ref(prp:convert-graphtocc)。 需要特别说的是, TopoEmbedX 首先把高阶域转换为相应增强Hasse图的子图，然后利用已有的图表示学习算法来计算子图的元素嵌入。 鉴于增强 Hasse 图的元素与原始高阶域之间的对应关系，这样就可以获得高阶域的嵌入。
+
+```{remark}
+根据我们对 Hasse 图的讨论，特别是将 CCNN 上的计算转换为（Hasse）图上的计算的能力，有人可能会说，GNNs 已经足够，不需要 CCNN 了。然而，这是一个误导性线索，因为任何计算都可以用计算图来表示。在 CC 的增强 Hasse 图上应用标准 GNN 并不等同于应用 CCNN。这一点将在第  \@ref(on-the-equivariance-of-ccnns)节中变得更加清晰，在这一节中，我们将介绍CCNN的*等变性（equivariances）*。.
+```
+
+## CCNNs的等变性{#on-the-equivariance-of-ccnns}
+
+与图类似，高阶深度学习模型，尤其是 CCNNs，应始终与其底层*等变性* [@bronstein2021geometric] 结合起来考虑。现在，我们为 CCNNs 的*置换（permutation）*和*方向等变（orientation equivariance）*提供新的定义，并提请注意它们与传统的GNNs等变性概念之间的关系。
+
+### CCNNs的置换等变{#permutation-equivariance-of-ccnns}
+
+命题 \@ref(prp:structure)描述了CC的结构，受其启发，本节将介绍置换等变CCNNs。我们将首先定义置换群在共链映射空间上的行为。
+
+```{definition, perm, name="共链映射空间上的置换，Permutation action on space of cochain maps"}
+令 $\mathcal{X}$是CC，令$\mbox{Sym}(\mathcal{X}) = \prod_{i=0}^{\dim(\mathcal{X})} \mbox{Sym}(\mathcal{X}^k)$ 是 $\mathcal{X}$上胞腔的秩保持置换（rank-preserving permutations）群，令 $\mathbf{G}=\{G_k\}$是定义在$\mathcal{X}$上的共链映射，$G_k  \colon \mathcal{C}^{i_k}\to \mathcal{C}^{j_k}$, $0\leq i_k,j_k\leq \dim(\mathcal{X})$的序列，令$\mathcal{P}=(\mathbf{P}_i)_{i=0}^{\dim(\mathcal{X})} \in \mbox{Sym}(\mathcal{X})$. 则，可定义$\mathbf{G}$上$\mathcal{P}$的*置换行为（permutation (group) action）* 为$\mathcal{P}(\mathbf{G}) = (\mathbf{P}_{j_k} G_{k} \mathbf{P}_{i_k}^T )_{i=0}^{\dim(\mathcal{X})}$ .
+```
+
+在定义\@ref(def:eqv)中，我们用定义\@ref(def:perm)中给出的群操作引入了置换等变CCNNs。定义\@ref(def:eqv)泛化了文献[@roddenberry2021principled; @schaub2021signal]中的相关定义，更详细的讨论可参阅文献[@joglwe2022; @velivckovic2022message]。定义中，我们使用 $\mbox{Proj}_k \colon \mathcal{C}^1\times \cdots \times \mathcal{C}^m \to \mathcal{C}^k$ 来表示满足 $1\leq k \leq m$的标准 $k$-th 投影（projection ），该投影通常表述为 $\mbox{Proj}_k ( \mathbf{H}_{1},\ldots, \mathbf{H}_{k},\ldots,\mathbf{H}_{m})= \mathbf{H}_{k}$ ）.
+
+```{definition, eqv, name="置换等变CCNN，Permutation-equivariant CCNN"}
+令 $\mathcal{X}$是CC，$\mathbf{G}= \{G_k\}$是定义在$\mathcal{X}$上的有限共链映射序列， $\mathcal{P}=(\mathbf{P}_i)_{i=0}^{\dim(\mathcal{X})} \in \mbox{Sym}(\mathcal{X})$。 有如下形式的CCNN：
+\begin{equation*}
+\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\colon \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m} \to \mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \cdots \times \mathcal{C}^{j_n}
+\end{equation*}
+称上述形式为*置换等变CCNN*，如果：
+\begin{equation}
+\mbox{Proj}_k \circ \mbox{CCNN}_{\mathbf{G};\mathbf{W}}(\mathbf{H}_{i_1},\ldots ,\mathbf{H}_{i_m})=
+\mathbf{P}_{k} \mbox{Proj}_k \circ
+\mbox{CCNN}_{\mathcal{P}(\mathbf{G});\mathbf{W}}(\mathbf{P}_{i_1} \mathbf{H}_{i_1}, \ldots ,\mathbf{P}_{i_m} \mathbf{H}_{i_m})
+\end{equation}
+对所有$1 \leq k\leq m$ 和任意 $(\mathbf{H}_{i_1},\ldots ,\mathbf{H}_{i_m}) \in\mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m}$ 都成立。
+```
+
+定义 \@ref(def:eqv) 泛化了GNNs的置换等变性的相应概念。对于一个有$n$个顶点和邻接矩阵 $A$的图，用$\mathrm{GNN}_{A;W}$表示该图上的GNN。令 $H \in \mathbb{R}^{n \times k}$是顶点特征，那么对于$P \in \mbox{Sym}(n)$有$P \,\mathrm{GNN}_{A;W}(H) = \mathrm{GNN}_{PAP^{T};W}(PH)$，
+则说$\mathrm{GNN}_{A;W}$ 是置换等变的。
+
+一般来讲，使用 Definition \@ref(def:eqv)可能很麻烦。用聚合节点来表征等变性更为简便。为此，请回想一下，张量图的高度是从任意源节点到任意目标节点的最长路径，且命题\@ref(prp:simple)允许我们用聚合节点来表达高度为1的张量图。
+
+```{proposition, simple, name="高度为1的张量图可看作聚合节点，Tensor diagrams of height one as merge nodes"}
+令  $\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\colon \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m} \to \mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \cdots \times \mathcal{C}^{j_n}$是张量图高度为1的CCNN，那么
+\begin{equation}
+		\label{merge_lemma}
+		\mbox{CCNN}_{\mathbf{G};\mathbf{W}}=(
+		\mathcal{M}_{\mathbf{G}_{j_1};\mathbf{W}_1},\ldots,
+		\mathcal{M}_{\mathbf{G}_{j_n};\mathbf{W}_n}),
+(\#eq:merge-lemma)
+\end{equation}
+	其中， $\mathbf{G}_k \subseteq \mathbf{G}$.
+```
+
+```{proof}
+令 $\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\colon \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m} \to \mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \cdots \times \mathcal{C}^{j_n}$是张量图高度为1的CCNN。由于函数 $\mbox{CCNN}_{\mathbf{G};\mathbf{W}}$的共域是 $\mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \ldots \times \mathcal{C}^{j_n}$，那么 $\mbox{CCNN}_{\mathbf{G};\mathbf{W}}$由$n$个函数 $F_k\colon  \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m} \to \mathcal{C}^{j_k}$确定（$1 \leq k \leq n$）。 由于$\mbox{CCNN}_{\mathbf{G};\mathbf{W}}$的张量图高度为1，那么每个函数 $F_k$ 的高度也为1，因此根据定义它是一个聚合节点。结果得证。
+```
+
+命题 \@ref(prp:simple) 指出高度为1的张量图中的每个目标节点 $j_k$ 都是由目标节点 $j_k$ 的边的标签组成的算子 $\mathbf{G}_{j_k}$ 指定的聚合节点。定义\@ref(def:eqv) 引入了CCNNs置换不变性的一般性概念，定义\@ref(def:node-equivariance) 引入了置换不变聚合节点的概念。由于聚合节点是CCNN，所以定义 \@ref(def:node-equivariance)是定义\@ref(def:eqv)的特例。
+
+```{definition, node-equivariance, name="置换不变聚合节点，Permutation-equivariant merge node"}
+令 $\mathcal{X}$是CC，$\mathbf{G}= \{G_k\}$是用$G_k\colon C^{i_k}(\mathcal{X})\to C^{j}(\mathcal{X})$定义在$\mathcal{X}$上的共链算子的有限序列，$\mathcal{P}=(\mathbf{P}_i)_{i=0}^{\dim(\mathcal{X})} \in \mbox{Sym}(\mathcal{X})$。称公式\@ref(eq:sum)中的聚合节点是 *置换不变聚合节点*，如果满足：
+\begin{equation}
+\mathcal{M}_{\mathbf{G};\mathbf{W}}(\mathbf{H}_{i_1},\ldots ,\mathbf{H}_{i_m})= \mathbf{P}_{j}  \mathcal{M}_{\mathcal{P}(\mathbf{G});\mathbf{W}}(\mathbf{P}_{i_1} \mathbf{H}_{i_1}, \ldots ,\mathbf{P}_{i_1} \mathbf{H}_{i_m})
+\end{equation}
+对任何$(\mathbf{H}_{i_1},\ldots ,\mathbf{H}_{i_m}) \in \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m}$.
+```
+```{proposition, height1, name="高度为1且有聚合节点的的CCNNs"}
+令 $\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\colon \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m} \to \mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \cdots \times \mathcal{C}^{j_n}$是张量图高度为1的CCNN，那么当且仅当公式\@ref(eq:merge-lemma)中的聚合节点$\mathcal{M}_{\mathbf{G}_{j_k};\mathbf{W}_k}$，$1 \leq k \leq n$，是置换等变时，$\mbox{CCNN}_{\mathbf{G};\mathbf{W}}$ 是置换等变。
+```
+
+```{proof}
+如果 CCNN高度为1，那么根据命题 \@ref(prp:simple), 有$\mbox{Proj}_k \circ \mbox{CCNN}_{\mathbf{G};\mathbf{W}}(\mathbf{H}_{i_1},\ldots ,\mathbf{H}_{i_m})= \mathcal{M}_{\mathbf{G}_{j_k};\mathbf{W}_k}$。从聚合节点等变（参见定义\@ref(def:node-equivariance)）和CCNN置换等变（参见定义\@ref(def:eqv)）可自然得出这个结论。
+```
+
+最后, 定理 \@ref(thm:height2) 用聚合节点来描述CCNNs的置换等变性，从这角度来看，定理\@ref(thm:height2)提供了CCNNs置换等变的适用版本。 provides a practical version of permutation equivariance for CCNNs.
+
+```{theorem, height2, name="置换等变CCNN和聚合节点，Permutation-equivariant CCNN and merge nodes"}
+ 如果$\mbox{CCNN}_{\mathbf{G};\mathbf{W}}$是置换等变，当且仅当 $\mbox{CCNN}_{\mathbf{G};\mathbf{W}}$中每个聚合节点都是置换等变的。
+```
+
+```{proof}
+命题 \@ref(prp:height1) 证明了高度为1的CCNNs的置换等变。对于高度为$n$的CCNNs，只需注意到高度为$n$的CCNN可由高度为1的CCNNs组合而得到，并且两个置换等变网络的组合也仍然是置换等变网络。
+```
+
+```{remark}
+置换等变假定每维的所有胞腔都是使用独立的索引来标注，如果标记CC中的胞腔用 $\mathcal{P}(S)$的子集的幂集$\mathcal{P}(S)$，而不是用索引，那么，我们只需考虑幂级置换 胞腔的置换引起的幂集置换，以确保结构保持关系。因此，只需要考虑由 0-cell构成的的幂集排列，以确保排等边差关系。
+```
+
+```{remark}
+GNN 具有等变性，指图形顶点集和顶点集上的输入信号的置换都产生相同的 GNN 输出置换。 因此，在底层 CC 的增强 Hasse 图上应用标准 GNN 并不等同于应用 CCNN。 虽然信息传递结构相同，但标准 GNN 和 CCNN 的权重共享和置换等变性却是不同的。 尤其，定义 \@ref(def:maps) 给出了额外的结构，在对增强Hasse图的顶点进行任意置换时，这种结构不会被保持。 因此, 为了将 CCNN 上的信息传递归约为相关的增强Hasse图上的信息传递，就必须小心谨慎。具体来说，我们只需考虑增强Hasse图中由相应 CC 中 0-cells的置换诱导的顶点标签的置换子群。 因此，采用拓扑学的丰富概念来思考分布式结构化学习架构是有价值的，因为拓扑结构有助于推理计算，而这些方式并不存在基于图的方法范围内。
+```
+
+```{remark}
+请注意，命题 \@ref(prp:convert-graphtocc))与前面的注释并不矛盾。事实上，命题\@ref(prp:convert-graphtocc) 中描述的计算是在 Hasse 图的一个特定子图上进行的，该子图的顶点是底层胞腔复形的 $k$-cells。一旦在计算过程中同时考虑不同维度，基于图的网络和 TDL 网络之间的差异就会开始显现。
+```
+
+### CCNNs的方向等变{#orientation-equivariance-of-ccnns}
+
+当 CC 被归约为正则胞腔复形时，也可以将方向等变引入 CCNN。类似于定义 \@ref(def:perm)，我们将引入以下关于 CC 的方向作用的定义。
+
+```{definition, orientation, name="对角共链映射空间上的方向作用，Orientation action on space of diagonal-cochain maps"}
+令 $\mathcal{X}$是CC， $\mathbf{G}=\{G_k\}$是定义在$\mathcal{X}$上的$G_k  \colon \mathcal{C}^{i_k}\to \mathcal{C}^{j_k}$, $0\leq i_k,j_k\leq \dim(\mathcal{X})$的共链算子序列。令 $O(\mathcal{X})$是$\mathcal{D}=(\mathbf{D}_i)_{i=0}^{\dim(\mathcal{X})}$ 对角矩阵群，对角线上的值为 $\pm 1$ ，矩阵大小为$|\mathcal{X}^k| \times |\mathcal{X}^k|$，使得 $\mathbf{D}_0=I$。 用$\mathcal{D}(\mathbf{G}) = (\mathbf{D}_{j_k} G_{k} \mathbf{D}_{i_k})_{i=0}^{\dim(\mathcal{X})}$来定义$\mathbf{G}$上的 *方向(群)作用*$\mathcal{D}$。
+```
+
+定义 \@ref(def:oe)使用定义\@ref(def:orientation)引入的群作用来定义了CCNNs的方向等变， CCNNs 的方向等变性(定义 \@ref(def:oe)) 用与CCNNs的置换等变类似的方式(定义 \@ref(def:eqv))被提出。
+
+```{definition, oe, name="方向等变CCNN，Orientation-equivariant CCNN"}
+令 $\mathcal{X}$是CC，令 $\mathbf{G}= \{G_k\}$定义在$\mathcal{X}$上的有限共链算子序列，令 $\mathcal{D} \in O(\mathcal{X})$，那么形如
+\begin{equation*}
+\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\colon \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m} \to \mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \cdots \times \mathcal{C}^{j_n}
+\end{equation*}
+的CCNN被称为 *方向等变CCNN* ，如果满足
+\begin{equation}
+\mbox{Proj}_k \circ \mbox{CCNN}_{\mathbf{G};\mathbf{W}}(\mathbf{H}_{i_1},\ldots ,\mathbf{H}_{i_m})=\mathbf{D}_{k} \mbox{Proj}_k \circ \mbox{CCNN}_{\mathcal{D}(\mathbf{G});\mathbf{W}}((\mathbf{D}_{i_1} \mathbf{H}_{i_1}, \ldots ,\mathbf{D}_{i_1} \mathbf{H}_{i_m}))
+\end{equation}
+对所有 $1 \leq k\leq m$ 和任何 $(\mathbf{H}_{i_1},\ldots ,\mathbf{H}_{i_m}) \in \mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m}$.
+```
+
+命题 \@ref(prp:simple) 和 \@ref(prp:height1) 对于方向等变的情况也可以类比说明。我们在此跳过这些事实的陈述，只陈述用聚合节点表征 CCNN 方向等变的主要定理。
+
+```{theorem, height3, name="方向等变CCNN和聚合节点，Orientation-equivariant CCNN and merge nodes"}
+ $\mbox{CCNN}_{\mathbf{G};\mathbf{W}}$ 是方向等变的，当且仅当$\mbox{CCNN}_{\mathbf{G};\mathbf{W}}$中的每个聚合节点都是方向等变的。
+```
+
+```{proof}
+定理 \@ref(thm:height3)的证明类似于定理 \@ref(thm:height2)的证明。
+```

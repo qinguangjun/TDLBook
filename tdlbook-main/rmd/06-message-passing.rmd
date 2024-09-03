@@ -1,0 +1,136 @@
+# (PART\*) 第三部分：高阶消息传递（Higher-order message passing） {-}
+
+# 消息传递{#message-passing}
+
+在本节中，我们将解释在第\@ref(push-forward-operator-and-merge-node)节中引入的聚合节点与高阶消息传递之间的关系。 特别是，我们证明了 CC 上的高阶消息传递可以通过第 \@ref(the-main-three-tensor-operations)节中介绍的基本张量运算来实现。 此外，我们还证明了 CCANNs（见章节\@ref(combinatorial-complex-attention-neural-networks)）与高阶消息传递之间的联系，并介绍了高阶消息传递的注意力版本。我们首先定义了CC上的高阶消息传递，泛化了[@hajijcell]中引入的概念。
+
+我们要指出的是，这里讨论的许多构造都是最基本的形式，但还可以进一步扩展。这个方向的一个重要方面是构建与特定群的作用相关的不变量或等变量的信息传递协议。
+
+## 高阶消息传递的定义{#definition-of-higher-order-message-passing}
+
+高阶消息传递指的是一种计算框架，它涉及使用一组邻域函数在高阶域中的实体和胞腔之间交换消息。 在定义\@ref(def: homp-definition)中，我们形式化了CCs的高阶消息传递概念,图\@ref(fig:homp)说明了定义\@ref(def:homp-definition)。
+
+```{definition, homp-definition, name="CC上的高阶消息传递(Higher-order message passing)"}
+令 $\mathcal{X}$是CC， $\mathcal{N}=\{ \mathcal{N}_1,\ldots,\mathcal{N}_n\}$是定义在 $\mathcal{X}$上的邻域函数几何，$x$是胞腔， 并且对于某个$\mathcal{N}_k \in \mathcal{N}$ 有$y\in \mathcal{N}_k(x)$。 胞腔$x$ 和 $y$之间的*message* $m_{x,y}$依赖于两个胞腔或胞腔上支持的数据。用$\mathcal{N}(x)$表示多集合$\{\!\!\{ \mathcal{N}_1(x) , \ldots , \mathcal{N}_n (x) \}\!\!\}$，用$\mathbf{h}_x^{(l)}$表示在层$l$的胞腔$x$上支持的某些数据。由$\mathcal{N}$诱导的$\mathcal{X}$上的高阶消息传递按如下四点规则来定义。
+
+\begin{align}
+m_{x,y} &= \alpha_{\mathcal{N}_k}(\mathbf{h}_x^{(l)},\mathbf{h}_y^{(l)}), (\#eq:homp0) \\
+m_{x}^k &=  \bigoplus_{y \in \mathcal{N}_k(x)}  m_{x,y}, \; 1\leq k \leq n, (\#eq:homp1) \\
+m_{x} &=  \bigotimes_{ \mathcal{N}_k \in \mathcal{N} } m_x^k, (\#eq:homp2) \\
+\mathbf{h}_x^{(l+1)} &= \beta (\mathbf{h}_x^{(l)}, m_x).
+(\#eq:homp3)
+\end{align}
+其中, $\bigoplus$是置换不变性聚合函数（permutation-invariant aggregation function），称作 $x$的*内领域（intra-neighborhood）*； $\bigotimes$是$x$的*外邻域（inter-neighborhood）* ，称作聚合函；$\alpha_{\mathcal{N}_k},\beta$ 等是可微函数。
+```
+
+```{r homp, echo=FALSE, fig.align="center", fig.cap="高阶信息传递示例. 左侧：选择一系列邻域函数 $\\mathcal{N}_1,\\ldots,\\mathcal{N}_k$， 选择通常取决于学习任务。 右侧：对于每个 $\\mathcal{N}_k$ ，使用内部邻域函数 $\\bigoplus$ 聚合消息。 然后，用邻域间函数 $\\bigotimes$ 汇集从所有邻域获得的最终信息。"}
+knitr::include_graphics('figures/homp.png', dpi=NA)
+```
+
+关于定义 \@ref(def:homp-definition)的一些讨论如下。首先，方程 \@ref(eq:homp0)中的信息$m_{x,y}$并不仅仅取决于胞腔 $x、y$ 上支持的数据$\mathbf{h}_x^{(l)}$、$\mathbf{h}_y^{(l)}$，还取决于胞腔本身。例如，如果$\mathcal{X}$是一个胞腔复形，那么在计算信息$m_{x,y}$时，$x$和$y$的*方向*都会被考虑在内。 另外，如果$x\cup y$ 或 $x\cap y$ 是 $\mathcal{X}$ 中的胞腔，那么在计算信息$m_{x,y}$时包含它们的数据也可能是有用的。这种独特的特性只体现在高阶域中，而不会出现在基于图的消息传递框架中[@gilmer2017neural;@bronstein2021geometric]^[$m_{x,y}$中的消息 “方向 ”是从$y$到$x$。一般来说，$m_{x,y}$ 和 $m_{y,x}$是不相等的]。其次，高阶消息传递依赖于邻域函数集$\mathcal{N}$的选择。这也是只有在高阶领域中才会出现的独特特征，在高阶领域中，邻域函数必然是由一组邻域关系来描述的，而不是像基于图的消息传递那样由图邻接关系来描述。 第三，在公式 \@ref(eq:homp0)中，由于$y$是根据邻域关系$\mathcal{N}_k \in\mathcal{N}$来隐含定义的，所以函数$\alpha_{\mathcal{N}_k}$和消息$m_{x,y}$都取决于$\mathcal{N}_k$。第四，邻域间 $\bigotimes$ 并不一定非得是一个置换不变的聚合函数。 例如，可以在多重集合 $\mathcal{N}(x)$ 上设置一个阶（order），并根据这个阶计算$m_x$。最后，高阶消息传递依赖于两个聚合函数，即邻内聚合函数和邻间聚合函数，而基于图的消息传递依赖于一个聚合函数。正如第\@ref(combinatorial-complexes)章节中所说明的，集合 $\mathcal{N}$的选择，使得可以在高阶消息传递中使用各种邻域函数。
+
+```{remark}
+定义 \@ref(def:pushing-exact-definition)中给出的前推算子与公式 \@ref(eq:homp0)的更新规则有关。 一方面，公式\@ref(eq:homp0)需要两个共链$\mathbf{X}_i= [\mathbf{h}_{x^i_1}^{(l)},\ldots,\mathbf{h}_{x^i_{|\mathcal{X}^i|}}^{(l)}]$  和 $\mathbf{Y}_{j}^{(l)}=[\mathbf{h}_{y^{j}_1}^{(l)},\ldots,\mathbf{h}_{y^{j}_{|\mathcal{X}^{j}|}}^{(l)}]$ 来计算 $\mathbf{X}^{(l+1)}_i = [\mathbf{h}_{x^i_1}^{(l+1)},\ldots,\mathbf{h}_{x^i_{|\mathcal{X}^i|}}^{(l+1)}]$，因此$\mathcal{C}^j$ 
+ 和$\mathcal{C}^i$上的信号必须存在，才能计算公式\@ref(eq:homp0)。 从这个角度来看，把这个操作看作更新规则是很自然和习惯的。另一方面，定义 \@ref(def:pushing-exact-definition)中的前推算子计算的是在给定共链 $\mathbf{H}_i\in \mathcal{C}^i$时，$\mathcal{C}^j$中的共链$\mathbf{K}_{j}$。 由于只需要 $\mathbf{H}_i$ 一条共链就可以完成这个计算，所以我们可以很自然地把方程 \@ref(eq:functional)看作一个函数。更多详情，请参见第 \@ref(merge-nodes-and-higher-order-message-passing-a-qualitative-comparison)节。
+```
+
+定义\@ref(def:homp-definition)给出的高阶消息传递框架可用于构造CC上的新的神经网络架构，正如在图\@ref(fig:tdl)中隐含反应的那样。首先，对于给定的的CC $\mathcal{X}$，给出$\mathcal{X}$上支持的共链 $\mathbf{H}_{i_1}\ldots, \mathbf{H}_{i_m}$。 其次，根据期望的学习任务选择合适的邻域函数集合。然后,用选定的邻域函数在输入共链$\mathbf{H}_{i_1}\ldots, \mathbf{H}_{i_m}$上执行定义\@ref(def:homp-definition)中的更新规则。 重复第2、3步，直到获得最终结果。
+
+```{definition, hmpsnn, name="高阶消息传递神经网络，Higher-order message-passing neural network"}
+凡是基于定义\@ref(def:homp-definition)构造的任何神经网络都可称作*高阶消息传递神经网络*.
+```
+
+## 高阶消息传递神经网络就是CCNNs{#higher-order-message-passing-neural-networks-are-ccnns}
+                                
+在本节，将表明高阶消息传递计算可以用聚合节点计算来实现，因此，高阶消息传递神经网络就可认为是CCNNs。结果，高阶消息传递就可以通过一致性更新规则集合来统一单纯复形、胞腔复形、超图上的消息传递，作为可选项，也可以通过张量图表示语言来实现统一。
+
+```{theorem, mn, name="聚合节点计算，Merge node computation"}
+定义\@ref(def:homp-definition)中的高阶消息传递计算可以用聚合节点计算来实现。
+```
+
+```{proof}
+令 $\mathcal{X}$是CC，$\mathcal{N}=\{ \mathcal{N}_1,\ldots,\mathcal{N}_n\}$是定义\@ref(def:homp-definition)中规定的一组邻域函数，$G_k$是邻域函数$\mathcal{N}_k$诱导的矩阵。假定定义\@ref(def:homp-definition)指定的胞腔 $x$是 $j$-cell，$y \in \mathcal{N}_k(x)$的邻居是 $i_k$-cells。 这里将指出公式 \@ref(eq:homp0)--\@ref(eq:homp3)可以看作是聚合节点的应用实现。接下来，我们将定义的邻域函数是$\mathcal{N}_{Id}(x)=\{x\}$ for $x\in \mathcal{X}$。 此外，我们将用$Id\colon\mathcal{C}^j\to \mathcal{C}^j$来标记与$\mathcal{N}_{Id}$关联的的邻居矩阵，因为它就是一个单位阵（identity matrix）。
+
+> 译者注：最后一句不知道翻的对不对，感觉句子不通顺，意思不明确。
+
+计算公式\@ref(eq:homp0)中的消息$m_{x,y}$涉及到两个共链:
+	\begin{equation*}
+		\mathbf{X}_j^{(l)}=
+		[\mathbf{h}_{x^j_1}^{(l)},\ldots,\mathbf{h}_{x^j_{|\mathcal{X}^j|}}^{(l)}],~
+		\mathbf{Y}_{i_k}^{(l)}=
+		[\mathbf{h}_{y^{i_k}_1}^{(l)},\ldots,\mathbf{h}_{y^{i_k}_{|\mathcal{X}^{i_k}|}}^{(l)}].
+	\end{equation*}
+每个消息$m_{x^{^j}_t, y^{i_k}_s }$都与矩阵$G_k$中的一个项$[G_k]_{st}$相对应。换句话说，矩阵$G_k$的每个非零项和消息$m_{x^{^j}_t, y^{i_k}_s }$都是一一对应的。
+
+
+从第\@ref(push-forward-operator-and-merge-node)节可以看出，计算 $\{m_x^k\}_{k=1}^n$ 相当于聚合节点 $\mathcal{M}_{Id_j、 G_k}\colon \mathcal{C}^j\times \mathcal{C}^{i_k}\to \mathcal{C}^j$ 执行通过 $\alpha_k$ 和 $\bigoplus$ 确定的计算，并且得出
+	\begin{equation*}
+		\mathbf{m}_j^k=[m_{x^j_1}^k,\ldots,m_{x^j_{|\mathcal{X}^j|}}^k]=
+		\mathcal{M}_{Id_j,G_k}(\mathbf{X}_j^{(l)},\mathbf{Y}_{i_k}^{(l)}) \in \mathcal{C}^{j}.
+	\end{equation*}
+在这个阶段， 有 $n$ $j$-cochains $\{\mathbf{m}_j^k\}_{k=1}^n$。公式\@ref(eq:homp2) 和 \@ref(eq:homp3) ，将这些共链与输入的$j$-cochain $\mathbf{X}_j^{(l)}$聚合。 尤其，计算公式 \@ref(eq:homp2)中的 $m_x$ 相当于在共链  $\{\mathbf{m}_j^k\}_{k=1}^n$上应用$n-1$次
+$\mathcal{M}_{Id_k,Id_k}\colon\mathcal{C}^j $的聚合节点操作。 很明显，首先通过聚合$\mathbf{m}_j^1$和 $\mathbf{m}_j^2$ 来获得 $\mathbf{n}_j^1=\mathcal{M}_{Id_j,Id_j}(\mathbf{m}_j^1,\mathbf{m}_j^2)$。然后，聚合$j$-cochain $\mathbf{n}_j^1$ 和 $j$-cochain $\mathbf{m}_j^3$，等等。最后的聚合节点是执行聚合操作 $\mathbf{n}_j^{n-1}=\mathcal{M}_{Id_j,Id_j}(\mathbf{n}_j^{n-2},\mathbf{m}_j^n)$， 也即 $\mathbf{m}_j = [ m_{x_1^j},\ldots, m_{x_{|\mathcal{X}^j|}^j }]$^[请注意，虽然我们对所有聚合节点都使用了相同的符号 $\mathcal{M}_{Id_k,Id_k}$，但这些节点一般都有不同的参数。]. 
+最后，计算由聚合节点$\mathcal{M}_{(Id_j,Id_j)}(\mathbf{m}_j, \mathbf{X}_j^{(l)})$（该计算由公式\@ref(eq:homp3)中的函数$\beta$确定）实现的 $\mathbf{X}_j^{(l+1)}$ 。
+```
+
+定理 \@ref(thm:mn)表明CCs上定义的高阶消息传递网络可以从基本张量操作来构造， 因此它们是 CCNN 的特例。我们在定理\@ref(thm:thm-unifying)中正式阐述了这一结果。
+
+```{theorem, thm-unifying, name="高阶消息传递和CCNs,Higher-order message passing and CCNNs"}
+高阶信息传递神经网络就是 CCNN。
+```
+
+```{proof}
+从定义 \@ref(def:hmpsnn)和定理 \@ref(thm:mn)可以立即得出该结论。
+```
+
+由定理 \@ref(thm:thm-unifying)可知，定义在通用性不如 CCs 的高阶域（如单纯复形、胞腔复形和超图）上的高阶消息传递神经网络也是 CCNNs 的特例。因此，定义\@ref(def:tdd)中引入的张量图形成了一种通用的图解方法，用于表达定义在常用高阶域上的神经网络。
+
+```{theorem, unifying1, name="消息传递神经网络和张量图，Message-passing neural networks and tensor diagrams"}
+Message-passing neural networks defined on simplicial complexes, cell complexes or hypergraphs can be expressed in terms of tensor diagrams and their computations can be realized in terms of the three elementary tensor operators.
+```
+
+```{proof}
+从两点可得出这一结论，即：定理@ref(thm:thm-unifying)，以及单纯复形、胞腔复形和超图可看作是 CCs 的特例实现。
+```
+
+定理 \@ref(thm:thm-unifying) 和 \@ref(thm:unifying1) 基于张量图提出了一个统一的TDL框架，从而为今后的发展提供了空间。 例如, 文献[@mathilde2023] 已经利基于该框架，用张量图来表达了单纯复形、胞腔复形和超图等现有的 TDL 架构。
+
+## 聚合节点和高阶消息传递：量化比较{#merge-nodes-and-higher-order-message-passing-a-qualitative-comparison}
+
+定义 \@ref(def:homp-definition)中给出的高阶消息传递提供了一种更新规则，可以使用由 $\mathcal{N}(x)$ 确定的一组邻域向量 $\mathbf{h}_y^{l}$ 从向量 $\mathbf{h}_x^{l}$ 获得向量 $\mathbf{h}_x^{l+1}$。显然，这个计算框架假定向量 $\mathbf{h}_x^{(l)}$ 和 $\mathbf{h}_{y}^{(l)}$ 是作为输入提供的。 换句话说，根据定义 \@ref(def:homp-definition)需要目标域中的 共链$\mathbf{X}_j^{(l)} \in \mathcal{C}^{j}$，以及共链 $\mathbf{Y}_{i_k}^{(l)} \in \mathcal{C}^{i_k}$，以便计算更新后的 $j-$cochain $\mathbf{X}_j^{(l+1)}$ 。 另一方面，进行聚合节点计算需要一个共链向量 $(\mathbf{H}_{i_1},\mathbf{H}_{i_2})$，这可以从公式 \@ref(eq:sum)和定义 \@ref(def:exact-definition-merge-node)中看出。
+
+这两种计算框架之间的差异可能看起来是符号性的，并且消息传递的视角可能看起来更直观，尤其是在处理基于图的模型时。然而，我们认为，在存在自定义高阶网络架构的情况下，聚合节点框架在计算上更自然、更灵活。为了说明这一点，我们考虑一下图 \@ref(fig:merge-example)中可视化的示例。
+
+在图\@ref(fig:merge-example)中显示的神经网络有一个共链输入向量 $(\mathbf{H}_0,\mathbf{H}_2) \in  \mathcal{C}^0 \times \mathcal{C}^2$，第一层的神经网络负责计算共链$\mathbf{H}_1 \in \mathcal{C}^1$，第二层的神经网络负责计算共链 $\mathbf{H}_3\in \mathcal{C}^3$。为了在第一层获得共链$\mathbf{H}_1$，需要考察由$B_{0,1}^T$ 和 $B_{1,2}$诱导的邻域函数。 然而，如果使用公式 \@ref(eq:homp0) 和 \@ref(eq:homp1)执行在图\@ref(fig:merge-example)中张量图第一层确定的计算时，那么应该注意到在$\mathcal{C}^1$上并没有提供共链来作为输入的一部分。因此，当使用公式\@ref(eq:homp0) 
+和\@ref(eq:homp1)时，需要特殊处理，因为向量 $\mathbf{h}_{x^1_j}$ 还没有计算出来。 请注意，GNN 中不存在这种人工制品，因为它们经常更新节点特征，而节点特征通常是作为输入的一部分提供的。具体来说，在 GNN 中，公式 \@ref(eq:homp0)更新规则中的前两个参数是在底层图的 0-cells上支持的共链。
+
+```{r merge-example, echo=FALSE, fig.align="center", fig.cap="图中描述的神经网络可以实现为两个聚合节点的组合。更具体的说，输入是共链向量 $(\\mathbf{H}_0,\\mathbf{H}_2)$，第一个聚合节点负责计算1-chain $\\mathbf{H}_1 = \\mathcal{M}_{B_{0,1}^T,B_{1,2}} (\\mathbf{H}_0,\\mathbf{H}_2)$；第二个聚合节点 $\\mathcal{M}_{B_{1,3}^T, B_{2,3}} \\colon\\mathcal{C}^1 \\times \\mathcal{C}^2 \\to \\mathcal{C}^3$负责计算3-cochain $\\mathbf{H}_3=\\mathcal{M}_{B_{1,3}^T, B_{2,3}}(\\mathbf{H}_1,\\mathbf{H}_2)$。从聚合节点的角度来看，可以计算出 1-cells 胞腔和 3-cells 胞腔支持的共链，而无需这些胞腔的初始共链。另一方面，高阶消息传递框架有两个主要限制：一是假定输入域所有维度所有胞腔上都有支持的初始共链，二是假定每次迭代都能更新输入域所有维度所有胞腔上所支持的所有共链。"}
+knitr::include_graphics('figures/merge_example_scaled.png', dpi=NA)
+```
+
+类似的，为了计算图\@ref(fig:merge-example)中第二层的共链$\mathbf{H}_3 \in  \mathcal{C}^3$，就必须考虑由$B_{1,3}^T$ and $B_{2,3}$诱导的邻域函数，而且必须使用共链向量$(\mathbf{H}_1,\mathbf{H}_2)$。
+ 这意味着图\@ref(fig:merge-example)中给出的神经网络计算得出的 共链$\mathbf{H}_1$ 和 $\mathbf{H}_3$ 不能通过迭代过程得到。 此外，输入向量 $\mathbf{H}_0$ 和$\mathbf{H}_2$ 在迭代过程的任何一步都不会被更新，结果就导致共链 $\mathbf{H}_1$  和 $\mathbf{H}_3$ 也从不会被更新。从更新规则（如高阶消息传递框架中出现的更新规则）的角度来看（定义\@ref(def:homp-definition)），这种设置是不自然的，因为它假定所有维度的*所有胞腔上的初始共链*都可作为输入，并在每次迭代时都要对输入域的的复形上*所有胞腔所支持的所有共链进行更新*。
+ 
+事实上，如果在使用高阶消息传递框架时遇到这样的困难，可以使用一些临时的解决办法，比如通过开启或关闭某些共链的迭代，或通过引入辅助共链来解决，聚合节点就是为了克服这些限制而设计的。 尤其, 从聚合节点的角度来看，我们可以把图\@ref(fig:merge-example)的第一层看作是函数$\mathcal{M}_{B_{0,1}^T,B_{1,2}}\colon \mathcal{C}^0 \times \mathcal{C}^1 \to \mathcal{C}^1$，参见公式\@ref(eq:functional)。函数 $\mathcal{M}_{B_{0,1}^T,B_{1,2}}$ 把共链向量 $(\mathbf{H}_0,\mathbf{H}_2)$作为输入，然后来计算1-chain $\mathbf{H}_1 = \mathcal{M}_{B_{0,1}^T,B_{1,2}} (\mathbf{H}_0,\mathbf{H}_2)$。 类似的，可以用聚合节点$\mathcal{M}_{B_{1,3}^T, B_{2,3}} \colon
+\mathcal{C}^1 \times \mathcal{C}^2 \to \mathcal{C}^3$来计算3-cochain $\mathbf{H}_3=\mathcal{M}_{B_{1,3}^T, B_{2,3}}(\mathbf{H}_1,\mathbf{H}_2)$。
+
+## 注意力高阶消息传递和CCANNs{#attention-higher-order-message-passing-and-ccanns}
+
+在这里，我们展示了高阶消息传递（定义  \@ref(def:homp-definition)）与 CCANNs（章节\@ref(combinatorial-complex-attention-neural-networks)）之间的联系。我们将首先介绍一个注意力版本的定义 \@ref(def:homp-definition)。
+
+```{definition, attention-homp, name="CC上的注意力高阶消息传递(Attention higher-order message passing on a CC)"}
+令 $\mathcal{X}$是CC，$\mathcal{N}=\{ \mathcal{N}_1,\ldots,\mathcal{N}_n\}$是定义在$\mathcal{X}$上的邻域函数$\mathcal{X}$，$x$是胞腔，并且对于某个$\mathcal{N}_k \in \mathcal{N}$，存在$y\in \mathcal{N}_k(x)$。所谓胞腔$x$和$y$之间的*消息*$m_{x,y}$就是要完成某种计算，它依赖于两个胞腔或他们所支持的数据。用$\mathcal{N}(x)$表示多集 $\{\!\!\{ \mathcal{N}_1(x) , \ldots ,  \mathcal{N}_n (x) \}\!\!\}$，$\mathbf{h}_x^{(l)}$表示层$l$的胞腔$x$支持的数据。$\mathcal{N}$诱导的$\mathcal{X}$上的*注意力高阶消息传递*可沟通过如下四条规则来定义：
+\begin{align}
+m_{x,y} &= \alpha_{\mathcal{N}_k}(\mathbf{h}_x^{(l)},\mathbf{h}_y^{(l)}), (\#eq:ahomp0) \\
+m_{x}^k &=  \bigoplus_{y \in \mathcal{N}_k(x)} a^k(x,y)  m_{x,y}, \; 1\leq k \leq n , (\#eq:ahomp1) \\
+m_{x} &=  \bigotimes_{ \mathcal{N}_k \in \mathcal{N} } b^k m_x^k , (\#eq:ahomp2) \\
+\mathbf{h}_x^{(l+1)} &= \beta (\mathbf{h}_x^{(l)}, m_x) . (\#eq:ahomp3)
+\end{align}
+其中, $a^k \colon \{x\} \times \mathcal{N}_k(x)\to [0,1]$ 是高阶注意力函数(参见定义\@ref(def:hoa)),
+$b^k$ 是满足$\sum_{k=1}^n b^k=1$的可训练的注意力权重,
+$\bigoplus$ 是置换不变性聚合函数，$\bigotimes$ 是一般的聚合函数，  $\alpha_{\mathcal{N}_k}$ 和 $\beta$ 是可微函数。
+```
+
+
+定义\@ref(def:attention-homp) 区别了两类，第一种由函数 $a^k$确定，公式\@ref(eq:ahomp1)的权重 $a^k(x,y)$依赖于邻域函数 $\mathcal{N}_k$和胞腔 $x$ and $y$。更进一步，$a^k(x,y)$确定了 确定了由邻域函数 $\mathcal{N}_k$ 决定的胞腔 $x$ 对其周围邻域 $y\in\mathcal{N}_k$ 的关注度。在章节\@ref(combinatorial-complex-attention-neural-networks)提到的CC-attention前推操作由这些权重来特定的参数化实现。另一方面，公式\@ref(eq:ahomp2)的权重 $b^k$ 仅是邻域$\mathcal{N}_k$的函数，
+并由此决定了胞腔 $x$ 对从每个邻域函数 $\mathcal{N}_k$ 中获得的消息的关注程度。在章节\@ref(combinatorial-complex-attention-neural-networks)给出的CC-attention前推操作中，我们设置$b^k$等于1。然而，聚合节点的概念（参见定义 \@ref(def:exact-definition-merge-node)）可以很容易地扩展为到引入相应的*注意力聚合节点*的概念，这反过来又可以用来在实践中实现公式 \@ref(eq:ahomp2)。 请注意，由权重 $b^k$ 决定的注意力是高阶领域所独有的，在基于图的注意力模型中不会出现。

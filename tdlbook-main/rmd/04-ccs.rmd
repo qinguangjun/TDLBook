@@ -1,0 +1,269 @@
+# (PART\*) 第二部分:组合复形 {-}
+
+# 组合复形{#combinatorial-complexes}
+
+在这一节，我们引入了组合复形（combinatorial complexes ，CCs），一类新的高阶域，它一般化了图、单纯复形、胞腔复形、超图等结构。图\@ref(fig:hon)展示了CCs在这些域上一般化的第一个例子。表\@ref(tab:complexsummary)列举了高阶域和图相关的关系特征,并概括了CCs对这种关系实现一般化的能力。
+
+
+```{r hon, echo=FALSE, fig.align="center", fig.cap="演示CCs怎样一般化不同的域. (a):集合$S$由实体（顶点）抽象组成，但不包含关系(b): 图建模了顶点间的二元关系(例如，$S$的元素). (c): 单纯复形建模了高阶关系的层次化结构 (例如，关系间的关系) ，但对其关系的“形状”有严格的约束。 (d): 与单纯复形类似，胞腔复形建模了高阶关系的层次化结构，但是在关系的形状的表现上更灵活(例如，胞腔)。 (f):超图建模了$S$中元素间的任意集合型关系,但是这些关系不能反应层次化结构。(e): CC组合了胞腔复形（关系间的层次化结构）和超图（任何集合型关系）的特征,将两种域进行了一般化。"}
+knitr::include_graphics('figures/hon.png', dpi=NA)
+```
+
+```{r complexsummary, echo=FALSE}
+feats <- c(
+  '层次化关系(Hierarcy of relations)',
+  '集合型关系(Set-type relations)',
+  '多关系耦合(Multi-relation coupling)',
+  '秩而非基数(Rank not cardinality)'
+)
+coc <- c('√', '√', '√', '√')
+hg <- c('', '√', '', '√')
+cec <- c('√', '', '√', '√')
+sc <- c('√', '', '√', '')
+domains <- data.frame(feats, coc, hg, cec, sc)
+colnames(domains) <- c('关系相关的特征', 'CC', '超图', '胞腔复形', '单纯复形')
+knitr::kable(domains, align=c('l', 'c', 'c', 'c', 'c'), booktabs=TRUE, caption="以表格形式总结拓扑域和图的关系的相关特征. 回想一下，关系是域的一个元素，域通过它的关系和这些关系相互关联的方式来指定的。与关系相关的理想特征在第一列中标出，关系的*层次结构*意味着高阶域的关系可以有不同的等级，*集合型关系*不受关系之间或关系长度的限制，*多关系耦合*意味着每个关系都可以通过定义在高阶域上的多个邻域函数来拥有其他邻近关系，*等级而非基数*表示在高阶域的给定层次中具有相同等级的关系不需要具有相同的基数。")
+```
+
+章节\@ref(cc-definition) 引入了组合复形的定义并提供了若干CCs的示例，章节\@ref(cc-homomorphisms-and-sub-ccs)定义了组合复形同态（CC-homomorphism）的概念并给出了了相关示例，章节\@ref(motivation-for-ccs)从实用角度介绍 CC 结构背后的动，章节\@ref(neighbourhood-functions-on-ccs)展示了邻域矩阵上邻域函数的计算方法，章节\@ref(data-on-ccs)引入了组合复形共链（CC-cochain）的概念。
+
+
+## 组合复形定义{#cc-definition}
+
+我们希望定义一种结构，该结构能够填补单纯/胞腔复形和超图间的代沟，正如章节\@ref(hierarchical-structure-and-set-type-relations)所描述的那样。为此，本章引入了组合复形（combinatorial complex，CC），一种高阶域，可以从三个角度来看，作为一个单纯复形，其胞腔和单纯子可以缺失；作为一个具有松弛结构的广义胞腔复形；或者作为一个通过加入秩函数而丰富的超图。
+
+```{definition, cc, name="组合复形，Combinatorial complex"}
+
+*组合复形（combinatorial complex，CC)*是一个三元组$(S,\mathcal{X},\mbox{rk})$, $S$是集合，$\mathcal{X}$是$\mathcal{P}(S)\setminus\{\emptyset\}$的子集，$\mbox{rk} \colon \mathcal{X}\to \mathbb{Z}_{\ge 0}$是秩函数且满足如下属性:
+
+1. $\forall s\in S, \{s\}\in\mathcal{X}$;
+2. 函数$\mbox{rk}$是保序的（order-preserving），即：如果$x,y\in \mathcal{X}$满足$x\subseteq  y$，那么$\mbox{rk}(x) \leq \mbox{rk}(y)$.
+
+$S$的元素称作*实体（entities）*或*顶点（vertices）*, $\mathcal{X}$的元素称作*关系（relations）*或*胞腔（cells）*, $\mbox{rk}$称作CC的*秩函数（rank function）*。
+```
+
+简单起见, $\mathcal{X}$被用作CC$(S,\mathcal{X},\mbox{rk})$的速记符号。定义\@ref(def:cc)建立了构建高阶网络的框架，在此基础上，我们可以定义通用的高阶深度学习架构。请注意，CC既表现出了层次关系，也表现出了集合类型关系。特别是，CC 的秩函数 $\mbox{rk}$给CC引入了关系的层次结构。此外，由于定义 \@ref(def:cc)中没有关系约束，CCs也可以包含集合型关系。因此，CCs包含了胞腔复形和超图，因为它们结合了两者与关系相关的特征。表 \@ref(tab:complexsummary)提供了 CCs 与常见的高阶网络和图之间关系相关特征的比较总结。
+
+```{remark}
+我们通常要求CC中的每个单一胞腔$\{s\}$的$\mbox{rk}(\{s\})=0$，这种约定使 CCs 自然地与单纯复形和胞腔复形（cellular complexes）相一致。 
+```
+
+胞腔$x\in\mathcal{X}$的秩是$x$上秩函数$\mbox{rk}$的值$\mbox{rk}(x)$，CC$\mathcal{X}$的*维度*$\mbox{dim}(\mathcal{X})$是 $\mathcal{X}$ 中胞腔的最大秩。秩为$k$的胞腔称作*$k$-cell*，记作$x^k$；CC $\mathcal{X}$的*$k$-骨架（skeleton）*记作$\mathcal{X}^{(k)}$，表示$\mathcal{X}$内秩最大为$k$的胞腔的集合；秩为$k$的胞腔集合记作$\mathcal{X}^k$，该集合对应于$\mathcal{X}^k=\mbox{rk}^{-1}(\{k\})$。$1$-cells称作$\mathcal{X}$的*边界（edges）*。一般来讲，CC的边界可以包含不止两个节点，而边仅有两个节点的CCs称作*基于图（graph-based）*的CCs。本文中，主要关注基于图的CCs。
+
+```{example, name="维度为2和3的CCs"}
+图\@ref(fig:ccexother)给出了四个CCs示例。例如，图\@ref(fig:ccexother)(a)是顶点集$S=\{s_0,s_1,s_2\}$上的2维CC，由$0$-cells $\{s_0\}$, $\{s_1\}$，$\{s_2\}$组成 (用橙色表示)，$1$-cell $\{s_0, s_1\}$ (紫色)，$2$-cell $\{s_0, s_1, s_2\} = S$ (蓝色).
+```
+
+```{r ccexother, echo=FALSE, fig.align="center", fig.cap="CCs示例，橙色圆圈代表顶点，粉色、蓝色和绿色分别代表秩为1、2和3的胞腔，(a)、(b) 和 (d) 中的每个 CC 的维度都等于 2，而 (c) 中的 CC 的维度等于 3。"}
+knitr::include_graphics('figures/cc_examples.png', dpi=NA)
+```
+
+## CC同态和子CCs{#cc-homomorphisms-and-sub-ccs}
+
+CC 同态是将 CC 互相联系起来的映射，CC 同态在描述将图或其他高阶域提升为 CC 的过程中发挥着重要作用。直观地说，提升映射是一个定义明确的过程，它将特定类型的域（如图）转换为另一种类型的域（如 CC）。提升映射的用处在于，它能将定义在 CC 上的深度学习模型的应用实现在更常见的域上，如图、胞腔复形或单纯复形。我们将在附录 \@ref(lifting-maps)中详细研究提升映射，并提供相关示例。定义 \@ref(def:maps)正式提出了CC同态的概念。
+
+```{definition, maps, name="CC-同态，CC-homomorphism"}
+从CC $(S_1, \mathcal{X}_1, \mbox{rk}_1)$到另一个CC$(S_2, \mathcal{X}_2, \mbox{rk}_2)$的同态，也称作*CC-同态*，是一个映射函数 $f \colon \mathcal{X}_1 \to \mathcal{X}_2$，该函数需满足如下属性：
+
+1. 如果 $x,y\in\mathcal{X}_1$ 满足 $x\subseteq y$, 那么 $f(x) \subseteq f(y)$. 
+2. 如果 $x\in\mathcal{X}_1$，那么$\mbox{rk}_1(x)\geq \mbox{rk}_2(f(x))$.
+```
+
+定义\@ref(def:maps)的条件2确保CC同态仅映射$\mathcal{X}_1$中的$k$-cell到$\mathcal{X}_2$中秩不大于$k$的胞腔。如果$\forall x \in \mathcal{X}_1, \mbox{rk}_1(x) = \mbox{rk}_2(f(x))$ 并且 $f$是单射（injective），那么称同态映射$f$是*CC-嵌入（CC-embedding）*。CC 嵌入在实践中非常有用，因为它们可以通过用高阶胞腔来增强域（例如图结构），从而将该域 “提升（lifting）”为 CC。示例 \@ref(exm:augmentation) 给出了三种CC嵌入，而示例\@ref(exm:homomorphism)给出的CC同态不是CC嵌入。
+
+
+```{example, augmentation, name="CC嵌入，CC-embeddings"}
+图\@ref(fig:non-embedd-hom)(a) 和 (b)展示了两种CC嵌入。图\@ref(fig:non-embedd-hom)(a)中，左侧图形中的每个胞腔都会被发送到右侧 CC 中的相应胞腔。同样，在图\@ref(fig:non-embedd-hom)(b)中，左边胞腔复形中的每个胞腔都被传送到右边 CC 中的对应胞腔。很容易验证这两个映射都是 CC 嵌入。
+```
+
+```{r non-embedd-hom, echo=FALSE, fig.align="center", fig.cap="CC同态示例. 粉色、蓝色和绿色分别代表秩为1、2、3胞腔。(a): 将 1 维 CC 嵌入 2 维 CC。(b)：一个 2 维的 CC 嵌入一个 3 维的 CC。(c) CC 同态的一个例子。左边CC $\\mathcal{X}_1$，右边是$\\mathcal{X}_2$，同态映射$f$用黑箭头表示。直观地说，CC同态映射 $f$ 可以类似看作是 $S_1 =\\{1, 2, 3、 4\\}$ 和 $S_2 =\\{a, b, c\\}$ 之间连续函数的组合（combinatorial analogue），该连续函数*塌缩（collapses）*胞腔$\\{1,2,3\\}$到胞腔$\\{a,b\\}$，胞腔$\\{1,2,3,4\\}$到胞腔$\\{a,b,c\\}$。从这个角度观察，CC 同态推广了单纯映射[@munkres2018elements]。"}
+knitr::include_graphics('figures/cc_map.png', dpi=NA)
+```
+
+::: {.glossarybox data-latex=""}
+>**译者注**
+>单纯映射(simplicial map)是联系复形的多面体之间的一类重要映射,它是从复形K的多面体|K|到复形L的多面体|L|的连续映射.
+
+:::
+
+```{example, homomorphism, name="CC同态，CC-homomorphism"}
+这里给出一个非CC嵌入的CC同态例子。考虑集合$S_1 = \{1, 2, 3,4\}$和$S_2 = \{a, b, c\}$，令$\mathcal{X}_1$表示由与$S_1$中元素对应的1个3-cell$\{1,2,3,4\}$、1个2-cell$\{1,2,3\}$和4个0-cells组成的$S_1$上的CC。同样，令$\mathcal{X}_2$表示由与$S_2$中元素对应的1个3-cell$\{a,b,c\}$、1个2-cell $\{a,b\}$和3个0-cells。图\@ref(fig:non-embedd-hom)(c)可视化了CCs$\mathcal{X}_1$ 和 $\mathcal{X}_2$。设有函数$f \colon S_1 \to S_2$定义为$f(1) = f(2) = a,~f(3) = b$和$f(4) = c$，很容易验证$f$诱导了从$\mathcal{X}_1$ 到 $\mathcal{X}_2$的CC同态。
+```
+
+```{definition, sub-cc, name="子CC，Sub-CC"}
+令$(S,\mathcal{X}, \mbox{rk})$是一个CC，CC $(S,\mathcal{X}, \mbox{rk})$的*子组合复形（sub-combinatorial complex，sub-CC）* 是 CC $(A,\mathcal{Y},\mbox{rk}^{\prime})$，使得 $A\subseteq S$, $\mathcal{Y}\subseteq\mathcal{X}$ 且 $\mbox{rk}^{\prime} = \mbox{rk}|_{\mathcal{Y}}$是$\mbox{rk}$在$\mathcal{Y}$上的约束（restriction）.
+```
+
+简单起见，本文把子CC $(A,\mathcal{Y},\mbox{rk}^{\prime})$记作$\mathcal{Y}$，任何$A \subseteq S$的子集都能用于按下述方式诱导子CC。考虑带有约束 $\mbox{rk}|_{\mathcal{X}_A}$的集合$\mathcal{X}_A = \{x \in \mathcal{X}  \mid x \subseteq A\}$ ，很容易看到三角$(A,\mathcal{X}_A,\mbox{rk}|_{\mathcal{X}_A})$ 构成了一个CC，称之为由$A$诱导的$\mathcal{X}$的子CC。注意， 集合 $\mathcal{X}$ 中的任何一个胞腔都会诱导出一个子 CC，这个子 CC 是通过考虑包含在其中的所有胞腔而得到的。最后，对于任意 $k$，我们不难发现，CC $\mathcal{X}^{k}$ 的骨架 $\mathcal{X}$ 是一个子 CC。
+
+```{example, sub-cc-ex, name="子CC，Sub-CC"}
+回忆一下图 \@ref(fig:ccexother)(a)中给出的CC $\mathcal{X}= \{\{s_0\}, \{s_1\}, \{s_2\}, \{s_0, s_1\}, \{s_0, s_1, s_2\}\}$，集合$A = \{s_0, s_1\}$诱导了$\mathcal{X}$的子CC$\mathcal{X}_A = \{\{s_0\}, \{s_1\}, \{s_0, s_1\}\}$
+```
+
+## 引入CCs的动机{#motivation-for-ccs}
+
+CCs的定义\@ref(def:cc)旨在实现高阶建模的所有目标，正如章节\@ref(motivation)所概述的那样。为了进一步说明定义 \@ref(def:cc)的动机，我们考虑了 CCs 的池化操作以及 CCs在结构上的一些优势。
+
+### CCs上的池化操作{#pooling-operations-on-ccs}
+
+我们首先考虑图上池化的一般特征，然后演示如何通过 CCs 以统一的方式实现基于图的池化。图 $\mathcal{G}$ 上的通用池化函数是 $\mathcal{POOL} \colon \mathcal{G} \to \mathcal{G}^{\prime }$，其中 $\mathcal{G}^{\prime}$ 是代表 $\mathcal{G}$的粗粒度版本的池化图。 $\mathcal{G}^{\prime}$的顶点对应于原图$\mathcal{G}$中的顶点簇（超级顶点），而$\mathcal{G}^{\prime}$中的边表示这些顶点簇之间是否存在连接。参见图 \@ref(fig:pooling-motivation)。
+
+```{r pooling-motivation, echo=FALSE, fig.align="center", fig.cap="通过 CCs 实现的基于图的池化操作。(a): 在这里，图的池化操作用池化函数来表示，该函数将图及其上定义的数据映射到该图的粗粒度版本上。右侧池化图中的超级顶点（super-vertices）与左侧原图中的顶点簇相对应，而右侧图中的边则表示这些簇之间是否存在连接关系。 (b-d): 右侧池化图中的超级顶点可以通过从原图中得到的 CC 中的高阶增强胞腔（蓝色胞腔）来实现，右侧池化图中的边可以通过顶点与高阶增强胞腔之间的 CC的 关联矩阵来实现。"}
+knitr::include_graphics('figures/pooling_motivation.png', dpi=NA)
+```
+
+基于CCs提出的一些形式化描述将把基于图的池化操作作为特例来描述。尤其，在$\mathcal{G}^{\prime}$的顶点上定义的超级顶点（$\mathcal{G}$上的顶点簇），通过将超级顶点表示为胞腔来增强$\mathcal{G}$，从而可以实现为CC上的高秩胞腔（higher-order ranked cells）。这种层次化结构由原图$\mathcal{G}$，还有带高秩胞腔增强的CC一起组成。这种以基于CC的高秩胞腔为基础实现的图上的池化操作是层次化的，因为新的胞腔可以以递归的方式组合在一起，从而获得底层空间的粗粒度版本。有了这种对 CCs 进行高阶池化操作的概念，我们在 \@ref(graph-pooling-as-cc-pooling)和 \@ref(image-pooling-as-cc-pooling)两节中分别演示了如何表达图/网格上的池化操作和基于图像的池化操作。 从这个角度来看，CCs提供了在图、图像等高阶网络上定义池化操作的通用框架。
+
+此外，还通过高阶池化操作探讨了 CCs 的两个主要特点。首先，CCs模型化集合型胞腔的能力为在顶点簇的形状上定义池化操作提供了灵活性，这种灵活性是实现自定义池化操作所必需的，在这种操作中，簇的形状可能是特定于任务的。其次，CC上的高秩胞腔（higher-order ranked， cells）对应于底层空间的粗粒度版本，这里提出的高阶池化可用于构建更粗粒度的表征，参见图\@ref(fig:pooling-motivation)。需要注意的是，超图和胞腔复形等通用性较低的结构无法同时灵活地进行簇整形（ cluster shaping）和生成更粗粒度的底层空间表示。
+
+### CCs的结构化优势{#structural-advantages-of-ccs}
+
+除了实现基于图的池化操作，CCs还提供了多种结构优势。尤其，具体来说，CCs统一了众多常用的高阶网络，使得可以对拓扑特性进行细粒度分析，促进深度学习中拓扑特征的消息传递，并能灵活建模关系之间的关系。
+
+**灵活的高阶结构和细粒度消息传递**。消息传递图模型在图的顶点之间传递消息，以学习图的表示，消息是根据顶点和边的特征计算出来的。这些消息更新顶点和边的特征，并从图的局部邻域收集消息。与其他高阶网络和图相比，CCs 的秩函数在两个方面更具通用性。首先，秩函数使得CCs在高阶结构表示方面更具灵活性；其次，在深度学习场景下，秩函数为CC提供了更细粒度的信息传递能力。例如，超图中的每个超边都被视为一个集合，没有秩的概念，因此所有超边都被统一处理，没有任何区别。更多详情请参见章节\@ref(combinatorial-complex-neural-networks)。
+
+**在关系间灵活的建模关系**，在用拓扑数据填充拓扑域的过程中，由于域中所有胞腔都缺乏可自然支持的数据，因此构建有意义的关系可能具有挑战性，在处理单纯复形或胞腔复形时尤其如此。例如，一个单纯复形的 $k$ 个实体之间的任何关系都必须从 $k-1$ 个实体的所有相应子集的关系中建立。现实世界的数据可能包含这些关系的一个子集，而不是全部。虽然胞腔复形在关系建模方面提供了更大的灵活性，但胞腔复形必须满足的边界条件限制了允许的关系类型。为了消除关系之间的所有限制，超图可以提供帮助，因为超图允许任意的集合类型关系。不过，超图不提供层次特征，这在需要同时考虑局部和全局特征的应用中可能会处于劣势。
+
+## CCs上的邻域函数{#neighbourhood-functions-on-ccs}
+
+我们在 CC 上引入了 CC 邻域函数的概念作为一种利用CC中拓扑信息的机制。在实践中，精心设计邻域函数通常是学习任务的一部分。出于我们的目的，我们只讨论两类广义邻域函数，即指定邻接和关联的函数(adjacency and incidence)。从深度学习的角度来看，
+从深度学习的角度看，CC-邻域函数奠定了扩展深度学习模型的一般性消息传递方案的基础，从而涵盖了几种最先进的 GNNs [@battaglia2016interaction; @kipf2016semi; @battaglia2018relational; @fey2019fast; @loukas2019graph; @morris2019weisfeiler].
+
+给定一个 CC，我们的目标是描述该 CC 的子 CC 的局部邻近的胞腔。为此，我们定义了 CC 邻近函数，该函数与CC s上下文环境中的定义 \@ref(def:ns)类似。
+
+```{definition, cc-neighborhood-function, name="CC领域函数，CC-neighborhood function"}
+CC $(S,\mathcal{X}, \mbox{rk})$上的*CC邻域函数*记作$\mathcal{N}$，该函数可为CC的每个子CC $(A,\mathcal{Y},\mbox{rk}^{\prime})$ 分配一个$S$子集的非空集合$\mathcal{N}(\mathcal{Y})$。
+```
+
+不失一般性，我们假定邻域$\mathcal{N}(\mathcal{Y})$的元素是$\mathcal{X}$的胞腔或子CCs。直观上来讲，sub-CC $\mathcal{Y}$的邻域$\mathcal{N}(\mathcal{Y})$是$S$子集的集合，他们位于$\mathcal{Y}$的局部邻近地区（local vicinity）。术语“局部邻近地区”是一般性描述，通常由具体情况而定。
+
+定义 \@ref(def:cc-neighborhood-function)是定义\@ref(def:ns)的离散化版本，两个定义的相对应可参见图\@ref(fig:cc-neighborhood)。在本文的其余部分，CC 邻域函数被简地称为邻域函数。实际上，CC 邻域函数中编码的信息是用矩阵来表示的，如下所述。
+
+```{r cc-neighborhood, echo=FALSE, fig.align="center", fig.cap="连续域邻域函数与 CC 邻域函数的可视化比较. (a): 具有连续域 $S$ 的邻域函数为 $x\\in S$ 分配了一组$S$ 的子集 $\\mathcal{N}(x)$ ，这些子集位于 $x$ 的局部邻近地区。 (b): 类似的，CC $(S,\\mathcal{X}, \\mbox{rk})$上的CC邻域函数分配给$x\\in S$一组$\\mathcal{X}$的子集$\\mathcal{N}(x)$，它们也在 $x$的局部邻近地区。"}
+knitr::include_graphics('figures/cts_discrete_nbhd.png', dpi=NA)
+```
+
+**邻域函数诱导的邻域矩阵**。 为了便于计算，可以用矩阵来表示邻域函数。关联矩阵、邻接矩阵和共邻接矩阵是编码各类邻域函数的常见矩阵形式。在定义 \@ref(def:neighborhood-matrix)中，我们引入了这些矩阵的广义化，称为 "邻域矩阵"。在这个定义中以及以后，我们用 $|S|$ 表示集合 $S$ 的基数（cardinality）。
+
+```{definition, neighborhood-matrix, name="邻域矩阵，Neighborhood matrix"}
+令$\mathcal{N}$是定义在 CC $\mathcal{X}$上的邻域函数，令$\mathcal{Y}=\{y_1,\ldots,y_n\}$ 和 $\mathcal{Z}=\{z_1,\ldots,z_m\}$ 是 $\mathcal{X}$上两个胞腔的集合，使得$\forall 1\leq i \leq n，\mathcal{N}(y_{i}) \subseteq \mathcal{Z}$。则，*$\mathcal{N}$上关于$\mathcal{Y}$和$\mathcal{Z}$的邻域矩阵*是$|\mathcal{Z}| \times|\mathcal{Y}|$二值矩阵(binary matrix)$G$，如果$z_i\in \mathcal{N}(y_j)$，则其第$(i,j)$个项$[G]_{ij}$的值为$1$，否则为$0$。
+```
+
+```{remark}
+在定义\@ref(def:neighborhood-matrix)中，$\mathcal{N}(y_j)$存储在邻域矩阵$G$的第$j-th$列。因此，当我们使用邻域矩阵 $G$ 时，我们用 $\mathcal{N}_{G}(j)$ 表示胞腔 $y_j$ 的邻域函数。
+```
+
+在 CC 上定义有用的邻接函数有很多种方法。在这项工作中，我们仅限于最直接的邻域函数：关联邻域函数和邻接邻域函数。 
+
+### CC中的关联关系（Incidence）{#incidence-in-a-cc}
+
+我们定义了关联的三种术语，以捕捉 CC 中胞腔关联结构的不同方面。首先，在定义\@ref(def:nstruct)种，我们引入了下关联（down-incidence）和上关联（up-incidence）邻域函数来描述，通过任意秩的胞腔来描述胞腔的关联结构。其次，在定义\@ref(def:filtered-incidence)，引入了$k-down$下关联和$k-up$上关联邻域函数，通过特定秩$k$的胞腔来描述胞腔的关联结构。然后，在定义\@ref(def:inc-mat)，引入$(r, k)$-incidence关联矩阵，以描述特定秩$r$和$k$的胞腔的关联结构。在下文中，我们假定 CC$(S,\mathcal{X}, \mbox{rk})$的$\mathcal{X}$ 集合中的胞腔有固定的顺序。
+
+```{definition, nstruct, name="下/上关联邻域函数，Down/up-incidence neighborhood functions"}
+令$(S,\mathcal{X}, \mbox{rk})$是一个CC，CC的两个胞腔$x, y\in\mathcal{X}$被称作关联的（ *incident*），如果$x \subsetneq y$或$y \subsetneq x$。尤其，胞腔$x\in\mathcal{X}$的*下关联邻域函数（down-incidence neighborhood function）* $\mathcal{N}_{\searrow}(x)$ 被定义为集合$\{ y\in \mathcal{X} \mid y \subsetneq x\}$，而$x$的*上关联邻域函数（up-incidence neighborhood function）* $\mathcal{N}_{\nearrow}(x)$ 被定义为集合 $\{ y\in \mathcal{X} \mid x \subsetneq y\}$.
+```
+
+定义\@ref(def:filtered-incidence)
+
+与定义 \@ref(def:nstruct)相比，定义 \@ref(def:filtered-incidence)提供了更精细的关联结构规定。具体来说，定义 \@ref(def:filtered-incidence) 和 \@ref(def:nstruct) 分别描述了一个胞腔相对于特定秩或任意秩胞腔的关联结构。
+
+
+```{definition, filtered-incidence, name="k-down/up incidence neighborhood functions"}
+令$(S,\mathcal{X}, \mbox{rk})$ 是一个CC，对于任何$k\in\mathbb{N}$, 胞腔$x$的*$k-down$下关联邻域函数* $\mathcal{N}_{\searrow,k}(x)$被定义为集合$\{ y\in \mathcal{X} \mid y \subsetneq x, \mbox{rk}(y)=\mbox{rk}(x)-k \}$。胞腔$x$的*$k-up$上关联邻域函数* $\mathcal{N}_{\nearrow,k}(x)$ 被定义为集合$\{ y\in \mathcal{X} \mid y \subsetneq x,\mbox{rk}(y)=\mbox{rk}(x)+k \}$。
+```
+
+显然，$\mathcal{N}_{\searrow}(x)= \bigcup_{k\in \mathbb{N}} \mathcal{N}_{\searrow,k}(x)$，并且$\mathcal{N}_{\nearrow}(x)= \bigcup_{k\in\mathbb{N}} \mathcal{N}_{\nearrow,k}(x)$。直接关联（immediate incidence）尤其重要，为此，胞腔$x \in \mathcal{X}$的*面（faces）*集合定义为$\mathcal{N}_{\searrow,1} (x)$，并且*共面（cofaces）*集合定义为$\mathcal{N}_{\nearrow,1} (x)$。参见图\@ref(fig:structure-inc)，给出了$k$-down和$k$-up关联邻域函数的描述。
+
+```{definition, inc-mat, name="邻域矩阵，Neighborhood matrix"}
+令$(S,\mathcal{X}, \mbox{rk})$是CC，对于任何$0\leq r<k \leq \dim(\mathcal{X})$下的$r,k \in \mathbb{Z}{\ge 0}$， $\mathcal{X}^{r}$ 和 $\mathcal{X}^{k}$之间的*$(r,k)$关联矩阵* $B_{r,k}$被定义为 $|\mathcal{X}^r| \times |\mathcal{X}^k|$二值矩阵，其中，如果$x^r_i$关联于$x^k_j$，那么第$(i, j)$-th项$[B_{r,k}]_{ij}$等于1，否则等于0。
+```
+
+```{r structure-inc, echo=FALSE, fig.align="center", fig.cap="维度为3的CC上的$k$-down 和 $k$-up 关联邻域函数。 (a): $k$-down 关联邻域函数， 目标橙色胞腔 $x$ 的秩为3。从左到右，红色胞腔标记了$\\mathcal{N}_{\\searrow,1}(x)$, $\\mathcal{N}_{\\searrow,2}(x)$ 和 $\\mathcal{N}_{\\searrow,3}(x)$. (b): $k$-up 关联邻域函数，目标橙色胞腔$x$秩为0，从左到右，红色胞腔标记了$\\mathcal{N}_{\\nearrow,1}(x)$, $\\mathcal{N}_{\\nearrow,2}(x)$ and $\\mathcal{N}_{\\nearrow,3}(x)$."}
+knitr::include_graphics('figures/structure_inc.png', dpi=NA)
+```
+
+定义\@ref(def:inc-mat)种的关联矩阵$B_{r,k}$规定了CC的邻域函数，关联矩阵诱导的邻域函数可用于构造CCs上的高阶消息传递实现方案，正如章节\@ref(combinatorial-complex-neural-networks)所描述的。
+
+### CC内的邻接关系（Adjacency）
+
+CCs 既有关联函数，也有其他邻域函数。例如，对于简化为图的 CC，更自然的邻域函数是基于邻接关系的概念。关联关系定义了不同秩的胞腔之间的关系，而邻接关系定义了相同秩的胞腔之间的关系。定义 \@ref(def:coa-nf)、 \@ref(def:k-coa-nf)和 \@ref(def:adj-mat)/\@ref(def:coadj-mat)引入了各自与关联关系相关的定义 \@ref(def:nstruct)、 \@ref(def:filtered-incidence)和 \@ref(def:inc-mat)类似的（共）邻接关系。
+
+```{definition, coa-nf, name="共邻接邻域函数，(Co)adjacency neighborhood functions"}
+令$(S,\mathcal{X}, \mbox{rk})$是CC，胞腔$x\in \mathcal{X}$的*邻接邻域函数（adjacency neighborhood function）* $\mathcal{N}_{a}(x)$定义为集合
+\begin{equation*}
+\{  y \in \mathcal{X} \mid \mbox{rk}(y)=\mbox{rk}(x), \exists z \in \mathcal{X} \text{ with } \mbox{rk}(z)>\mbox{rk}(x) \text{ such that } x,y\subsetneq z\}.
+\end{equation*}
+$x$的*共邻接邻域函数（coadjacency neighborhood function）* $\mathcal{N}_{co}(x)$ 定义为集合
+\begin{equation*}
+\{ y \in \mathcal{X} \mid \mbox{rk}(y)=\mbox{rk}(x), \exists z \in \mathcal{X}
+\text{ with } \mbox{rk}(z)<\mbox{rk}(x) \text{ such that } z\subsetneq y\text{ and }z\subsetneq x \}.
+\end{equation*}
+满足条件$\mathcal{N}_{a}(x)$ 或 $\mathcal{N}_{co}(x)$的胞腔$z$称为*桥接胞腔（bridge cell）*.
+```
+
+```{definition, k-coa-nf, name="k-(共)邻接领域函数，k-(co)adjacency neighborhood functions"}
+令$(S, \mathcal{X}, \mbox{rk})$是CC，对于任何$k\in\mathbb{N}$, 胞腔$x \in \mathcal{X}$的*$k$-邻接邻域函数* $\mathcal{N}_{a,k}(x)$定义为集合
+
+\begin{equation*}
+\{ y \in \mathcal{X} \mid \mbox{rk}(y)=\mbox{rk}(x),
+\exists z \in \mathcal{X}
+\text{ with } \mbox{rk}(z)=\mbox{rk}(x)+k \text{ such that } x,y\subsetneq z \}.
+\end{equation*}
+
+$x$的*$k$-共邻邻域函数* $\mathcal{N}_{co,k}(x)$定义为集合
+
+\begin{equation*}
+\{ y \in \mathcal{X} \mid \mbox{rk}(y)=\mbox{rk}(x),
+\exists z \in \mathcal{X}
+\text{ with } \mbox{rk}(z)=\mbox{rk}(x)-k
+\text{ such that } z\subsetneq y\text{ and }z\subsetneq x \}.
+\end{equation*}
+
+```
+
+```{definition, adj-mat, name="邻接矩阵，Adjacency matrix"}
+对于满足$0\leq r<r+k \leq \dim(\mathcal{X})$的任何$r\in\mathbb{Z}_{\ge 0}$ and $k\in \mathbb{Z}_{>0}$ ， $\mathcal{X}^{r}$关于 $\mathcal{X}^{k}$的胞腔之间的 *$(r,k)$-邻接矩阵* $A_{r,k}$被定义为$|\mathcal{X}^r| \times |\mathcal{X}^r|$ 二值矩阵（binary matrix），该矩阵的第$(i, j)$-th项，如果$x^r_i$  $k$-邻接于 $x^r_j$，那么$[A_{r,k}]_{ij}$等于1，否则等于0。
+```
+
+```{definition, coadj-mat, name="共邻接矩阵，Coadjacency matrix"}
+对于满足$0\leq r-k<r \leq \dim(\mathcal{X})$的任何$r\in \mathbb{Z}_{\ge 0}$ and $k\in\mathbb{N}$ ， $\mathcal{X}^{r}$关于$\mathcal{X}^{k}$的胞腔之间的*$(r,k)$-共邻接矩阵* $coA_{r,k}$ among the cells of $\mathcal{X}^{r}$ 定义为 $|\mathcal{X}^r| \times |\mathcal{X}^r|$二值矩阵，如果$x^r_i$ $k$-共邻于$x^r_j$ ，那么该矩阵的$(i, j)$-th项$[coA_{r,k}]_{ij}$等于1，否则等于0。
+```
+
+显然, $\mathcal{N}_{a}(x)= \cup_{k\in\mathbb{N}} \mathcal{N}_{a,k}(x)$，并且 $\mathcal{N}_{co}(x)= \cup_{k\in\mathbb{N}} \mathcal{N}_{co,k}(x)$。图\@ref(fig:structure-adj)给出了$k$-邻接和$k$-共邻邻域函数的描述。
+
+```{r structure-adj, echo=FALSE, fig.align="center", fig.cap="维度为3的域CC的$k$-(共)邻接邻域函数。(a): $k$-邻接邻域函数。目标橙色胞腔$x$ 秩为0，从左到右，红色胞腔标记了$\\mathcal{N}_{a,1}(x)$, $\\mathcal{N}_{a,2}(x)$ 和 $\\mathcal{N}_{a,3}(x)$。 (b): $k$-共邻邻域函数，目标橙色胞腔$x$秩为2，从左到右，红色胞腔标记了$\\mathcal{N}_{co,1}(x)$, $\\mathcal{N}_{co,2}(x)$和$\\mathcal{N}_{co,3}(x)$."}
+knitr::include_graphics('figures/structure_adj.png', dpi=NA)
+```
+
+## CCs上的数据{#data-on-ccs}
+
+由于我们对处理定义在 CC $(S,\mathcal{X},\mbox{rk})$ 上的数据感兴趣，因此我们引入了 $k$-共链空间（$k$-cochain spaces）、$k$-共链（$k$-cochains）和共链映射(cochain maps)等概念。
+
+
+```{definition, k-cochain-spaces, name="k-共链空间，k-cochain spaces"}
+令$\mathcal{C}^k(\mathcal{X},\mathbb{R}^d )$是秩为$k \in \mathbb{Z}_{\ge 0}$且维度为$d$的函数$\mathbf{H}_k\colon\mathcal{X}^k\to \mathbb{R}^d$的$\mathbb{R}$-向量空间（vector space）。$d$ 称作*数据维度（data dimension）*，$\mathcal{C}^k(\mathcal{X},\mathbb{R}^d)$称作*$k$-共链空间（cochain space）*，$\mathcal{C}^k(\mathcal{X},\mathbb{R}^d)$中的元素$\mathbf{H}_k$称作*$k$-共链（cochains）* 或 *$k$-信号（signals）*。
+```
+
+当底层CC很明确的时候，可以直接使用$\mathcal{C}^k(\mathcal{X})$ 或 $\mathcal{C}^k$来简略表示。此外，还可以说$k$-共链空间$\mathcal{C}^k(\mathcal{X})$被定义在$\mathcal{X}$上。直观来讲，$k$-cochain可被解释为定义在$\mathcal{X}$的$k$-cells上的信号[@grady2010discrete]。图\@ref(fig:cc-cochain)(a)给出了单纯复形的0、1、2秩上支持的共链。
+
+```{r cc-cochain, echo=FALSE, fig.align="center", fig.cap="CC在维度4上支持的$k$-cochains (左图) 和共链映射（ cochain maps，右图) 。左图： $k$-cochain可以被解释为定义在$k$-cells上的信号或特征向量（feature vector）。图中，维度3的共链附在顶点上，维度2的共链附在1-cells上，维度4的共链附在2-cells上。右图：$coA_{r,k}$ 和 $A_{r,k}$ 定义了等维共链空间之间的共链映射（cochain map），$B_{r,k}$定义了不同维度空间之间的共链映射。"}
+knitr::include_graphics('figures/mapping_cochain.png', dpi=NA)
+```
+
+当$\mathcal{X}$是图时，$0$-cochains对应于图上的信号[@ortega2018graph]。通过对$\mathcal{X}^k$中的胞腔排序，我们可以用欧式向量空间$\mathbb{R}^{ |\mathcal{X}^k| \times d}$ 规范地识别出$\mathcal{C}^k(\mathcal{X},\mathbb{R}^d )$ ，并且直接将$\mathbf{H}_k$写作向量$[ \mathbf{h}_{x^k_1},\ldots,\mathbf{h}_{x^k_{|\mathcal{X}^k|} }]$。其中，$\mathbf{h}_{x^k_j} \in \mathbb{R}^d$是与胞腔$x^k_j$相关的特征向量。符号$\mathbf{H}_{k,j}$指特征向量$\mathbf{h}_{x^k_j}$ ，以避免明确引用胞腔$x^k_j$。我们也可以处理共链空间之间的映射，他们被称为共链映射。
+
+```{definition, cochain-maps, name="共链映射，Cochain maps"}
+对于$r< k$, 关联矩阵$B_{r,k}$ 产生映射
+\begin{align*}
+B_{r,k}\colon \mathcal{C}^k(\mathcal{X}) &\to   \mathcal{C}^r(\mathcal{X}),\\
+\mathbf{H}_k &\to  B_{r,k}(\mathbf{H}_k),
+\end{align*}
+其中，$B_{r,k}(\mathbf{H}_k)$ 表示矩阵$B_{r,k}$和向量$\mathbf{H}_k$的通常意义上的乘积$B_{r,k}\mathbf{H}_k$。类似的，$(r,k)$-邻接矩阵$A_{r,k}$产生映射
+\begin{align*}
+A_{r,k}\colon \mathcal{C}^r(\mathcal{X}) &\to   \mathcal{C}^r(\mathcal{X}),\\
+\mathbf{H}_r &\to  A_{r,k}(\mathbf{H}_r).
+\end{align*}
+共链空间之间的这两类映射都称为 *共链映射（cochain maps）*。
+```
+
+共链映射可以作为算子来用，例如在底层CC上的“变换（shuffle）”、"再分布（redistribute）"数据等操作。在TDL场景下，共链映射是定义高阶消息传递(Section \@ref(definition-of-higher-order-message-passing))和反池化/池化操作(Section \@ref(cc-pooling-and-unpooling))的主要工具。每个邻接矩阵$A_{r,k}$或共邻接矩阵$coA_{r,k}$都定义了等维共链空间之间的共链映射，而每个关联矩阵$B_{r,k}$都定义了不同维度空间之间的共链映射。参见图\@ref(fig:cc-cochain)(b) 给出的维度4下的CC的共链映射示例。

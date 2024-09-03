@@ -1,0 +1,83 @@
+\mainmatter
+
+# (PART\*) 第一部分：基础知识 {-}
+
+# 引言
+
+最近几年，可用于计算分析的数据量呈指数级增长，包括科学数据以及常见的数据类型，如文本、图像和音频。丰富的数据使物理、化学、计算社会科学和生物学等各个领域都能利用机器学习技术（主要是深度神经网络）取得重大进展，由于深度神经网络可以有效地从大型数据集中总结和提取模式，因此适用于许多复杂的任务。深度神经网络的开发是为了从规则（欧式）域支持的数据中学习，如图像中的网格、文本序列和时间序列，此类模型包括卷积神经网络（CNNs）[@lecun1998; @krizhevsky2012; @simonyan2014]、递归神经网络（RNNs）[@bahdanau2014; @sutskever2014]、注意力Transformers[@vaswani2017]等，这些模型已被证明在处理欧式域上的数据时非常有效[@goodfellow2016]，在各类应用中表现出了前所未有的性能，最近的应用是聊天机器人，例如ChatGPT ([@adesso2023]，以及和文本控制图像合成 [@rombach2022] 。
+
+然而，各领域的科学数据往往结构不同，不被常规的欧式域支持。因此，用深度神经网络处理这类数据一直是个挑战。在此背景下，几何深度学习（geometric deep learning，GDL）[@wu2020comprehensive; @zhou2020graph; @bronstein2021geometric]作为深度学习模型向非欧式域的扩展而出现。 为了做到这种扩展，GDL 将计算限制在对称性、不变性、等变性等几何规则上。当然，在处理任意数据域时，包括集合[@qi2017pointnet; @rempe2020caspr; @deng2018ppfnet; @zhao20223dpointcaps; @huang2022multiway]、网格 [@boscaini2015learning; @masci2015geodesic; @boscaini2016learning; @kokkinos2012intrinsic; @shuman2016vertex; @wu20153d; @monti2017geometric]、
+流形[@boscaini2015learning; @masci2015geodesic; @boscaini2016learning; @kokkinos2012intrinsic; @shuman2016vertex; @wu20153d; @monti2017geometric]、图 [@scarselli2008graph; @gallicchio2010graph; @zhou2020graph; @wu2020comprehensive; @boscaini2016learning; @monti2017geometric; @bronstein2017geometric; @kipf2016semi]，也允许施加适当的归纳偏差。尤其是图，由于其在众多科学研究中的适用性及其对传统网格的泛化能力，引起了人们的广泛兴趣。因此，图神经网络（GNNs） [@bronstein2017geometric; @kipf2016semi]的发展极大地增强了人们对几类自然存在的图类数据进行建模和分析的能力。
+
+尽管 GDL 和 GNN 取得了成功，但从纯粹的几何视角来看图形，只能产生局部抽象，无法捕捉数据中的非局部属性和依赖关系。拓扑数据（*Topological data*）包括边（在图中）、三角形（在网格中）或小团（cliques）等的相互作用，在复杂物理系统的一系列新应用中自然存在 [@battiston2021physics; @lambiotte2019networks]，诸如交通流预测[@jiang2022graph]、社会影响力 [@zhu2018social]、蛋白质相互作用 [@murgas2022hypergraph]、分子涉及 [@schiff2020characterizing]、视觉增强 [@efthymiou2021graph]、推荐系统 [@la2022music]，以及流行病学 [@deng2020cola]等。 为了对这些数据进行原生而有效的建模，我们必须超越图形，并且考虑在某些几何变换下保持不变的量化空间属性。换句话说，我们需要考虑*数据的拓扑结构* [@carlsson2009topology] 来制定能够从复杂数据中提取语义信息的神经网络架构。
+
+从数据中抽取更多全局信息的方法是超越基于图的抽象，去考虑图的扩展，例如单纯复形（simplicial complexes）、胞腔复形（ cell complexes）、超图（hypergraphs），甚至推广到科学计算中会遇到的更多的数据域[@bick2021higher; @battiston2020networks; @benson2021higher; @torres2021and]。继续发展机器学习模型，以便从这些拓扑域的支持的数据中学习，这是正在快速发展的新领域，我们在下文中将其称为*拓扑深度学习（topological deep learning，TDL）*。TDL 将多个研究领域交织在一起，包括拓扑数据分析（topological data analysis，TDA)[@edelsbrunner2010computational; @carlsson2009topology; @dey22; @love2023topological; @ghrist2014elementary]、拓扑信号处理（topological signal processing） [@schaub2018denoising; @yang2021finite; @schaub2022signal; @roddenberry2021signal; @barbarossa2020topological; @robinson2014topological; @sardellitti2022topological]、网络科学（network science） [@skardal2021higher; @lambiotte2019networks; @barabasi2013network; @battiston2020networks; @bick2021higher; @bianconi2021higher; @benson2016higher; @de2016physics; @bao2022impact; @oballe2021bayesian]、几何深度学习（and geometric deep learning）[@zhang2020deep; @cao2020comprehensive; @fey2019fast; @loukas2019graph; @battaglia2018relational; @morris2019weisfeiler; @battaglia2016interaction]。
+
+尽管人们对 TDL 的兴趣与日俱增，但迄今为止还没有建立对这些思想的基本原理的广泛综合。我们认为，这是阻碍 TDL 取得进展的一个缺陷，因为它使得在不同概念之间建立联系变得具有挑战性，阻碍了比较，并使其他领域的研究人员难以找到 进入TDL领域 的切入点。因此，在本文中，我们旨在对 TDL 的基本原理进行基础性概述，不仅为近年来文献中出现的许多令人兴奋的观点提供一个统一的框架，而且作为一个概念起点，促进对新观点的探索。最终，我们希望这项工作能促进 TDL 的加速发展，我们相信这将是把深度学习的成功经验应用到更多应用场景的关键因素。
+
+通过从代数拓扑学的传统拓扑概念[@ghrist2014elementary; @hatcher2005algebraic]和高阶网络的最新进展 [@battiston2020networks; @torres2021and; @bick2021higher; @battiston2021physics]中汲取灵感，我们首先引入组合复形*(combinatorial complexes ，CCs)*作为我们TDL框架的主要构建模块。 CCs构建了一个新的拓扑域，将图、单纯复形、胞腔复形、超图等作为特例统一了起来，如图\@ref(fig:main-figure)所示^[本文中的所有图表都应使用彩色，因为不同的颜色传达不同的信息。]。与超图类似，CCs可以编码抽象实体集间的类集合关系。此外，CCs 还可以构建层次化的高阶关系，类似于单纯复形和胞腔复形中的关系。因此，CCs 概括并结合了超图和胞腔复形的理想特性。
+
+```{r main-figure, echo=FALSE, fig.align="center", fig.cap="该图解直观展示了我们的主要贡献。(a): 不同的数学结构可用来表示抽象实体之间的不同关系。集合由无连接的实体组成，图编码了顶点间的二元关系，单纯复形和胞腔复形模型化了分层的高阶关系，超图则表示了无层次的任意集合型关系，我们采用组合复形（CCs）来覆盖图、单纯复形、胞腔复形和超图，CCs 不仅具有集合型关系，也能表示关系间的层次结构。(b): 通过利用 CCs 的层次和拓扑结构，我们引入了前推操作（push-forward），它是高阶消息传递协议和 CCs上非池化/池化操作的基本构件。前推操作可用来够构建组合复形神经网络（combinatorial complex neural networks，CCNN），为高阶域上的拓扑深度学习提供通用的概念框架。"}
+knitr::include_graphics('figures/main_figure.png', dpi=NA)
+```
+
+此外，此外，我们还引入了构建深度神经网络所需的算子，用于学习锚定在 CCs上的输入特征和抽象摘要。这些算子提供了卷积、注意机制、消息传递，以及包含不变性、等变性或其他几何规律的方法。具体来说，前推操作（*push-forward operation*）允许在不同维度之间推送数据，从而形成了一个基本构件，用于在CCs上定义高阶消息传递协议（*higher-order message-passing protocols*）、非池化/池化（*(un)pooling operations*）等操作。由此产生的学习模型，我们称之为组合复杂神经网络*（combinatorial complex neural networks，CCNNs）*，它能够学习抽象的高阶数据结构，这在我们的实验评估中得到了清晰的验证。
+
+我们希望我们的贡献能成为一个平台，鼓励研究人员和从业人员扩展我们的 CCNNs，并邀请社区在我们工作的基础上扩展高阶领域的 TDL。图\@ref(fig:main-figure)直观地概括了我们的贡献，具体如下：
+
+* 首先，我们为TDL引入了CCs域，我们描述了 CCs 的特征及其属性，并解释了它们如何用来推广到现有的数据域，如图、超图、单纯复形和胞腔复形。因此，CCs 可以作为一个统一的起点，帮助学习拓扑数据的表达式表示。
+
+* 其次，使用CCs作为数据域，我们构造了CCNNs，一个高阶消息传递神经网络的抽象类，可为基于超图、胞腔复形的TDL模型提供统一的蓝图。
+
+  + 基于CCs上的push-forward运算，我们为CCNNs引入了卷积、注意力、非池化和池化操作。
+  
+	+ 我们形式化并研究了 CCNNs 的变换(*permutation*)和方向等变(*orientation equivariance*)，为今后 CCNNs 的几何化工作铺平了道路。
+	
+  + 我们展示了如何通过图形符号直观地构建 CCNNs。
+  
+* 最后，我们在实践场景中评估了我们的想法
+
+	+ 我们以python库的形式发布了我们框架的源代码：*TopoNetX, TopoEmbedX，TopoModelX*
+	
+	+ 我们的研究表明，在形状分析和图学习等各种应用中，CCNNs 的预测性能可与最先进的特定任务神经网络相媲美。
+	
+  + 我们将我们的工作与 TDA 中的经典构造建立了联系，如 *mapper* [@singh2007topological]。尤其，我们用 TDL 框架实现了mapper，并演示了如何将其用于 CCs 的高阶非池化和池化操作。
+  
+	+ 我们也展示了任何 CC 都可以还原为一种叫做Hasse 图(*Hasse graph*)的特殊图。这使得我们能够用基于图的模型来描述 CCNNs 的某些方面，从而将高阶表示学习归约为图表示学习（使用放大的计算图）。
+	
+**术语**
+
+在深入探讨更多细节之前，我们先介绍一下本文中使用的既定概念的基本术语。其中一些术语将在第\@ref(preliminaries)章中重新正式讨论。附录\@ref(glossary)为本文提出的新观点提供了符号和术语表。
+
+:::: {.glossarybox data-latex=""}
+**胞腔复形**([**Cell complex**](https://app.vectary.com/p/3EBiRiJcYjFNvkbbWszQ0Z))：一类拓扑空间，是拓扑圆盘（胞腔）的不相交并，其中每个胞腔都与欧式球的内部同构，这些胞腔通过附加映射以局部合理的方式连接在一起。
+
+**域(Domain)**：通常指支持数据的底层空间。
+
+**实体（Entity）**或**顶点（vertex）**：一个抽象的点，也可以认为是集合的元素
+
+**图（Grapg）**或网络：一组由边集联系起来的实体或顶点集合，其中，边集表示了顶点间的二元关系。
+
+**拓扑域上的层次化结构(Hierarchical structure)**：通过一个整数值函数为域中的每个关系都分配一个正整数（秩，rank），使得高阶关系可以被分配更高的秩值。例如，一个单纯复形具有由其单纯形的基数（cardinality）推导出的层次化结构。
+
+**高阶网络/拓扑域（Higher-order network/topological domain）**：图的推广，反应实体间的二元或高阶关系，单纯复形、胞腔复形、超图式此类高阶网络的示例。
+
+**超图（Hypergraph）**：一组由超边集联系的实体（顶点）集合，超边表示顶点间的二元或高阶关系。
+
+**消息传递（Message passing）**：一种在域上领域实体间传递数据、`消息'的计算框架，根据从领域收到的消息来更新每个实体的表示
+
+**关系（Relation）**或**胞腔（cell）**：实体（顶点）集的子集，如果关系的基数等于2，则说它是**二元关系**；如果基数大于2，则说它是**高阶关系**。
+**集合型关系（Set-type relation）**：如果高阶网络中的某一关系存在且不蕴含于网络中的另一关系，则称该网络具有集合类型关系。例如，超图就包含集合类型关系。
+
+**单纯形（Simplex）**：三角形或四面体在任意维度上的推广，例如，维度为0、1、2、3的单纯形分别是点、线段、三角形、四面体。
+
+**单纯复形**
+[**Simplicial complex**](https://app.vectary.com/p/4HZRioKH7lZ2jWESIBrjhf):单纯形的集合，集合中每个单纯形的每个面也都在集合中，集合中任意两个单纯形的交集要么是空的，要么是两个单纯形的一个面。
+
+**拓扑数据（Topological data）**：支持拓扑域中关系的特征向量
+
+**拓扑深度学习（Topological deep learning）**：用深度学习技术研究拓扑域，用拓扑域在深度学习中表示数据
+
+**拓扑神经网络（Topological neural network）**：在拓扑域上处理数据的深度学习模型
+
+::::

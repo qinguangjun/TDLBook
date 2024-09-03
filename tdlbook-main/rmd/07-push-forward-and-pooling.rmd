@@ -1,0 +1,121 @@
+# 前推、池化和反池化{#push-forward-pooling-and-unpooling}
+
+
+本节将展示如何利用定义\@ref(def:pushing-exact-definition)的前推操作来实现对CCc的（反）池化操作，随后接着介绍CCNNs的（反）池化操作。此外，本节还展示了基于 CC 的池化如何为基于图像和图的池化提供统一框架，以及 CC s上的保形池化(shape-preserving pooling)与图上的映射器是如何相关的。
+
+特别是，我们建立了另一个统一的数学原理：作为消息传递的池化，可以从根本上由前推操作（push-forward）构建而成。因此，前推操作构成了主要的基本构件，所有高阶计算都可以从中实现。这种实现方式非常重要，因为它为在复形上建立统一的深度学习应用编程接口（API）奠定了数学基础，该接口将池化和基于消息传递的计算结合为单一操作。事实上，在我们贡献的 Python 软件包之一 [TopoModelX](https://github.com/pyt-team/TopoModelX)中，高阶消息传递和池化/反池化操作就是作为一个单一函数在各种拓扑域中实现的。
+
+## CC池化和反池化{#cc-pooling-and-unpooling}
+
+我们定义了一种基于 CC 的池化操作，它扩展了基于图像和基于图的池化操作的主要特点。 具体来说，我们建立了一种池化操作，可以 “下采样（downscales） ”CC $\mbox{X}$ 上支持的信号大小。 To 为此，我们利用CCs自然的层次性，将池化操作定义为由共链映射 $G\colon\mathcal{C}^{i}(\mathcal{X})\to \mathcal{C}^{j}(\mathcal{X})$ 引导的前推操作，该共链映射将$i$-cochain推向$j$-cochain。为了得到一个有用的池化操作，这需要缩减其输入 $i$-cochain 的大小，我们施加了 $j>i$ 的约束。定义 \@ref(def:pooling-exact-definition)实现了我们对 CC 池化的设想。图 \@ref(fig:pooling-hoans)形象地展示了定义\@ref(def:pooling-exact-definition)背后的直觉。尤其是，图\@ref(fig:pooling-hoans)展示了在三维 CC 上支持的共链上连续应用池操化作的例子。
+
+```{definition, pooling-exact-definition, name="CC池化操作，CC-pooling operation"}
+令 $\mbox{X}$是一个CC，$G\colon\mathcal{C}^{i}( \mbox{X})\to \mathcal{C}^{j}( \mbox{X})$是共链映射，则如果 $j>i$，那么$G$引导的前推操作被称为*CC池化操作*。
+```
+
+```{r pooling-hoans, echo=FALSE, fig.align="center", fig.cap="连续CC（反）池化操作的示例. CC 池化操作利用了底层 CC 的分层结构，通过将低阶共链推向高阶胞腔来粗化低阶共链，从而提高对某些结构扭曲的不变性能力。图中粉色、蓝色和绿色胞腔分别有秩1、2、3，图（a）是维度为3的CC $\\mbox{X}$。在$\\mbox{X}$上，我们将考察三个共链操作: $B_{0,1} \\colon\\mathcal{C}^1\\to\\mathcal{C}^0$, $B_{1,2} \\colon\\mathcal{C}^2\\to \\mathcal{C}^1$ 和 $B_{2,3}\\colon\\mathcal{C}^3\\to\\mathcal{C}^2$。 对于图（b）、（c）、（d）中的顶行，假定首先给定0-cochain $\\mathbf{H}_0$；而对于这三幅图的底部行，则假定首先给定3-cochain$\\mathbf{H}_3$。例如，在图（b）的顶部行，输入0-cochain $\\mathbf{H}_0$ 通过函数$\\mathcal{F}_{B_{0,1}^T}\\colon\\mathcal{C}^0\\to \\mathcal{C}^1$前推到1-cochain $\\mathbf{H}_1$。$B_{0,1}^T$诱导的前推操作就是CC-pooling操作，因为该操作发送0-cochain到了高阶共链。在图（b）的底部行，$B_{0,1}$诱导的前推操作 $\\mathcal{F}_{B_{0,1}}\\colon \\mathcal{C}^1\\to \\mathcal{C}^0$则是反池化操作，因为该操作发送 $1$-cochain 到了 $0$-cochain。图 (c) 和 (d)和图（b）类似，这些图就说明了$B_{1,2}^T$和$B_{2,3}^T$ (顶部)诱导的池化操作, 以及$B_{1,2}$ 和 $B_{2,3}$诱导的反池化操作。"}
+knitr::include_graphics('figures/pooling.png', dpi=NA)
+```
+
+在定义\@ref(def:unpooling-exact-definition)中，我们引入了CCs上的反池化操作来将共链前推到低秩共链，图\@ref(fig:pooling-hoans)给出了CCs上的反池化操作示例。
+
+```{definition, unpooling-exact-definition, name="CC-unpooling操作，CC-unpooling operation"}
+令$\mbox{X}$是CC，$G\colon\mathcal{C}^i( \mbox{X})\to \mathcal{C}^j( \mbox{X})$是共链映射。如果$j<i$，那么称$G$ 诱导的前推操为*CC反池化操作（CC-unpooling operation）*。
+```
+
+## 将常见的池化操作表述为 CC-pooling{#formulating-common-pooling-operations-as-cc-pooling}
+
+在本节中，我们将用 CC 池化来表述常见的池化操作。特别是，我们将证明图形和图像池可以被视为 CC 池化。
+
+### 用CC-pooling表示图池化操作{#graph-pooling-as-cc-pooling}
+
+在此，我们将简要说明CC-pooing操作（参见定义\@ref(def:pooling-exact-definition)）和基于图的池化算法是一致的。令$\mathbf{H}_0$定义在图$\mathcal{G}$的顶点和边上的共链，$\mathbf{H}^{\prime}_0$是定义在$\mathcal{G}$的粗粒度版本$\mathcal{G}^{\prime }$上的共链。在这种情况下，$\mathbf{H}^{\prime}_0$就是$\mathbf{H}_0$的粗粒度版，元组 $(\mathcal{G},\mathbf{H}_0)$上支持的图池化函数是$\mathcal{POOL} \colon (\mathcal{G},\mathbf{H}_0) \to (\mathcal{G}^{\prime},\mathbf{H}^{\prime}_0)$，该函数发送$\mathcal{G}$中的每个顶点到$\mathcal{G}^{\prime}$中的每一个顶点，这对应于$\mathcal{G}$上顶点的聚类操作。接下来，将正式阐述怎么用CC-pooling来实现$\mathcal{POOL}$函数。
+
+```{proposition, pool, name="CC-pooling的角色"}
+函数$\mathcal{POOL}$可用CC-pooling操作实现。
+```
+
+```{proof}
+图$\mathcal{G}^{\prime}$中的每个顶点都可表示原图$\mathcal{G}$中的一个顶点聚类。 利用这些聚类的成员元素，我们能够通过一个 2-cells 胞腔集合来扩展 $\mathcal{G}$ 以构建 CC，这样得到的每个胞腔都对应于 $\mathcal{G}^{\prime}$ 的一个超节点。我们用 $\mathcal{X}_{\mathcal{G}}$ 来表示由此产生的 CC 结构，它由 2-cells 胞腔增强的 $\mathcal{G}$ 组成。因此，任何定义在$\mathcal{G}^{\prime}$上的0-cochain $\mathbf{H}^{\prime}_0$都能写作2-cochain $\mathbf{H}_2 \in \mathcal{C}^2(\mathcal{X}_{\mathcal{G}})$。在原图 $\mathcal{G}$的顶点和池化图$\mathcal{G}^{\prime}$的顶点，或其等价描述形式CC $\mathcal{X}_{\mathcal{G}}$的顶点间的关系，都可以通过关联矩阵$B_{0,2}^T$来描述。因此，为了学习信号$\mathbf{H}_2$可以用映射$B_{0,2}^T \colon \mathcal{C}^{2} (\mathcal{X}_{\mathcal{G}}) \to \mathcal{C}^{0}(\mathcal{X}_{\mathcal{G}})$来实现，该操作把共链$\mathbf{H}_0$ 推向  $\mathbf{H}_2$。
+```
+
+定义$\mathcal{X}_{\mathcal{G}}$中的2-cells可以用 *图映射（mapper on graphs）*工具 [@hajij2018mog]来实现, 它是一个TDA分类工，更详细的构造方法参见章节\@ref(mapper-and-the-cc-pooling-operation)。
+
+### 图像池化作为CC-pooing{#image-pooling-as-cc-pooling}
+
+由于图像可以实现为网格图(lattice graphs)，因此存储在图像网格(image grid)上的信号可以实现为与图像相对应的网格图的 0-cochain，参见图\@ref(fig:image-pooling)(a--b)。在此，我们将阐明 CC-pooling（定义\@ref(def:pooling-exact-definition)）与已知的图像池化的定义是一致的。事实上，可以用2-cells来增强\@ref(fig:image-pooling)(b)中的网格图，正如图 \@ref(fig:image-pooling)(c)所示，以便执行图像池化操作。通常，这些胞腔都有规则的窗口大小。在图\@ref(fig:image-pooling)(c)中，我们选择的池化窗口大小，或者说是 2-cell的大小，是 $2\times 2$，池化步长为 1。 这种情况下的图像池化操作可以通过共链映射$B_{0,2}^T \colon\mathcal{C}^0 \to \mathcal{C}^2$诱导的CC-pooling来实现，如图 \@ref(fig:image-pooling)(d).所示。我们在下面的命题中正式正式阐述这一点。
+
+```{r image-pooling, echo=FALSE, fig.align="center", fig.cap="用CC-pooling实现图像池化。 (a): 尺寸为$3\\times3$的图像。 (b): 与图（a）对应的网格图。(c): 2-cells增强的网格图。选择 (c) 中的那些特定胞腔，相当于选择图像池化窗口大小为$2\\times 2$ ，池化步长为 1。 (d): 执行图像池化计算等价于执行由共链映射$B_{0,2}^T \\colon\\mathcal{C}^0 \\to \\mathcal{C}^2$诱导的CC-pooling操作，该共链映射前推图像信号（$\\mathcal{X}^2$支持的$0$-cochain）到$\\mathcal{X}^2$支持的信号。"}
+knitr::include_graphics('figures/image_pooling.png', dpi=NA)
+```
+
+```{proposition, image-pool, name="图像池化的实现"}
+图像池化操作可以通过从底层图像域到二维 CC 的前推操作来实现，该二维 CC是通过适当的二维胞腔对图像进行增强而得到的，图像池化计算就在该二维胞腔中进行。
+```
+
+```{proof}
+从图像池化的定义中可以直接得出结论。
+```
+
+## 池化与反池化CCNNs{#pooling-and-unpooling-ccnns}
+
+定义\@ref(def:pooling-exact-definition)中的池化操作仅考虑了CCNN的张量图仅有单一边的特殊情况，在下文中，我们将通过确定 CCNN 作为池化 CCNN 的定义属性来概括池化概念。为此，我们从张量图高度为 1 的 CCNN 开始讲解。
+
+```{definition, height-1-pooling, name="高度为1的CCNN池化，Pooling CCNN of height one"}
+对于高度为1的张量图$\mbox{CCNN}_{\mathbf{G};\mathbf{W}}$表示的CCNN，令$\mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m}$是CCNN的域，令$\mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \cdots \times \mathcal{C}^{j_n}$是CCNN的共域（codomain），令$i_{min}=min(i_1,\ldots,i_m)$和$j_{min}=min(j_1,\ldots,j_n)$。如果满足如下条件，则说CCNN是*高度为1的池化CCNN*:
+  
+1. $i_{min}< j_{min}$, 且
+2. 张量图$\mbox{CCNN}_{\mathbf{G};\mathbf{W}}$ 对于某个$k\geq j_{min}$，有共链操作$G\colon \mathcal{C}^{i_{min}} \to \mathcal{C}^{k}$标记的边。
+```
+
+直观地说，如果一个高度为1的张量图所代表的 CCNN 将其最低秩的信号推送给较高等级的胞腔，那么它就是高度为1的池化 CCNN。请注意，读出操作可以作为高度为1的池化 CCNN 来实现，见图 \@ref(fig:readout)中的说明。
+
+```{r readout, echo=FALSE, fig.align="center",fig.cap="池化操作示例。在这个例子中，展示了一个维度为3的CC。秩为 3 的胞腔（绿色表示）在 CC中的所有胞腔中秩最高。(a): 高度为 1 的池化 CCNN 会将一个共链向量$(\\mathbf{H}_0,\\mathbf{H}_1)$ 池化为一个 2-cochain $\\mathbf{H}_2$ 。 (b):读出操作可以作为高度为 1 的池化 CCNN来实现，方法是由一个秩数高于CC中所有其他胞腔的单个（绿色）胞腔封装整个CC，并将低秩胞腔的所有信号池化（读出）到封装（绿色）胞腔。"}
+knitr::include_graphics('figures/read_out.png', dpi=NA)
+```
+
+CCNN 可能不会在每一层都执行池化操作，它可能会保持最低秩信号的维度。在给出池化 CCNN 的一般性定义之前，我们首先定义高度为1的最低秩保持 （rank-preserving ）CCNN。
+
+```{definition, lowest-rank, name="高度为1的最低秩保持CCNN，Lowest rank-preserving CCNN of height one"}
+对于由高度为1的张量图表示的CCNN，令 $\mathcal{C}^{i_1}\times\mathcal{C}^{i_2}\times \cdots \times  \mathcal{C}^{i_m}$是CCNN的域，令 $\mathcal{C}^{j_1}\times\mathcal{C}^{j_2}\times \cdots \times \mathcal{C}^{j_n}$ 是CCNN的共域，令 $i_{min}=min(i_1,\ldots,i_m)$ 且$j_{min}=min(j_1,\ldots,i_n)$。如果 $i_{min}= j_{min}$，那么就说CCNN高度为1的最低秩保持CCNN。
+```
+
+每个 CCNN 都是由高度为1的张量图表示的 CCNN 组成的。因此，正如定义 \@ref(def:general-pooling-hoan)所阐述的，池化 CCNN 可以用高度为1的张量图来表征。
+
+```{definition, general-pooling-hoan, name="池化CCNN，Pooling CCNN"}
+令 $\mbox{CCNN}_{\mathbf{G};\mathbf{W}}$是CCNN的张量图表示， 则可将CCNN分解作
+\begin{equation*}
+\mbox{CCNN}_{\mathbf{G};\mathbf{W}}=
+\mbox{CCNN}_{\mathbf{G}_N;\mathbf{W}_N} \circ \cdots \circ \mbox{CCNN}_{\mathbf{G}_1;\mathbf{W}_1},
+\end{equation*}
+其中， $\mbox{CCNN}_{\mathbf{G}_i;\mathbf{W}_i},i=1,\ldots,N$, 是高度为1的张量图，表示了CCNN的第$i$-th层，并且 $\mathbf{G}_i \subseteq \mathbf{G}$。称 $\mbox{CCNN}_{\mathbf{G};\mathbf{W}}$表示的CCNN是*池化 CCNN*，如果：
+
+1. 每个 $\mbox{CCNN}_{\mathbf{G}_i;\mathbf{W}_i}$ 都是高度为1的池化CCNN，或者是高度为1的最低秩保持CCNN，且
+2. 在CCNN的层 $\mbox{CCNN}_{\mathbf{G}_i;\mathbf{W}_i}$中至少有一个是高度为1的池化CCNN。
+\end{enumerate}
+```
+
+直观地说，池化CCNN 是一种 CCNN，其张量图形成了一个 “阶梯”，将信号推送到每一层的高秩胞腔。图 \@ref(fig:tensor)(d) 给出了一个高度为二的池化 CCNN 的例子。
+
+高度为1的反池化CCNN的定义类似高度为1的池化CCNN(参见定义\@ref(def:height-1-pooling))，唯一的不同是不等式$i_{min}<j_{min}$ 变成了 $i_{min}>j_{min}$。除此之外，反池化 CCNN (参见定义\@ref(def:general-unpooling-hoan)) 的定义都类似于池化CCNN (定义\@ref(def:general-pooling-hoan))。
+
+```{definition, general-unpooling-hoan, name="反池化CCNN，Unpooling CCNN"}
+令 $\mbox{CCNN}_{\mathbf{G};\mathbf{W}}$是CCNN的张量图表示，那么可解耦CCNN为
+\begin{equation*}
+\mbox{CCNN}_{\mathbf{G};\mathbf{W}}=
+\mbox{CCNN}_{\mathbf{G}_N;\mathbf{W}_N} \circ \cdots \circ \mbox{CCNN}_{\mathbf{G}_1;\mathbf{W}_1},
+\end{equation*}
+其中，$\mbox{CCNN}_{\mathbf{G}_i;\mathbf{W}_i},i=1,\ldots,N$, 是表征CCNN第$i$-th层的高度为1的张量图，并且 $\mathbf{G}_i \subseteq \mathbf{G}$，则称$\mbox{CCNN}_{\mathbf{G};\mathbf{W}}$表征的CCNN是反池化CCNN，如果：
+
+1. 每个$\mbox{CCNN}_{\mathbf{G}_i;\mathbf{W}_i}$ 都要么是高度为1的反池化CCNN，要么是高度为1的最低秩保持CCNN，且
+2. 在CCNN的层 $\mbox{CCNN}_{\mathbf{G}_i;\mathbf{W}_i}$中至少有一个是高度为1的反池化CCNN。
+```
+
+## 映射器和CC池化操作{#mapper-and-the-cc-pooling-operation}
+在实际使用时，在高阶域上构建有用的 CC 池化操作取决于输入 CC 中的高秩胞腔。 与基于图像的模型类似，CC-池化操作可在高阶网络的末端依次应用，以提供输入域的汇总表示，参见图\@ref(fig:pooling-hoans)。 输入的 CC 中可能并没有这样的分层摘要，例如, 如果 $\mathcal{X}$是图，那么一个CC-pooling操作，正如定义\@ref(def:pooling-exact-definition)中给出的那样, 可能仅仅是前推输入的节点信号到边信号，而并不总是能提供输入信号的简明摘要。
+
+在这种情况下，我们可以用一组维度为 $\dim(\mathcal{X})+1$ 的新胞腔来*增强输入 CC* $\mathcal{X}$ ，以使得新胞腔近似于输入 CC $\mathcal{X}$ 的形状。图\@ref(fig:graph-tda) 给出了一个增强图 $\mathcal{X}$的示例，它是一个维度为1的CC，其新胞腔的维度为2，新胞腔根据文献[@dey2016multiscale; @singh2007topological; @hajij2018mog]^[使用mapper算法来图骨架化（graph skeletonization）的方法[@singh2007topological]已经在文献[@dey2016multiscale]中研究过，我们的实现和讨论依赖于文献[@hajij2018mog]中提到的概念。]中的方法使用*图mapper(mapper on graph, MOG)*来构造。通过 MOG 构造方法得到的增强高秩胞腔概要了底层图的形状特征，这是一种理想的池化特征（例如在形状分析中）。关于 MOG 构建的拓扑保持（ topology-preserving） CC 池化操作的详情，请参阅附录 \@ref(a-mapper-induced-topology-preserving-cc-pooling-operation) 。
+
+```{r graph-tda, echo=FALSE, fig.align="center", fig.cap="构造CC$\\mathcal{X}$上形状保持（shape-preserving）的池化操作示例。在此，我们将演示 $\\mathcal{X}$ 是图的情况。构建方法使用*图mapper（mapper on graphs，MOG）*[@singh2007topological; @hajij2018mog]，它是一种图骨架化算法，可用于为 $\\mathcal{X}$ 增添秩为 2 的拓扑保持胞腔（topology-preserving）。（a）输入图$\\mathcal{X}$是维度为1的CC。（b）MOG算法的输入需要三个参数：图$\\mathcal{X}$，特征保持标量函数$g\\colon\\mathcal{X}^0\\to [a,b]$，范围$[a,b]$的覆盖（cover）$\\mathcal{U}$（覆盖闭区间$[a,b]$的开集的集合）。标量函数$g$用于将范围 $[a,b]$ 上的覆盖 $\\mathcal{U}$ 拉回到 $\\mathcal{X}$ 上的覆盖, 图 (b) 中节点的颜色表示 $g$ 的标量值。图（b）中，$\\mathcal{X}$被分裂为四段，每段都对应于$\\mathcal{U}$的一个覆盖元素。（c）图中显示了拉回的覆盖元素的连接组件，每个相连的分量都被一个蓝色胞腔所包围，每个蓝色胞腔也都被视为秩为 2 的单元。蓝色胞腔用来增强$\\mathcal{X}$，以形成维度2的CC，增强后的$\\mathcal{X}$由原$\\mathcal{X}$上的0-cells、1-cells，以及增强的2-cells来组成实现。增强的CC用$\\mathcal{X}_{g,\\mathcal{U}}$来标记。(d): MOG 算法构建了一个图，其节点是覆盖 $\\mathcal{U}$的回拉过程中每个覆盖元素所包含的连通成分，边由这些连通成分组成。换句话说，MOG 生成的图概要了通过 MOG 算法添加的秩为 2的增强胞腔之间的连接情况。图（d）中给出的MOG生成图的邻接矩阵等价于$\\mathcal{X}_{g,\\mathcal{U}}$的胞腔$A_{2,2}$的邻接矩阵。当且仅当 $\\mathcal{X}$ 中存在的 2-cells胞腔相交于一个节点时（后者发生的前提是当且仅当 MOG生成的图的节点之间存在一条边时），它们才是 2 相邻（adjacent）的 。给定CC结构，共链映射$B_{0,2}^T\\colon\\mathcal{C}^0(X_{g,\\mathcal{U}})\\to \\mathcal{C}^2(X_{g,\\mathcal{U}})$可用于诱导形状保持的操作。此外，$\\mathcal{X}$顶点集上支持的信号 $\\mathbf{H}_0$可以被前推和池化为增强2-cells上支持的信号$\\mathbf{H}_2$。这里给出的图受了文献 [@hajij2018mog]的启发。"}
+knitr::include_graphics('figures/graph_tda.png', dpi=NA)
+```
