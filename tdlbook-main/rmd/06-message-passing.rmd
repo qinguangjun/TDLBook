@@ -119,7 +119,7 @@ knitr::include_graphics('figures/merge_example_scaled.png', dpi=NA)
 在这里，我们展示了高阶消息传递（定义  \@ref(def:homp-definition)）与 CCANNs（章节\@ref(combinatorial-complex-attention-neural-networks)）之间的联系。我们将首先介绍一个注意力版本的定义 \@ref(def:homp-definition)。
 
 ```{definition, attention-homp, name="CC上的注意力高阶消息传递(Attention higher-order message passing on a CC)"}
-令 $\mathcal{X}$是CC，$\mathcal{N}=\{ \mathcal{N}_1,\ldots,\mathcal{N}_n\}$是定义在$\mathcal{X}$上的邻域函数$\mathcal{X}$，$x$是胞腔，并且对于某个$\mathcal{N}_k \in \mathcal{N}$，存在$y\in \mathcal{N}_k(x)$。所谓胞腔$x$和$y$之间的*消息*$m_{x,y}$就是要完成某种计算，它依赖于两个胞腔或他们所支持的数据。用$\mathcal{N}(x)$表示多集 $\{\!\!\{ \mathcal{N}_1(x) , \ldots ,  \mathcal{N}_n (x) \}\!\!\}$，$\mathbf{h}_x^{(l)}$表示层$l$的胞腔$x$支持的数据。$\mathcal{N}$诱导的$\mathcal{X}$上的*注意力高阶消息传递*可沟通过如下四条规则来定义：
+令 $\mathcal{X}$是CC，$\mathcal{N}=\{ \mathcal{N}_1,\ldots,\mathcal{N}_n\}$是定义在$\mathcal{X}$上的邻域函数$\mathcal{X}$，$x$是胞腔，并且对于某个$\mathcal{N}_k \in \mathcal{N}$，存在$y\in \mathcal{N}_k(x)$。所谓胞腔$x$和$y$之间的*消息*$m_{x,y}$就是要完成某种计算，它依赖于两个胞腔或他们所支持的数据。用$\mathcal{N}(x)$表示多集 $\{\!\!\{ \mathcal{N}_1(x) , \ldots ,  \mathcal{N}_n (x) \}\!\!\}$，$\mathbf{h}_x^{(l)}$表示层$l$的胞腔$x$支持的数据。$\mathcal{N}$诱导的$\mathcal{X}$上的*注意力高阶消息传递*可通过如下四条规则来定义：
 \begin{align}
 m_{x,y} &= \alpha_{\mathcal{N}_k}(\mathbf{h}_x^{(l)},\mathbf{h}_y^{(l)}), (\#eq:ahomp0) \\
 m_{x}^k &=  \bigoplus_{y \in \mathcal{N}_k(x)} a^k(x,y)  m_{x,y}, \; 1\leq k \leq n , (\#eq:ahomp1) \\
