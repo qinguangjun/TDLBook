@@ -51,7 +51,10 @@ knitr::include_graphics('figures/experiment.png', dpi=NA)
 
 请注意，为 COSEG 和人体数据集选择的架构具有相同数量和类型的构建模块；比较图 \@ref(fig:mesh-net)(a) 和 (b). 实验采用 85%-15% 的随机训练-测试比例。对于这两种架构，输出张量都采用了软最大激活（softmax activation），使用 0.0001 的学习率和标准交叉熵损失对所有分割模型进行了 600 次训练，在人体和形状 COSEG 数据集上都采用这些设置。
 
-We test the proposed CCNNs on mesh segmentation using the Human Body [@maron2017convolutional] and the Shape COSEG (vase, chair, and alien) [@wang2012active] datasets. For each mesh in these datasets, the utilized CC structure is the one induced by the triangulation of the meshes, although other variations in the CC structure yield comparable results. Further, three $k$-cochains are constructed for $0\leq k \leq 2$ and are utilized in CCNN training. As shown in Table \@ref(tab:shape-xp), CCNNs outperform three neural networks tailored to mesh analysis (HodgeNet [@smirnov2021hodgenet], PD-MeshNet [@milano2020primal] and MeshCCN [@hanocka2019meshcnn]) on two out of four datasets, and are among the best two neural networks on all four datasets.
+我们使用Human Body [@maron2017convolutional] 和 Shape COSEG（花瓶、椅子和外星人）[@wang2012active] 数据集对所提出的 CCNN 进行了网格分割测试。对于这些数据集中的每个网格，所使用的 CC 结构是由网格的三角剖分建立的，尽管 CC 结构的其他变化也会产生类似的结果。此外，还为 $0\leq k \leq 2$  构建了三个 $k$-cochains，并在 CCNN 训练中使用。如表 \@ref(tab:shape-xp)所示，在四个数据集中的两个数据集上，CCNN 优于为网格分析量身定制的三个神经网络（HodgeNet [@smirnov2021hodgenet], PD-MeshNet [@milano2020primal] 和 MeshCCN [@hanocka2019meshcnn]），并且是所有四个数据集上最好的两个神经网络之一。
+
+
+
 
 ```{r shape-xp, echo=FALSE}
 methods <- c('HodgeNet', 'PD-MeshNet', 'MeshCNN', 'CCNN')
