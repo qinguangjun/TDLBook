@@ -23,7 +23,7 @@
 <meta name="author" content="Mustafa Hajij, Theodore Papamarkou, Ghada Zamzmi, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Michael T. Schaub" />
 
 
-<meta name="date" content="2024-09-04" />
+<meta name="date" content="2024-09-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -190,7 +190,7 @@ div.csl-indent {
 <li class="chapter" data-level="9.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#shape-analysis-mesh-segmentation-and-classification"><i class="fa fa-check"></i><b>9.3</b> 形状分析：网格分割与分类</a>
 <ul>
 <li class="chapter" data-level="9.3.1" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-segmentation"><i class="fa fa-check"></i><b>9.3.1</b> 网格分割</a></li>
-<li class="chapter" data-level="9.3.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-and-point-cloud-classification"><i class="fa fa-check"></i><b>9.3.2</b> Mesh and point cloud classification</a></li>
+<li class="chapter" data-level="9.3.2" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#mesh-and-point-cloud-classification"><i class="fa fa-check"></i><b>9.3.2</b> 网格和点云分类</a></li>
 <li class="chapter" data-level="9.3.3" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#graph-classification"><i class="fa fa-check"></i><b>9.3.3</b> Graph classification</a></li>
 </ul></li>
 <li class="chapter" data-level="9.4" data-path="implementation-and-numerical-results.html"><a href="implementation-and-numerical-results.html#pooling-with-mapper-on-graphs-and-data-classification"><i class="fa fa-check"></i><b>9.4</b> Pooling with mapper on graphs and data classification</a>
@@ -287,7 +287,7 @@ div.csl-indent {
 <caption><span id="tab:shape-xp">表 9.1: </span>与形状分析相关的测试集，即Human Body和 COSEG（花瓶、椅子、外星人）数据集的预测准确率。本文报告的结果基于 <span class="math inline">\(\mbox{CCNN}_{COSEG}\)</span> 和<span class="math inline">\(\mbox{CCNN}_{HB}\)</span> 架构。其中，第一列报告的是 <span class="math inline">\(\mbox{CCNN}_{HB}\)</span> 的结果，而第二、第三和第四列报告的是 <span class="math inline">\(\mbox{CCNN}_{COSEG}\)</span>的结果。</caption>
 <thead>
 <tr class="header">
-<th align="left">Method</th>
+<th align="left">方法</th>
 <th align="center">Human Body</th>
 <th align="center">COSEG vase</th>
 <th align="center">COSEG chair</th>
@@ -325,17 +325,20 @@ div.csl-indent {
 </tr>
 </tbody>
 </table>
-<p><strong>Architecture of <span class="math inline">\(\mbox{CCNN}_{COSEG}\)</span> and <span class="math inline">\(\mbox{CCNN}_{HB}\)</span></strong>. In <span class="math inline">\(\mbox{CCNN}_{COSEG}\)</span>, as shown in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(a), we choose a CCNN pooling architecture as given in Definition <a href="push-forward-pooling-and-unpooling.html#def:general-pooling-hoan">7.5</a>, which pushes signals from vertices, edges and faces, and aggregates their information towards the final face prediction class. We choose <span class="math inline">\(\mbox{CCNN}_{HB}\)</span> similarly, except that the predicted signal is an edge class. The reason for this choice is that the Human Body dataset <span class="citation">(<a href="#ref-atzmon2018point">Atzmon, Maron, and Lipman 2018</a>)</span> encodes the segmentation information on edges.</p>
+<p><strong><span class="math inline">\(\mbox{CCNN}_{COSEG}\)</span> 和 <span class="math inline">\(\mbox{CCNN}_{HB}\)</span>的架构</strong>. 在 <span class="math inline">\(\mbox{CCNN}_{COSEG}\)</span>中, 如图<a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(a)所示, 我们选择定义 <a href="push-forward-pooling-and-unpooling.html#def:general-pooling-hoan">7.5</a>中给出的 带池化操作的CCNN 的架构，该架构会推送来自顶点、边和面的信号，并将它们的信息汇总到最终的面预测类中。我们同样选择 <span class="math inline">\(\mbox{CCNN}_{HB}\)</span>，只不过预测的信号是边类。之所以这样选择，是因为Human Body 数据集<span class="citation">(<a href="#ref-atzmon2018point">Atzmon, Maron, and Lipman 2018</a>)</span>对边缘的分割信息进行了编码。</p>
 </div>
 <div id="mesh-and-point-cloud-classification" class="section level3 hasAnchor" number="9.3.2">
-<h3><span class="header-section-number">9.3.2</span> Mesh and point cloud classification<a href="implementation-and-numerical-results.html#mesh-and-point-cloud-classification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>We evaluate our method on mesh classification using the SHREC11 dataset <span class="citation">(<a href="#ref-lian2011shape">Lian et al. 2011</a>)</span> based on the same cochains and CC structure used in the segmentation experiment of Section <a href="implementation-and-numerical-results.html#mesh-segmentation">9.3.1</a>. The CCNN architecture for our mesh classification task, denoted by <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span>, is demonstrated in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(b). The final layer of <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span>, depicted as a grey node in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(b), is a simple pooling operation that sums all embeddings of the CC after mapping them to the same Euclidean space. The <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span> is trained for 40 epochs with both tanh and identity activation functions using a learning rate of 0.005 and the standard cross-entropy loss. We use anisotropic scaling and random rotations for data augmentation. Each mesh is augmented 30 times, is centered around the vertex center of the mass, and is rescaled to fit inside the unit cube.</p>
-<p>The <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span> with identity activations and <span class="math inline">\(\tanh\)</span> activations achieve predictive accuracies of 96.67% and 99.17%, respectively. Table <a href="implementation-and-numerical-results.html#tab:shrec">9.2</a> shows that CCNNs outperform two neural networks tailored to mesh analysis (HodgeNet and MeshCCN), being the second best model behind PD-MeshNet in mesh and point cloud classification. It is worth mentioning that the mesh classification CCNN requires a significantly lower number of epochs to train (40 epochs) as compared to the mesh segmentation CCNNs (600 epochs).</p>
+<h3><span class="header-section-number">9.3.2</span> 网格和点云分类<a href="implementation-and-numerical-results.html#mesh-and-point-cloud-classification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>我们使用 SHREC11 数据集<span class="citation">(<a href="#ref-lian2011shape">Lian et al. 2011</a>)</span>对我们的方法针对网格分类进行了评估，该数据集采用和第<a href="implementation-and-numerical-results.html#mesh-segmentation">9.3.1</a>节的分割实验中的相同共链和 CC 结构。用于网格分类任务的 CCNN 架构（表示为<span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span> ）如图 <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(b)所示。<span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span>的最后一层在图<a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(b)中以灰色节点表示，这是一个简单的池化操作，将CC的所有嵌入映射到相同的欧是空间后求和。<span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span> 使用 <span class="math inline">\(tanh\)</span> 和 <span class="math inline">\(identity\)</span> 激活函数进行了 40 次训练，学习率为 0.005，损失为标准交叉熵。我们使用各向异向扩展和随机旋转来增强数据。每个网格增强 30 次，以质量顶点中心为中心，并重新缩放以适应单位立方体。</p>
+<p>带有<span class="math inline">\(identity\)</span> 激活和<span class="math inline">\(\tanh\)</span>激活的<span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span>的预测准确率分别达到96.67%和99.17%。表<a href="implementation-and-numerical-results.html#tab:shrec">9.2</a>显示，CCNNs 的表现优于两个专门用于网格分析的神经网络（HodgeNet 和 MeshCCN），在网格和点云分类方面是仅次于 PD-MeshNet 的最佳模型。值得一提的是，网格分类 CCNN 所需的训练历时（40 个epochs）大大少于网格分割 CCNN（600 个epochs）。</p>
+<blockquote>
+<p>译者注：Identity激活 是一种输入和输出相等的激活函数，比较适合底层函数是线性的，比如线性回归问题，当存在非线性问题是，作用就大打折扣</p>
+</blockquote>
 <table>
-<caption><span id="tab:shrec">表 9.2: </span>Predictive accuracy on the SHREC11 test dataset. The left and right column report the mesh and point cloud classification results, respectively. The CCNN for mesh classification is <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span>, while the CCNN for point cloud classification is <span class="math inline">\(\mbox{CCNN}_{MOG2}\)</span>.</caption>
+<caption><span id="tab:shrec">表 9.2: </span>在数据集SHREC11 test 上的预测精度。 左列和右列分别报告了网格和点云分类结果。网格分类的 CCNN 为 <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span> ，点云分类的 CCNN 为 <span class="math inline">\(\mbox{CCNN}_{MOG2}\)</span> 。</caption>
 <thead>
 <tr class="header">
-<th align="left">Method</th>
+<th align="left">方法</th>
 <th align="center">Mesh</th>
 <th align="center">Point cloud</th>
 </tr>
@@ -363,7 +366,7 @@ div.csl-indent {
 </tr>
 </tbody>
 </table>
-<p><strong>Architecture of <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span></strong>. The <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span> has two layers and is chosen as a pooling CCNN in the sense of Definition <a href="push-forward-pooling-and-unpooling.html#def:general-pooling-hoan">7.5</a>, similar to <span class="math inline">\(\mbox{CCNN}_{COSEG}\)</span> and <span class="math inline">\(\mbox{CCNN}_{HB}\)</span>. The main difference is that the final layer of <span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span>, represented by the grey point in Figure <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(b), is a global pooling function that sums all embeddings of all dimensions (zero, one and two) of the underlying CC after mapping them to the same Euclidean space.</p>
+<p><strong><span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span>的架构</strong>. <span class="math inline">\(mbox{CCNN}_{SHREC}\)</span>有两层，用作定义<a href="push-forward-pooling-and-unpooling.html#def:general-pooling-hoan">7.5</a>中描述的池化CCNN，类似于<span class="math inline">\(\mbox{CCNN}_{COSEG}\)</span>和<span class="math inline">\(\mbox{CCNN}_{HB}\)</span>。主要区别在于，<span class="math inline">\(\mbox{CCNN}_{SHREC}\)</span> 的最后一层（图 <a href="implementation-and-numerical-results.html#fig:mesh-net">9.1</a>(b)中的灰色点表示）是一个全局池化函数，它将底层 CC 的所有维度（0、1、2）的嵌入映射到相同的欧氏空间后求和。</p>
 </div>
 <div id="graph-classification" class="section level3 hasAnchor" number="9.3.3">
 <h3><span class="header-section-number">9.3.3</span> Graph classification<a href="implementation-and-numerical-results.html#graph-classification" class="anchor-section" aria-label="Anchor link to header"></a></h3>

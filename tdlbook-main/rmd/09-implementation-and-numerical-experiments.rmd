@@ -53,35 +53,39 @@ knitr::include_graphics('figures/experiment.png', dpi=NA)
 
 我们使用Human Body [@maron2017convolutional] 和 Shape COSEG（花瓶、椅子和外星人）[@wang2012active] 数据集对所提出的 CCNN 进行了网格分割测试。对于这些数据集中的每个网格，所使用的 CC 结构是由网格的三角剖分建立的，尽管 CC 结构的其他变化也会产生类似的结果。此外，还为 $0\leq k \leq 2$  构建了三个 $k$-cochains，并在 CCNN 训练中使用。如表 \@ref(tab:shape-xp)所示，在四个数据集中的两个数据集上，CCNN 优于为网格分析量身定制的三个神经网络（HodgeNet [@smirnov2021hodgenet], PD-MeshNet [@milano2020primal] 和 MeshCCN [@hanocka2019meshcnn]），并且是所有四个数据集上最好的两个神经网络之一。
 
+
 ```{r shape-xp, echo=FALSE}
-方法 <- c('HodgeNet', 'PD-MeshNet', 'MeshCNN', 'CCNN')
+methods <- c('HodgeNet', 'PD-MeshNet', 'MeshCNN', 'CCNN')
 hb <- c('85.03', '85.61', '85.39', '87.30')
 cosegv <- c('90.30', '95.36', '92.36', '93.40')
 cosegc <- c('95.68', '97.23', '92.99', '98.30')
 cosega <- c('96.03', '98.18', '96.26', '93.70')
 domains <- data.frame(methods, hb, cosegv, cosegc, cosega)
-colnames(domains) <- c('Method', 'Human Body', 'COSEG vase', 'COSEG chair', 'COSEG alien')
+colnames(domains) <- c('方法', 'Human Body', 'COSEG vase', 'COSEG chair', 'COSEG alien')
 knitr::kable(domains, align=c('l', 'c', 'c', 'c', 'c'), booktabs=TRUE, caption="与形状分析相关的测试集，即Human Body和 COSEG（花瓶、椅子、外星人）数据集的预测准确率。本文报告的结果基于  $\\mbox{CCNN}_{COSEG}$ 和$\\mbox{CCNN}_{HB}$  架构。其中，第一列报告的是 $\\mbox{CCNN}_{HB}$ 的结果，而第二、第三和第四列报告的是 $\\mbox{CCNN}_{COSEG}$的结果。")
 ```
 
-**Architecture of $\mbox{CCNN}_{COSEG}$ and  $\mbox{CCNN}_{HB}$**. In $\mbox{CCNN}_{COSEG}$, as shown in Figure \@ref(fig:mesh-net)(a), we choose a CCNN pooling architecture as given in Definition \@ref(def:general-pooling-hoan), which pushes signals from vertices, edges and faces, and aggregates their information towards the final face prediction class. We choose $\mbox{CCNN}_{HB}$ similarly, except that the predicted signal is an edge class. The reason for this choice is that the Human Body dataset [@atzmon2018point] encodes the segmentation information on edges.
+**$\mbox{CCNN}_{COSEG}$ 和  $\mbox{CCNN}_{HB}$的架构**. 在 $\mbox{CCNN}_{COSEG}$中, 如图\@ref(fig:mesh-net)(a)所示, 我们选择定义 \@ref(def:general-pooling-hoan)中给出的 带池化操作的CCNN 的架构，该架构会推送来自顶点、边和面的信号，并将它们的信息汇总到最终的面预测类中。我们同样选择 $\mbox{CCNN}_{HB}$，只不过预测的信号是边类。之所以这样选择，是因为Human Body 数据集[@atzmon2018point]对边缘的分割信息进行了编码。
 
-### Mesh and point cloud classification
+### 网格和点云分类{#mesh-and-point-cloud-classification}
 
-We evaluate our method on mesh classification using the SHREC11 dataset [@lian2011shape] based on the same cochains and CC structure used in the segmentation experiment of Section \@ref(mesh-segmentation). The CCNN architecture for our mesh classification task, denoted by $\mbox{CCNN}_{SHREC}$, is demonstrated in Figure \@ref(fig:mesh-net)(b). The final layer of $\mbox{CCNN}_{SHREC}$, depicted as a grey node in Figure \@ref(fig:mesh-net)(b), is a simple pooling operation that sums all embeddings of the CC after mapping them to the same Euclidean space. The $\mbox{CCNN}_{SHREC}$ is trained for 40 epochs with both tanh and identity activation functions using a learning rate of 0.005 and the standard cross-entropy loss. We use anisotropic scaling and random rotations for data augmentation. Each mesh is augmented 30 times, is centered around the vertex center of the mass, and is rescaled to fit inside the unit cube.
+我们使用 SHREC11 数据集[@lian2011shape]对我们的方法针对网格分类进行了评估，该数据集采用和第\@ref(mesh-segmentation)节的分割实验中的相同共链和 CC 结构。用于网格分类任务的 CCNN 架构（表示为$\mbox{CCNN}_{SHREC}$ ）如图 \@ref(fig:mesh-net)(b)所示。$\mbox{CCNN}_{SHREC}$的最后一层在图\@ref(fig:mesh-net)(b)中以灰色节点表示，这是一个简单的池化操作，将CC的所有嵌入映射到相同的欧是空间后求和。$\mbox{CCNN}_{SHREC}$ 使用 $tanh$ 和 $identity$ 激活函数进行了 40 次训练，学习率为 0.005，损失为标准交叉熵。我们使用各向异向扩展和随机旋转来增强数据。每个网格增强 30 次，以质量顶点中心为中心，并重新缩放以适应单位立方体。
 
-The $\mbox{CCNN}_{SHREC}$ with identity activations and $\tanh$ activations achieve predictive accuracies of 96.67% and 99.17%, respectively. Table \@ref(tab:shrec) shows that CCNNs outperform two neural networks tailored to mesh analysis (HodgeNet and MeshCCN), being the second best model behind PD-MeshNet in mesh and point cloud classification. It is worth mentioning that the mesh classification CCNN requires a significantly lower number of epochs to train (40 epochs) as compared to the mesh segmentation CCNNs (600 epochs).
+
+带有$identity$ 激活和$\tanh$激活的$\mbox{CCNN}_{SHREC}$的预测准确率分别达到96.67%和99.17%。表\@ref(tab:shrec)显示，CCNNs 的表现优于两个专门用于网格分析的神经网络（HodgeNet 和 MeshCCN），在网格和点云分类方面是仅次于 PD-MeshNet 的最佳模型。值得一提的是，网格分类 CCNN 所需的训练历时（40 个epochs）大大少于网格分割 CCNN（600 个epochs）。
+
+> 译者注：Identity激活 是一种输入和输出相等的激活函数，比较适合底层函数是线性的，比如线性回归问题，当存在非线性问题是，作用就大打折扣
 
 ```{r shrec, echo=FALSE}
 methods <- c('HodgeNet', 'PD-MeshNet', 'MeshCNN', 'CCNN')
 mesh <- c('99.10', '99.70', '98.60', '99.17')
 pointcloud <- c('94.70', '99.10', '91.00', '95.20')
 domains <- data.frame(methods, mesh, pointcloud)
-colnames(domains) <- c('Method', 'Mesh', 'Point cloud')
-knitr::kable(domains, align=c('l', 'c', 'c'), booktabs=TRUE, caption="Predictive accuracy on the SHREC11 test dataset. The left and right column report the mesh and point cloud classification results, respectively. The CCNN for mesh classification is $\\mbox{CCNN}_{SHREC}$, while the CCNN for point cloud classification is $\\mbox{CCNN}_{MOG2}$.")
+colnames(domains) <- c('方法', 'Mesh', 'Point cloud')
+knitr::kable(domains, align=c('l', 'c', 'c'), booktabs=TRUE, caption="在数据集SHREC11 test 上的预测精度。 左列和右列分别报告了网格和点云分类结果。网格分类的 CCNN 为 $\\mbox{CCNN}_{SHREC}$ ，点云分类的 CCNN 为 $\\mbox{CCNN}_{MOG2}$ 。")
 ```
 
-**Architecture of $\mbox{CCNN}_{SHREC}$**. The $\mbox{CCNN}_{SHREC}$ has two layers and is chosen as a pooling CCNN in the sense of Definition \@ref(def:general-pooling-hoan), similar to $\mbox{CCNN}_{COSEG}$ and $\mbox{CCNN}_{HB}$. The main difference is that the final layer of $\mbox{CCNN}_{SHREC}$, represented by the grey point in Figure \@ref(fig:mesh-net)(b), is a global pooling function that sums all embeddings of all dimensions (zero, one and two) of the underlying CC after mapping them to the same Euclidean space.
+**$\mbox{CCNN}_{SHREC}$的架构**. $mbox{CCNN}_{SHREC}$有两层，用作定义\@ref(def:general-pooling-hoan)中描述的池化CCNN，类似于$\mbox{CCNN}_{COSEG}$和$\mbox{CCNN}_{HB}$。主要区别在于，$\mbox{CCNN}_{SHREC}$ 的最后一层（图 \@ref(fig:mesh-net)(b)中的灰色点表示）是一个全局池化函数，它将底层 CC 的所有维度（0、1、2）的嵌入映射到相同的欧氏空间后求和。
 
 ### Graph classification
 
