@@ -87,11 +87,11 @@ knitr::kable(domains, align=c('l', 'c', 'c'), booktabs=TRUE, caption="在数据�
 
 **$\mbox{CCNN}_{SHREC}$的架构**. $mbox{CCNN}_{SHREC}$有两层，用作定义\@ref(def:general-pooling-hoan)中描述的池化CCNN，类似于$\mbox{CCNN}_{COSEG}$和$\mbox{CCNN}_{HB}$。主要区别在于，$\mbox{CCNN}_{SHREC}$ 的最后一层（图 \@ref(fig:mesh-net)(b)中的灰色点表示）是一个全局池化函数，它将底层 CC 的所有维度（0、1、2）的嵌入映射到相同的欧氏空间后求和。
 
-### Graph classification
+### 图分类{#graph-classification}
 
-For the graph classification task, we use the graph classification benchmark provided in [@bianchi2020mincutpool]; the dataset consists of graphs with three different labels. For each graph, the feature vector on each vertex (the 0-cochain) is a one-hot vector of size five, and it stores the relative position of the vertex on the graph. To construct the CC structure, we use the 2-clique complex of the input graph. We then proceed to build the CCNN for graph classification, denoted by $\mbox{CCNN}_{Graph}$, which is visualized in Figure \@ref(fig:mesh-net)(c). The matrices used for the construction of $\mbox{CCNN}_{Graph}$ are $B_{0,1},~B_{1,2},~B_{0,2}$, their transpose matrices, and the (co)adjacency matrices $A_{0,1},A_{1,1},~coA_{2,1}$. The cochains of $\mbox{CCNN}_{Graph}$ are constructed as follows. For each graph in the dataset, we set the 0-cochain to be the one-hot vector of size 5 provided by the dataset. This one-hot vector stores the relative position of the vertex on the graph. We also construct the 1-cochain and 2-cochain on the 2-clique complex of the graph by considering the coordinate-wise max value of the one-hot vectors attached to the vertices of each cell. The input to $\mbox{CCNN}_{graoh}$ consists of the 0-cochain provided as a part of the dataset as well as the constructed 1 and 2-cochains. The grey node in Figure \@ref(fig:mesh-net)(c) indicates a simple mean pooling operation. We train this network with a learning rate of 0.005 and no data augmentation.
+对于图分类任务，使用文献[@bianchi2020mincutpool]中提供的图分类测试基准数据，该数据集由三类不同标签的数据组成。对于每个图， 每个顶点(0-cochain)的特征向量都是尺寸为5的独热向量，存储了图中顶点的相对位置。 为了构建 CC 结构，我们使用了输入图的 2-clique 复形。 然后，我们继续构建用于图分类的 CCNN，表示为 $\mbox{CCNN}_{Graph}$ 表示，如图 \@ref(fig:mesh-net)(c)所示。 构造 $\mbox{CCNN}_{Graph}$的矩阵式 $B_{0,1},~B_{1,2},~B_{0,2}$，转置矩阵和（共）邻矩阵是$A_{0,1},A_{1,1},~coA_{2,1}$。 $\mbox{CCNN}_{Graph}$ 的共链构建方式如下对于数据集中的每个图，我们将 0-Cochain 设置为数据集提供的大小为 5的独热向量。这个独热向量存储了顶点在图中的相对位置。我们还通过考虑连接到每个胞腔顶点的独热向量的坐标最大值，在图的 2-clique复形上构建 1-cochain和2-cochain。$\mbox{CCNN}_{graoh}$ 的输入包括作为数据集一部分提供的 0-cochain，以及构建的 1-cochain和 2-cochain。图 \@ref(fig:mesh-net)(c) 中的灰色节点表示简单的均值池化操作。我们以 0.005 的学习率训练这个网络，并且没有增强数据。
 
-Table \@ref(tab:wrap-tab) reports the results on the *easy* and the *hard* versions of the datasets^[The difficulty in these datasets is controlled by the compactness degree of the graph clusters; clusters in the 'easy' data have more in-between cluster connections, while clusters in the `hard' data are more isolated [@bianchi2020mincutpool].], and compares them to six state-of-the-art GNNs. As shown in Table \@ref(tab:wrap-tab), CCNNs outperform all six GNNs on the hard dataset, and five of the GNNs on the easy dataset. The proposed CCNN outperforms MinCutPool on the hard dataset, while it attains comparable performance to MinCutPool on the easy dataset.
+表 \@ref(tab:wrap-tab)报告了*简易*和*困难*两个版本数据集的结果^[这些数据集的难度受图簇紧凑程度的控制；“简易 ”数据中的簇具有更多的簇间连接，而 “困难 ”数据中的簇更加孤立[@bianchi2020mincutpool]]，并将它们与六个最先进的GNN进行了比较。如表\@ref(tab:wrap-tab)所示，在 “困难 ”数据集上，CCNN优于所有六种GNN，在 “简易 ”数据集上，CCNN优于五种GNN。我们提出的 CCNN 在困难数据集上的表现优于 MinCutPool，而在建议数据集上的表现与 MinCutPool 相当。
 
 ```{r wrap-tab, echo=FALSE}
 dsets <- c('Easy', 'Hard')
@@ -106,7 +106,7 @@ domains <- data.frame(
   dsets, graclus, ndp, diffpool, topk, sagpool, mincutpool, ccnn
 )
 colnames(domains) <- c(
-  'Dataset',
+  '数据集',
   'Graclus',
   'NDP',
   'DiffPool',
@@ -115,10 +115,10 @@ colnames(domains) <- c(
   'MinCutPool',
   'CCNN'
 )
-knitr::kable(domains, align=c('l', 'c', 'c', 'c', 'c'), booktabs=TRUE, caption="Predictive accuracy on the test set of [@bianchi2020mincutpool] related to graph classification. All results are reported using the $\\mbox{CCNN}_{Graph}$ architecture.")
+knitr::kable(domains, align=c('l', 'c', 'c', 'c', 'c'), booktabs=TRUE, caption="在[@bianchi2020mincutpool]测试集上与图分类相关的预测准确率。所有结果均使用 $\\mbox{CCNN}_{Graph}$架构报告。")
 ```
 
-**Architecture of  $\mbox{CCNN}_{Graph}$**. In the $\mbox{CCNN}_{Graph}$ displayed in Figure \@ref(fig:mesh-net)(c) we choose a CCNN pooling architecture as given in Definition \@ref(def:general-pooling-hoan) that pushes signals from vertices, edges and faces, and aggregate their information towards the higher-order cells before making making the final prediction. For the dataset of [@bianchi2020mincutpool], we experiment with two architectures; the first one is identical to the $\mbox{CCNN}_{SHREC}$ shown in Figure \@ref(fig:mesh-net)(b), and the second one is the $\mbox{CCNN}_{Graph}$ shown in Figure \@ref(fig:mesh-net)(c). We report the results for $\mbox{CCNN}_{Graph}$, as it provides superior performance. Note that when this neural network is conducted on an underlying simplicial complex, the neighborhood matrices $B_{0,1}$ and $B_{1,3}$ are typically not considered, hence the CC-structure equipped with these additional incidence matrices improves the generalization performance of the $\mbox{CCNN}_{Graph}$.
+**$\mbox{CCNN}_{Graph}$的架构**. 对于图\@ref(fig:mesh-net)(c)中给出的$\mbox{CCNN}_{Graph}$， 我们选择了定义\@ref(def:general-pooling-hoan)中给出的 CCNN 池架构，该架构推送来自顶点、边和面的信号，并在做出最终预测之前将它们的信息聚合到高阶胞腔。对于[@bianchi2020mincutpool]中的数据集，我们用两种架构进行了实验：第一种架构与图\@ref(fig:mesh-net)(b)中所示的$\mbox{CCNN}_{SHREC}$相同，第二种架构是图\@ref(fig:mesh-net)(c)中所示的$\mbox{CCNN}_{Graph}$。我们报告的是 $\mbox{CCNN}_{Graph}$的实验结果，因为它的性能更优。需要注意的是，当这种神经网络在底层单纯复形上执行时，通常不会考虑关联矩阵 $B_{0,1}$ and $B_{1,3}$，但是配备了这些额外关联矩阵的 CC 结构有助于提高 $\mbox{CCNN}_{Graph}$ 的泛化性能。
 
 ## Pooling with mapper on graphs and data classification
 
