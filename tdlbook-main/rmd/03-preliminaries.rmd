@@ -1,3 +1,8 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
 # 预备知识{#preliminaries}
 
 在各种机器学习应用中，集合$S$中实体间的邻近性概念具有重要意义，因为它有助于理解$S$中实体间的关系。例如，聚类算法的目的是将相互接近的点进行分组。在推荐系统中，目标是推荐与用户已表示感兴趣的项具有相似性的项。然而，问题是我们如何精确量化近似性的概念？
@@ -121,7 +126,7 @@ knitr::include_graphics('figures/proximity.png', dpi=NA)
 
 :::
 
-直观地说，在高阶域$\mathcal{X}$上的秩函数$\mbox{rk}$给$\mathcal{X}$中的每一个关系附加一个用非负整数值表示的秩，使得$\mathcal{X}$中的集合胞腔通过$\mbox{rk}$得以保全。实际上，秩函数在$\mathcal{X}$上诱导了一个*层次结构*。胞腔和单纯复形是具有秩函数的高阶域的常见例子，因此具有层次化关系。。
+直观地说，在高阶域$\mathcal{X}$上的秩函数$\mbox{rk}$给$\mathcal{X}$中的每一个关系附加一个用非负整数值表示的秩，使得$\mathcal{X}$中的集合胞腔通过$\mbox{rk}$得以保全。实际上，秩函数在$\mathcal{X}$上诱导了一个*层次结构*。胞腔和单纯复形是具有秩函数的高阶域的常见例子，因此具有层次化关系。
 
 
 ```{definition, strelations, name="集合型关系，Set-type relations"}

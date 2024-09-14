@@ -1,3 +1,9 @@
+---
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+---
 \mainmatter
 
 # (PART\*) 第一部分：基础知识 {-}

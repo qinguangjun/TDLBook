@@ -196,7 +196,6 @@ point-cloud-classification-cc-pooling-with-input-vertex-features-only
 ablation-studies
 related-work
 graph-based-models
-higher-order-deep-learning-models
 attention-based-models
 graph-based-pooling
 applied-algebraic-topology

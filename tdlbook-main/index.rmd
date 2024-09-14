@@ -58,7 +58,7 @@ knitr::include_graphics('figures/face.jpeg', dpi=NA)
 
 > **问题1.** 生成html文件正常，但是生成epub文件里的公式不能正常显示
 
-> **问题2.** 如果生成的HTML中公式显示不正常，重启电脑就好了，不指导为什么
+> **问题2.** 如果生成的HTML中公式显示不正常，重启电脑就好了，不知道为什么
 
 > "dsfdsfdsfsfd"
 
