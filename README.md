@@ -3,6 +3,6 @@ Chinese Version of "Topological Deep Learning: Going Beyond Graph Data". This is
 
 "Topological Deep Learning: Going Beyond Graph Data"的中文版，一本很棒的书，关于拓扑深度学习的第一本书。
 
-原文见 https://tdlbook.org/，https://github.com/pyt-team/tdlbook
+原文见 https://tdlbook.org/ 和 https://github.com/pyt-team/tdlbook
 
 翻译中......

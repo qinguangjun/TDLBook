@@ -38,13 +38,13 @@ lapply(c('xfun'), function(pkg) {
 Aldo Guzmán-Sáenz, Tamal K. Dey, Soham Mukherjee, Shreyas N. Samaga,
 Neal Livesay, Robin Walters, Paul Rosen*.
 
-# 译者 {.unnumbered}
+# 翻译说明 {.unnumbered}
 
-**秦广军**
+**译者：秦广军**
 
-北京联合大学 智慧城市学院
+北京联合大学 智慧城市学院 计算机工程系
 
-2024年08月06日开始，xxxx年xx月xx日结束
+2024年08月06日开始，2024年xx月xx日结束
 
 北京
 
@@ -60,7 +60,12 @@ knitr::include_graphics('figures/face.jpeg', dpi=NA)
 
 > **问题2.** 如果生成的HTML中公式显示不正常，重启电脑就好了，不知道为什么
 
-> "dsfdsfdsfsfd"
+> **问题3.** 不知道怎么生成pdf
+
+> **问题4.** 怎么生成目录，不是侧边栏目录，而是目录页
+
+
+原文见 https://tdlbook.org/ 和 https://github.com/pyt-team/tdlbook
 
 除了本文，下面再给出一些有用的链接：
 

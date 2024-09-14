@@ -101,7 +101,7 @@ div.csl-indent {
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>贡献者</a></li>
-<li class="chapter" data-level="" data-path="译者.html"><a href="译者.html"><i class="fa fa-check"></i>译者</a></li>
+<li class="chapter" data-level="" data-path="翻译说明.html"><a href="翻译说明.html"><i class="fa fa-check"></i>翻译说明</a></li>
 <li class="chapter" data-level="" data-path="序言.html"><a href="序言.html"><i class="fa fa-check"></i>序言</a>
 <ul>
 <li class="chapter" data-level="" data-path="序言.html"><a href="序言.html#编译"><i class="fa fa-check"></i>编译</a></li>
@@ -245,7 +245,7 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="glossary" class="section level1 hasAnchor" number="12">
 <h1><span class="header-section-number">附录 A</span> 术语<a href="glossary.html#glossary" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>下表概括了本文用到的符号。</p>
+<p><strong>表1：集合相关的符号</strong></p>
 <table>
 <colgroup>
 <col width="23%" />
@@ -253,7 +253,7 @@ div.csl-indent {
 </colgroup>
 <thead>
 <tr class="header">
-<th align="left">术语</th>
+<th align="left">符号</th>
 <th align="left">描述</th>
 </tr>
 </thead>
@@ -280,11 +280,62 @@ div.csl-indent {
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\mathcal{N}_{co}(x)\)</span></td>
-<td align="left">Coadjacency set of a cell 胞腔<span class="math inline">\(x\)</span>的共邻接集（Coadjacency set）</td>
+<td align="left">胞腔<span class="math inline">\(x\)</span>的共邻接集（Coadjacency set）</td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\mathcal{N}_{\{ G_1,\ldots,G_n\}}(x)\)</span></td>
-<td align="left">由邻域矩阵（neighborhood matrices）<span class="math inline">\(\{G_1,\dots,G_n\}\)</span>限定的 <span class="math inline">\(x\)</span>的领域</td>
+<td align="left">由邻域矩阵（neighborhood matrices）<span class="math inline">\(\{G_1,\dots,G_n\}\)</span>限定的 <span class="math inline">\(x\)</span>的邻域</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\mathcal{N}_{\searrow}(x)\)</span></td>
+<td align="left">胞腔<span class="math inline">\(x\)</span>的下关联（down-incidence）集合</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\mathcal{N}_{\nearrow}(x)\)</span></td>
+<td align="left">胞腔<span class="math inline">\(x\)</span>的上关联（up-incidence）集合</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\mathcal{N}_{\searrow,k}(x)\)</span></td>
+<td align="left">胞腔<span class="math inline">\(x\)</span>的<span class="math inline">\(k\)</span>下关联（<span class="math inline">\(k\)</span>-down incidence）集合</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\mathcal{N}_{\nearrow,k}(x)\)</span></td>
+<td align="left">胞腔<span class="math inline">\(x\)</span>的<span class="math inline">\(k\)</span>上关联（<span class="math inline">\(k\)</span>-up incidence）集合</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\mathbb{N}\)</span> 和 <span class="math inline">\(\mathbb{Z}_{\ge 0}\)</span></td>
+<td align="left">分别为正整数和非负整数的集合</td>
+</tr>
+</tbody>
+</table>
+<p><strong>表2：域相关的符号</strong></p>
+<table>
+<colgroup>
+<col width="23%" />
+<col width="76%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">符号</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\mathcal{G}\)</span></td>
+<td align="left">图</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(x^k\)</span></td>
+<td align="left">秩（rank）为<span class="math inline">\(k\)</span>的胞腔<span class="math inline">\(x\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\mbox{rk}\)</span></td>
+<td align="left">秩函数（Rank function）</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\((S, \mathcal{X}, \mbox{rk})\)</span></td>
+<td align="left">由集合<span class="math inline">\(S\)</span>、 <span class="math inline">\(\mathcal{P}(S)\setminus\{\emptyset\}\)</span>的子集<span class="math inline">\(\mathcal{X}\)</span>和秩函数<span class="math inline">\(\mbox{rk}\)</span>组成的CC</td>
 </tr>
 </tbody>
 </table>
@@ -294,47 +345,6 @@ div.csl-indent {
 <col width="64%" />
 </colgroup>
 <tbody>
-<tr class="odd">
-<td><span class="math inline">\(\mathcal{N}_{\searrow}(x)\)</span></td>
-<td>Set of down-incidence of a cell <span class="math inline">\(x\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\mathcal{N}_{\nearrow}(x)\)</span></td>
-<td>Set of up-incidence of a cell <span class="math inline">\(x\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\mathcal{N}_{\searrow,k}(x)\)</span></td>
-<td>Set of <span class="math inline">\(k\)</span>-down incidence of a cell <span class="math inline">\(x\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\mathcal{N}_{\nearrow,k}(x)\)</span></td>
-<td>Set of <span class="math inline">\(k\)</span>-up incidence of a cell <span class="math inline">\(x\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\mathbb{N}\)</span> and <span class="math inline">\(\mathbb{Z}_{\ge 0}\)</span></td>
-<td>Set of positive integers and non-negative integers, respectively</td>
-</tr>
-<tr class="even">
-<td colspan="2"><center>
-Domains
-</center></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\mathcal{G}\)</span></td>
-<td>Graph</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(x^k\)</span></td>
-<td>Cell <span class="math inline">\(x\)</span> of rank <span class="math inline">\(k\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\mbox{rk}\)</span></td>
-<td>Rank function</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\((S, \mathcal{X}, \mbox{rk})\)</span></td>
-<td>CC, consisting of a set <span class="math inline">\(S\)</span>, a subset <span class="math inline">\(\mathcal{X}\)</span> of <span class="math inline">\(\mathcal{P}(S)\setminus\{\emptyset\}\)</span>, and a rank function <span class="math inline">\(\mbox{rk}\)</span></td>
-</tr>
 <tr class="odd">
 <td><span class="math inline">\(\dim (\mathcal{X})\)</span></td>
 <td>Dimension of a CC <span class="math inline">\(\mathcal{X}\)</span></td>
