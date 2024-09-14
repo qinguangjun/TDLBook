@@ -6,3 +6,12 @@ Chinese Version of "Topological Deep Learning: Going Beyond Graph Data". This is
 原文见 https://tdlbook.org/ 和 https://github.com/pyt-team/tdlbook
 
 翻译中......
+
+**译者：秦广军**
+
+北京联合大学 智慧城市学院 计算机工程系
+
+2024年08月06日开始，2024年xx月xx日结束
+
+
+北京

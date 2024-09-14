@@ -1,7 +1,7 @@
 ---
 title: "拓扑深度学习：超越图数据"
 author: "Mustafa Hajij, Theodore Papamarkou, Ghada Zamzmi, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Michael T. Schaub "
-date: "`r Sys.Date()`"
+date: 2024年08月06日 下载 #"`r Sys.Date()`"
 documentclass: krantz
 bibliography: [bib/main.bib, bib/related-work.bib, bib/appendix.bib]
 biblio-style: apalike
@@ -44,7 +44,9 @@ Neal Livesay, Robin Walters, Paul Rosen*.
 
 北京联合大学 智慧城市学院 计算机工程系
 
-2024年08月06日开始，2024年xx月xx日结束
+2024年08月06日开始，2024年09月xx日结束
+
+编译日期："`r Sys.Date()`"
 
 北京
 

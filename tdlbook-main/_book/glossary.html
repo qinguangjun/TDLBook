@@ -23,7 +23,6 @@
 <meta name="author" content="Mustafa Hajij, Theodore Papamarkou, Ghada Zamzmi, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Michael T. Schaub" />
 
 
-<meta name="date" content="2024-09-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -339,216 +338,228 @@ div.csl-indent {
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\dim (\mathcal{X})\)</span></td>
-<td align="left">Dimension of a CC <span class="math inline">\(\mathcal{X}\)</span></td>
+<td align="left">CC <span class="math inline">\(\mathcal{X}的维度\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\{c_\alpha\}_{\alpha \in I}\)</span></td>
+<td align="left">由索引集<span class="math inline">\(I\)</span>索引的子空间（胞腔）划分</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\mbox{int}(x)\)</span></td>
+<td align="left">正则胞腔复形（regular cell complex）中胞腔<span class="math inline">\(x\)</span>的内部区域</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(n_\alpha\in \mathbb{N}\)</span></td>
+<td align="left">正则胞腔复形的胞腔的维度</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(0\)</span>-cells</td>
+<td align="left">CC 的顶点</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(1\)</span>-cells</td>
+<td align="left">CC 的边</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(k\)</span>-cells</td>
+<td align="left">秩为<span class="math inline">\(k\)</span>的胞腔</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\mathcal{X}^{(k)}\)</span></td>
+<td align="left"><span class="math inline">\(\mathcal{X}\)</span>的<span class="math inline">\(k\)</span>-骨架（skeleton）, 由<span class="math inline">\(\mathcal{X}\)</span>上的<span class="math inline">\(i\)</span>-cells构成， <span class="math inline">\(i\leq k\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\mathcal{X}^k\)</span></td>
+<td align="left"><span class="math inline">\(\mathcal{X}\)</span>的<span class="math inline">\(k\)</span>-cells集合</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(|\mathcal{X}^k|\)</span></td>
+<td align="left"><span class="math inline">\(\mathcal{X}^k\)</span>的基（Cardinality）, 即 <span class="math inline">\(\mathcal{X}\)</span>的<span class="math inline">\(k\)</span>-cells个数</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\mathcal{X}_{n-hop}(G)\)</span></td>
+<td align="left">图<span class="math inline">\(G\)</span>的<span class="math inline">\(n\)</span>-hop CC</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\mathcal{X}_p(G)\)</span></td>
+<td align="left">Path-based CC of a graph 图<span class="math inline">\(G\)</span>上基于路径(path)的CC</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\mathcal{X}_{loop}(G)\)</span></td>
+<td align="left">Loop-based CC of a graph 图<span class="math inline">\(G\)</span>上基于环（loop）的CC</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\mathcal{X}_{SC}(\mathcal{Y})\)</span></td>
+<td align="left">Coface CC of a 单纯复形（simplicial complex）/CC <span class="math inline">\(\mathcal{Y}\)</span>的共面(Coface)CC</td>
 </tr>
 </tbody>
 </table>
+<p><strong>表3. 矩阵相关的符号</strong></p>
 <table>
 <colgroup>
-<col width="35%" />
-<col width="64%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\(\{c_\alpha\}_{\alpha \in I}\)</span></td>
-<td>Partition into subspaces (cells) indexed by an index set <span class="math inline">\(I\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\mbox{int}(x)\)</span></td>
-<td>Interior of a cell <span class="math inline">\(x\)</span> in a regular cell complex</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(n_\alpha\in \mathbb{N}\)</span></td>
-<td>Dimension of a cell in a regular cell complex</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(0\)</span>-cells</td>
-<td>Vertices of a CC</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(1\)</span>-cells</td>
-<td>Edges of a CC</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(k\)</span>-cells</td>
-<td>Cells with rank <span class="math inline">\(k\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\mathcal{X}^{(k)}\)</span></td>
-<td><span class="math inline">\(k\)</span>-skeleton of <span class="math inline">\(\mathcal{X}\)</span>, formed by <span class="math inline">\(i\)</span>-cells in <span class="math inline">\(\mathcal{X}\)</span> with <span class="math inline">\(i\leq k\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\mathcal{X}^k\)</span></td>
-<td>Set of k-cells of <span class="math inline">\(\mathcal{X}\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(|\mathcal{X}^k|\)</span></td>
-<td>Cardinality of <span class="math inline">\(\mathcal{X}^k\)</span>, that is number of <span class="math inline">\(k\)</span>-cells of <span class="math inline">\(\mathcal{X}\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\mathcal{X}_{n-hop}(G)\)</span></td>
-<td><span class="math inline">\(n\)</span>-hop CC of a graph <span class="math inline">\(G\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\mathcal{X}_p(G)\)</span></td>
-<td>Path-based CC of a graph <span class="math inline">\(G\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\mathcal{X}_{loop}(G)\)</span></td>
-<td>Loop-based CC of a graph <span class="math inline">\(G\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\mathcal{X}_{SC}(\mathcal{Y})\)</span></td>
-<td>Coface CC of a simplicial complex/CC <span class="math inline">\(\mathcal{Y}\)</span></td>
-</tr>
-<tr class="even">
-<td colspan="2"><center>
-Matrix notations
-</center></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(B_{r,k}\)</span></td>
-<td>Incidence matrices between <span class="math inline">\(r\)</span>-cells and <span class="math inline">\(k\)</span>-cells</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(A_{r,k}\)</span></td>
-<td>Adjacency matrices among the cells of <span class="math inline">\(\mbox{X}^{r}\)</span> with respect to the cells of <span class="math inline">\(\mbox{X}^{k}\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(coA_{r,k}\)</span></td>
-<td>Coadjacency matrices among the cells of <span class="math inline">\(\mbox{X}^{r}\)</span> with respect to the cells of <span class="math inline">\(\mbox{X}^{k}\)</span></td>
-</tr>
-<tr class="even">
-<td colspan="2"><center>
-CCNNs
-</center></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\mathbf{W}\)</span></td>
-<td>Trainable parameter</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\mathcal{C}^k(\mathcal{X},\mathbb{R}^d)\)</span></td>
-<td><span class="math inline">\(k\)</span>-cochain space with features in <span class="math inline">\(\mathbb{R}^d\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\mathcal{C}^k\)</span></td>
-<td><span class="math inline">\(k\)</span>-cochain space with features in some Euclidean space</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\mathbf{G}= \{G_1,\ldots,G_m\}\)</span></td>
-<td>Set of cochain maps <span class="math inline">\(G_i\)</span> defined on a complex</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\mathcal{M}_{ \mathbf{G};\mathbf{W}}\)</span></td>
-<td>Merge node</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(G:C^{s}(\mathcal{X})\to C^{t}(\mathcal{X})\)</span></td>
-<td>Cochain map</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\((\mathbf{x}_{i_1},\ldots, \mathbf{x}_{i_m})\)</span></td>
-<td>Vector of cochains</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(att^{l}: C^{s}(\mathcal{X})\to C^{s}(\mathcal{X})\)</span></td>
-<td>Higher-order attention matrix</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\mathcal{N}_{\mathcal{Y}_0}=\{\mathcal{Y}_1,\ldots,\sigma_{|\mathcal{N}_{\mathcal{Y}_0}|}\}\)</span></td>
-<td>Set of a complex object in the vicinity of <span class="math inline">\(\mathcal{Y}_0\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(a: {\mathcal{Y}_0}\times \mathcal{N}_{\mathcal{Y}_0}\to [0,1]\)</span></td>
-<td>Higher-order attention function</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span></td>
-<td>CCNN or its tensor diagram representation</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\mathcal{H}_{\mathcal{X}}= (V (\mathcal{H}_{\mathcal{X}}), E(\mathcal{H}_{\mathcal{X}}) )\)</span></td>
-<td>Hasse graph with vertices <span class="math inline">\(V (\mathcal{H}_{\mathcal{X}})\)</span> and edges <span class="math inline">\(E(\mathcal{H}_{\mathcal{X}})\)</span>; see Definition <a href="hasse-graph-interpretation-of-ccnns-1.html#def:hg">8.1</a></td>
-</tr>
-</tbody>
-</table>
-<p>The table below summarizes the paper’s acronyms.</p>
-<table style="width:88%;">
-<colgroup>
-<col width="13%" />
-<col width="73%" />
+<col width="23%" />
+<col width="76%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th>Acronym</th>
-<th>Description</th>
+<th align="left">符号</th>
+<th align="left">描述</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>AGD</td>
-<td>Average geodesic distance</td>
+<td align="left"><span class="math inline">\(B_{r,k}\)</span></td>
+<td align="left"><span class="math inline">\(r\)</span>-cells 和 <span class="math inline">\(k\)</span>-cells之间的关联矩阵 （ Incidence matrices）</td>
 </tr>
 <tr class="even">
-<td>CC</td>
-<td>Combinatorial complex</td>
+<td align="left"><span class="math inline">\(A_{r,k}\)</span></td>
+<td align="left"><span class="math inline">\(\mbox{X}^{r}\)</span>的胞腔关于<span class="math inline">\(\mbox{X}^{k}\)</span>的胞腔之间的邻接矩阵（Adjacency matrices）</td>
 </tr>
 <tr class="odd">
-<td>CCANN</td>
-<td>Combinatorial complex attention neural network</td>
+<td align="left"><span class="math inline">\(coA_{r,k}\)</span></td>
+<td align="left"><span class="math inline">\(\mbox{X}^{r}\)</span>的胞腔关于<span class="math inline">\(\mbox{X}^{k}\)</span>的胞腔之间的共邻矩阵（Coadjacency matrices）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>表4：CCNNs相关的符号</strong></p>
+<table>
+<colgroup>
+<col width="23%" />
+<col width="76%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">符号</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\mathbf{W}\)</span></td>
+<td align="left">可训练参数</td>
 </tr>
 <tr class="even">
-<td>CCCNN</td>
-<td>Combinatorial complex convolutional neural network</td>
+<td align="left"><span class="math inline">\(\mathcal{C}^k(\mathcal{X},\mathbb{R}^d)\)</span></td>
+<td align="left"><span class="math inline">\(\mathbb{R}^d\)</span> 上带特征属性的<span class="math inline">\(k\)</span>-共链空间（ <span class="math inline">\(k\)</span>-cochain space ）</td>
 </tr>
 <tr class="odd">
-<td>CCNN</td>
-<td>Combinatorial complex neural network</td>
+<td align="left"><span class="math inline">\(\mathcal{C}^k\)</span></td>
+<td align="left">欧式空间上带特征属性的<span class="math inline">\(k\)</span>-cochain space</td>
 </tr>
 <tr class="even">
-<td>CNN</td>
-<td>Convolutional neural network</td>
+<td align="left"><span class="math inline">\(\mathbf{G}= \{G_1,\ldots,G_m\}\)</span></td>
+<td align="left">定义在复形上的共链映射<span class="math inline">\(G_i\)</span>的集合</td>
 </tr>
 <tr class="odd">
-<td>DEC</td>
-<td>Discrete exterior calculus</td>
+<td align="left"><span class="math inline">\(\mathcal{M}_{ \mathbf{G};\mathbf{W}}\)</span></td>
+<td align="left">聚合节点（Merge node）</td>
 </tr>
 <tr class="even">
-<td>GDL</td>
-<td>Geometric deep learning</td>
+<td align="left"><span class="math inline">\(G:C^{s}(\mathcal{X})\to C^{t}(\mathcal{X})\)</span></td>
+<td align="left">共链映射（Cochain map）</td>
 </tr>
 <tr class="odd">
-<td>GNN</td>
-<td>Graph neural network</td>
+<td align="left"><span class="math inline">\((\mathbf{x}_{i_1},\ldots, \mathbf{x}_{i_m})\)</span></td>
+<td align="left">共链的向量形式</td>
 </tr>
 <tr class="even">
-<td>MOG</td>
-<td>Mapper on graphs</td>
+<td align="left"><span class="math inline">\(att^{l}: C^{s}(\mathcal{X})\to C^{s}(\mathcal{X})\)</span></td>
+<td align="left">高阶注意力矩阵</td>
 </tr>
 <tr class="odd">
-<td>RNN</td>
-<td>Recurrent neural network</td>
+<td align="left"><span class="math inline">\(\mathcal{N}_{\mathcal{Y}_0}=\{\mathcal{Y}_1,\ldots,\sigma_{|\mathcal{N}_{\mathcal{Y}_0}|}\}\)</span></td>
+<td align="left">Set of a complex object in the vicinity of <span class="math inline">\(\mathcal{Y}_0\)</span>的近邻（vicinity）中复形对象的集合</td>
 </tr>
 <tr class="even">
-<td>SCoNe</td>
-<td>Simplicial complex network</td>
+<td align="left"><span class="math inline">\(a: {\mathcal{Y}_0}\times \mathcal{N}_{\mathcal{Y}_0}\to [0,1]\)</span></td>
+<td align="left">高阶注意力函数</td>
 </tr>
 <tr class="odd">
-<td>Sub-CC</td>
-<td>sub-combinatorial complex</td>
+<td align="left"><span class="math inline">\(\mbox{CCNN}_{\mathbf{G};\mathbf{W}}\)</span></td>
+<td align="left">CCNN或它的张量图表示（ tensor diagram representation ）</td>
 </tr>
 <tr class="even">
-<td>TDA</td>
-<td>Topological data analysis</td>
+<td align="left"><span class="math inline">\(\mathcal{H}_{\mathcal{X}}= (V (\mathcal{H}_{\mathcal{X}}), E(\mathcal{H}_{\mathcal{X}}) )\)</span></td>
+<td align="left">Hasse 图，顶点为<span class="math inline">\(V (\mathcal{H}_{\mathcal{X}})\)</span> ，边为<span class="math inline">\(E(\mathcal{H}_{\mathcal{X}})\)</span>; 参加定义 <a href="hasse-graph-interpretation-of-ccnns-1.html#def:hg">8.1</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>表4.文中用到的缩写</strong></p>
+<table>
+<colgroup>
+<col width="23%" />
+<col width="76%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">缩写</th>
+<th align="left">全称</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AGD</td>
+<td align="left">平均测地距离，Average geodesic distance</td>
+</tr>
+<tr class="even">
+<td align="left">CC</td>
+<td align="left">组合复形，Combinatorial complex</td>
 </tr>
 <tr class="odd">
-<td>TDL</td>
-<td>Topological deep learning</td>
+<td align="left">CCANN</td>
+<td align="left">组合复形注意力神经网络，Combinatorial complex attention neural network</td>
 </tr>
 <tr class="even">
-<td>TQFT</td>
-<td>Topological quantum field theory</td>
+<td align="left">CCCNN</td>
+<td align="left">组合复形卷积神经网络，Combinatorial complex convolutional neural network</td>
+</tr>
+<tr class="odd">
+<td align="left">CCNN</td>
+<td align="left">组合复形神经网络，Combinatorial complex neural network</td>
+</tr>
+<tr class="even">
+<td align="left">CNN</td>
+<td align="left">卷积神经网络，Convolutional neural network</td>
+</tr>
+<tr class="odd">
+<td align="left">DEC</td>
+<td align="left">离散外微积分，Discrete exterior calculus</td>
+</tr>
+<tr class="even">
+<td align="left">GDL</td>
+<td align="left">集合深度学习，Geometric deep learning</td>
+</tr>
+<tr class="odd">
+<td align="left">GNN</td>
+<td align="left">图神经网络，Graph neural network</td>
+</tr>
+<tr class="even">
+<td align="left">MOG</td>
+<td align="left">图上的Mapper，Mapper on graphs</td>
+</tr>
+<tr class="odd">
+<td align="left">RNN</td>
+<td align="left">递归神经网络，Recurrent neural network</td>
+</tr>
+<tr class="even">
+<td align="left">SCoNe</td>
+<td align="left">单纯复形网络，Simplicial complex network</td>
+</tr>
+<tr class="odd">
+<td align="left">Sub-CC</td>
+<td align="left">子组合复形，sub-combinatorial complex</td>
+</tr>
+<tr class="even">
+<td align="left">TDA</td>
+<td align="left">拓扑数据分析，Topological data analysis</td>
+</tr>
+<tr class="odd">
+<td align="left">TDL</td>
+<td align="left">拓扑深度学习，Topological deep learning</td>
+</tr>
+<tr class="even">
+<td align="left">TQFT</td>
+<td align="left">拓扑量子场论，Topological quantum field theory</td>
 </tr>
 </tbody>
 </table>
