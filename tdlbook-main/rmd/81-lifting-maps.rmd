@@ -1,4 +1,4 @@
-# Lifting maps
+# 提升映射{#lifting-maps}
 
 Lifting refers to the process of mapping a featured domain to another featured domain via a well-defined procedure. This section shows how we can lift a given domain to a CC or cell complex. Such lifting is useful as it allows CCNNs to be applied to common topological domains, including graphs and cell/simplicial complexes. This section only scratches the surface, as there remain many lifting constructions to be explored. We refer the reader to [@ferri2018simplicial] for examples of lifting graphs to simplicial complexes.
 
