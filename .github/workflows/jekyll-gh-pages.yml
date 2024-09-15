@@ -42,7 +42,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{https://github.com/qinguangjun/TDLBook/blob/main/tdlbook-main/_book/index.html }}
     runs-on: ubuntu-latest
     needs: build
     steps:
