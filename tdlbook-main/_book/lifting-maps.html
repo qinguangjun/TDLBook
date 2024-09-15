@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>附录 B Lifting maps | 拓扑深度学习：超越图数据</title>
+  <title>附录 B 提升映射 | 拓扑深度学习：超越图数据</title>
   <meta name="description" content="一本关于拓扑深度学习的书。" />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="附录 B Lifting maps | 拓扑深度学习：超越图数据" />
+  <meta property="og:title" content="附录 B 提升映射 | 拓扑深度学习：超越图数据" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="一本关于拓扑深度学习的书。" />
   <meta name="github-repo" content="pyt-team/tdlbook" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="附录 B Lifting maps | 拓扑深度学习：超越图数据" />
+  <meta name="twitter:title" content="附录 B 提升映射 | 拓扑深度学习：超越图数据" />
   
   <meta name="twitter:description" content="一本关于拓扑深度学习的书。" />
   
@@ -210,10 +210,10 @@ div.csl-indent {
 <li class="chapter" data-level="11" data-path="conclusions.html"><a href="conclusions.html"><i class="fa fa-check"></i><b>11</b> 结论</a></li>
 <li class="appendix"><span><b>附录</b></span></li>
 <li class="chapter" data-level="A" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>A</b> 术语</a></li>
-<li class="chapter" data-level="B" data-path="lifting-maps.html"><a href="lifting-maps.html"><i class="fa fa-check"></i><b>B</b> Lifting maps</a>
+<li class="chapter" data-level="B" data-path="lifting-maps.html"><a href="lifting-maps.html"><i class="fa fa-check"></i><b>B</b> 提升映射</a>
 <ul>
-<li class="chapter" data-level="B.1" data-path="lifting-maps.html"><a href="lifting-maps.html#n-hop-cc-of-a-graph"><i class="fa fa-check"></i><b>B.1</b> n-hop CC of a graph</a></li>
-<li class="chapter" data-level="B.2" data-path="lifting-maps.html"><a href="lifting-maps.html#path-based-and-subgraph-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.2</b> Path-based and subgraph-based CC of a graph</a></li>
+<li class="chapter" data-level="B.1" data-path="lifting-maps.html"><a href="lifting-maps.html#n-hop-cc-of-a-graph"><i class="fa fa-check"></i><b>B.1</b> 图的n-hop CC</a></li>
+<li class="chapter" data-level="B.2" data-path="lifting-maps.html"><a href="lifting-maps.html#path-based-and-subgraph-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.2</b> 图的基于路径和基于子图的CC</a></li>
 <li class="chapter" data-level="B.3" data-path="lifting-maps.html"><a href="lifting-maps.html#loop-based-cc-of-a-graph"><i class="fa fa-check"></i><b>B.3</b> Loop-based CC of a graph</a></li>
 <li class="chapter" data-level="B.4" data-path="lifting-maps.html"><a href="lifting-maps.html#coface-cc-of-a-simplicial-complex-or-of-a-cc"><i class="fa fa-check"></i><b>B.4</b> Coface CC of a simplicial complex or of a CC</a></li>
 <li class="chapter" data-level="B.5" data-path="lifting-maps.html"><a href="lifting-maps.html#augmentation-of-ccs-by-higher-rank-cells"><i class="fa fa-check"></i><b>B.5</b> Augmentation of CCs by higher-rank cells</a></li>
@@ -243,11 +243,11 @@ div.csl-indent {
 
             <section class="normal" id="section-">
 <div id="lifting-maps" class="section level1 hasAnchor" number="13">
-<h1><span class="header-section-number">附录 B</span> Lifting maps<a href="lifting-maps.html#lifting-maps" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>Lifting refers to the process of mapping a featured domain to another featured domain via a well-defined procedure. This section shows how we can lift a given domain to a CC or cell complex. Such lifting is useful as it allows CCNNs to be applied to common topological domains, including graphs and cell/simplicial complexes. This section only scratches the surface, as there remain many lifting constructions to be explored. We refer the reader to <span class="citation">(<a href="#ref-ferri2018simplicial">Ferri, Bergomi, and Zu 2018</a>)</span> for examples of lifting graphs to simplicial complexes.</p>
+<h1><span class="header-section-number">附录 B</span> 提升映射<a href="lifting-maps.html#lifting-maps" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>提升是指通过明确定义的程序将一个特征域映射到另一个特征域的过程。本节展示了我们如何将给定域提升到 CC 或胞腔复形。这种提升非常有用，因为它允许 CCNNs 应用于常见的拓扑域，包括图和胞腔/单纯复形。本节只是蜻蜓点水，还有很多提升结构有待探索。关于将图提升到单纯复形的例子，请读者参阅 <span class="citation">(<a href="#ref-ferri2018simplicial">Ferri, Bergomi, and Zu 2018</a>)</span>。</p>
 <div id="n-hop-cc-of-a-graph" class="section level2 hasAnchor" number="13.1">
-<h2><span class="header-section-number">B.1</span> n-hop CC of a graph<a href="lifting-maps.html#n-hop-cc-of-a-graph" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Let <span class="math inline">\(\mathcal{G}=(V(\mathcal{G}),E(\mathcal{G}))\)</span> be a graph and <span class="math inline">\(n\geq 2\)</span> an integer. The <span class="math inline">\(n\)</span><em>-hop CC</em> of <span class="math inline">\(\mathcal{G}\)</span>, denoted by <span class="math inline">\(\mbox{CC}_{n-\mbox{hop}}(\mathcal{G})\)</span>, is the CC whose <span class="math inline">\(0\)</span>-cells, <span class="math inline">\(1\)</span>-cells, and <span class="math inline">\(n\)</span>-cells are the nodes of <span class="math inline">\(\mathcal{G}\)</span>, edges of <span class="math inline">\(\mathcal{G}\)</span>, and set nodes in <span class="math inline">\(n\)</span>-hop neighborhoods of the nodes in <span class="math inline">\(\mathcal{G}\)</span>, respectively. It is easy to verify that <span class="math inline">\(\mbox{CC}_{n-\mbox{hop}}(\mathcal{G})\)</span> is a CC of dimension <span class="math inline">\(n\)</span>. Figure <a href="lifting-maps.html#fig:liftings">B.1</a>(a) visualizes the <span class="math inline">\(1\)</span>-hop CC of a graph.</p>
+<h2><span class="header-section-number">B.1</span> 图的n-hop CC<a href="lifting-maps.html#n-hop-cc-of-a-graph" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>令<span class="math inline">\(\mathcal{G}=(V(\mathcal{G}),E(\mathcal{G}))\)</span>是图，<span class="math inline">\(n\geq 2\)</span>是整数。 图<span class="math inline">\(\mathcal{G}\)</span>的 <span class="math inline">\(n\)</span><em>-hop CC</em>记为<span class="math inline">\(\mbox{CC}_{n-\mbox{hop}}(\mathcal{G})\)</span>是一个CC，其<span class="math inline">\(0\)</span>-cells、<span class="math inline">\(1\)</span>-cells和<span class="math inline">\(n\)</span>-cells 分别是<span class="math inline">\(\mathcal{G}\)</span>的顶点、边，以及<span class="math inline">\(\mathcal{G}\)</span>的顶点的<span class="math inline">\(n\)</span>-hop领域集。 很容易验证<span class="math inline">\(\mbox{CC}_{n-\mbox{hop}}(\mathcal{G})\)</span>是维度为<span class="math inline">\(n\)</span>的CC。图<a href="lifting-maps.html#fig:liftings">B.1</a>(a) 可视化了图<span class="math inline">\(\mathcal{G}\)</span>的<span class="math inline">\(1\)</span>-hop CC。</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:liftings"></span>
 <img src="figures/lifting_maps.png" alt="Examples of lifting domains to CCs and cell complexes. (a): The $1$-hop neighborhood of the red node can be considered as a 2-cell that we can augment to the graph. Adding such 2-cells to a graph yields a CC called the 1-hop neighborhood of the graph. (b): A path on a graph of length more than two can be considered as a 2-cell that we can augment to the graph. Adding such 2-cells to a graph yields a CC called a path-based CC of the graph. (c): A loop in a graph (i.e., a closed path with no repeating edges) can be considered as a 2-cell that we can augment to the graph. Adding such 2-cells to a graph yields a CC called a loop-based CC of the graph. (d): For every blue 2-cell of a simplicial complex, we introduce a green 3-cell obtained by considering the 1-coface of the 2-cell. Adding such 3-cells to a simplicial complex yields a CC of dimension three called the coface CC of the simplicial complex."  />
 <p class="caption">
@@ -256,7 +256,7 @@ div.csl-indent {
 </div>
 </div>
 <div id="path-based-and-subgraph-based-cc-of-a-graph" class="section level2 hasAnchor" number="13.2">
-<h2><span class="header-section-number">B.2</span> Path-based and subgraph-based CC of a graph<a href="lifting-maps.html#path-based-and-subgraph-based-cc-of-a-graph" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<h2><span class="header-section-number">B.2</span> 图的基于路径和基于子图的CC<a href="lifting-maps.html#path-based-and-subgraph-based-cc-of-a-graph" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Let <span class="math inline">\(\mathcal{G}=(V(\mathcal{G}),E(\mathcal{G}))\)</span> be a graph. A natural CC structure on <span class="math inline">\(\mathcal{G}\)</span> considers paths of <span class="math inline">\(\mathcal{G}\)</span>. We define a <em>path-based CC</em> of <span class="math inline">\(\mathcal{G}\)</span>, denoted by <span class="math inline">\(\mbox{CC}_p(\mathcal{G})\)</span>, to be a CC consisting of <span class="math inline">\(0\)</span>-cells, <span class="math inline">\(1\)</span>-cells and <span class="math inline">\(2\)</span>-cells specified as follows. First, <span class="math inline">\(\mathcal{X}^0\)</span> and <span class="math inline">\(\mathcal{X}^1\)</span> in <span class="math inline">\(\mbox{CC}_p(\mathcal{G})\)</span> are the sets of nodes and edges of <span class="math inline">\(\mathcal{G}\)</span>, respectively. We now explain how to construct a <span class="math inline">\(2\)</span>-cell in <span class="math inline">\(\mbox{CC}_p(\mathcal{G})\)</span>. Let <span class="math inline">\(P\)</span> be a path in <span class="math inline">\(\mathcal{G}\)</span> with length larger than or equal to two (i.e., with two or more edges). An element <span class="math inline">\(x_P\)</span> in <span class="math inline">\(\mathcal{X}^2\)</span> induced by <span class="math inline">\(P\)</span> is defined to be <span class="math inline">\(x_P=\cup_{v\in P }\{v\}\)</span>. The set <span class="math inline">\(\mathcal{X}^2\)</span> in <span class="math inline">\(\mbox{CC}_p(\mathcal{G})\)</span> is a non-empty collection of elements <span class="math inline">\(x_P\)</span>. It is easy to verify that <span class="math inline">\(\mbox{CC}_p(\mathcal{G})\)</span> is a CC with <span class="math inline">\(\dim(\mbox{CC}_p(\mathcal{G}))=2\)</span>. Note that we may replace the path <span class="math inline">\(P\)</span> by a tree/subgraph of graph <span class="math inline">\(\mathcal{G}\)</span> and obtain a similar CC structure induced by the tree/subgraph of <span class="math inline">\(\mathcal{G}\)</span>. Figure <a href="lifting-maps.html#fig:liftings">B.1</a>(b) shows an example of a path-based CC of a graph.</p>
 </div>
 <div id="loop-based-cc-of-a-graph" class="section level2 hasAnchor" number="13.3">
