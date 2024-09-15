@@ -66,6 +66,8 @@ knitr::include_graphics('figures/face.jpeg', dpi=NA)
 
 > **问题4.** 怎么生成目录，不是侧边栏目录，而是目录页
 
+> **问题5.** 不知道怎么部署成网页版，试了几次没弄成
+
 
 原文见 https://tdlbook.org/ 和 https://github.com/pyt-team/tdlbook
 
@@ -77,6 +79,12 @@ knitr::include_graphics('figures/face.jpeg', dpi=NA)
 Public， https://github.com/lrnzgiusti/awesome-topological-deep-learning
 
 + ICML Topological Deep Learning Challenge 2024: Beyond the Graph Domain，https://pyt-team.github.io/packs/challenge.html
+
++ 本书团队的github https://github.com/pyt-team
+
++ Mustafa Hajij的主页 https://www.mustafahajij.com/
+
++ Theodore Papamarkou的主页 https://www.theopapamarkou.com/
 
 # 序言 {.unnumbered}
 
