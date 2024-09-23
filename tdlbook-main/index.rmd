@@ -52,7 +52,7 @@ Neal Livesay, Robin Walters, Paul Rosen*.
 
 > 几何深度学习，这真的是一个很酷的想法，作为其一个分支，拓扑深度学习更是直接将代数拓扑应用到了神经网络中。读过作者的相关文章，本书是作者写的第一本关于拓扑深度学习的书，于是决定把本书翻译了。说它是书，其实更像个小册子，或者蓝皮书，是学习几何深度学习和拓扑深度学习的重要入门材料。
 
-> 对于深度学习，我不是太了解的那么深入，只是在科研上逐渐开始使用，对于代数拓扑这种十分抽象的专业知识更是初次接触，不确定相关术语和表述翻译是否准确，请参考原文阅读（[TDLBook](https://tdlbook.org/)）。
+> 对于深度学习和拓扑数据分析，我不是太了解的那么深入，只是在科研上逐渐开始使用，于是又接触到了拓扑深度学习、几何深度学习，对于代数拓扑这种十分抽象的专业知识更是初次接触，不确定相关术语和表述翻译是否准确，请参考原文阅读（[TDLBook](https://tdlbook.org/)）。
 
 ```{r thissite, echo=FALSE, fig.align="center", fig.cap="来自这个网站"}
 knitr::include_graphics('figures/face.jpeg', dpi=NA)
@@ -79,6 +79,8 @@ knitr::include_graphics('figures/face.jpeg', dpi=NA)
 Public， https://github.com/lrnzgiusti/awesome-topological-deep-learning
 
 + ICML Topological Deep Learning Challenge 2024: Beyond the Graph Domain，https://pyt-team.github.io/packs/challenge.html
+
++ TopoX， https://pyt-team.github.io/index.html
 
 + 本书团队的github https://github.com/pyt-team
 
